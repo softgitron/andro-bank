@@ -33,5 +33,14 @@
         android:id="@+id/roni_test"
         android:name="com.example.androbank.ui.roniTest.RoniTestFragment"
         android:label="RoniTestFragment"
-        tools:layout="@layout/fragment_roni_test" />
+        tools:layout="@layout/fragment_roni_test" >
+        <action
+            android:id="@+id/action_roni_test_to_fragment_roni_test_success"
+            app:destination="@id/fragment_roni_test_success" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_roni_test_success"
+        android:name="com.example.androbank.ui.roniTest.fragment_roni_test_success"
+        android:label="fragment_roni_test_success"
+        tools:layout="@layout/fragment_roni_test_success" />
 </navigation>

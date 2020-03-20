@@ -75,12 +75,13 @@
         android:id="@+id/lastNameField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="Last name"
         android:inputType="textPersonName"
         android:minEms="12"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/firstNameField" />
+        app:layout_constraintTop_toBottomOf="@+id/firstNameError" />
 
     <TextView
         android:id="@+id/lastNameError"
@@ -96,12 +97,13 @@
         android:id="@+id/emailField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="Emal"
         android:inputType="textEmailAddress"
         android:minEms="12"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lastNameField" />
+        app:layout_constraintTop_toBottomOf="@+id/lastNameError" />
 
     <TextView
         android:id="@+id/emailError"
@@ -184,6 +186,7 @@
         android:id="@+id/accountCreationError"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:textColor="#E57373"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"

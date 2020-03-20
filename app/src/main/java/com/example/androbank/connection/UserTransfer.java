@@ -5,7 +5,7 @@ import java.util.Observable;
 public class UserTransfer extends Transfer {
     public static Response createUser(String username, String firstName, String lastName, String email, String phoneNumber, String password) {
         CreateUser createUser = new CreateUser(username, firstName, lastName, email, phoneNumber, password);
-        return sendRequest(createUser, MethodType.POST, String.class, false);
+        return sendRequest(MethodType.POST, "/users/createUser", createUser, String.class, false);
     }
 }
 

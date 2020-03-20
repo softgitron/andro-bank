@@ -4,6 +4,7 @@ import java.util.Observable;
 
 public class Response extends Observable {
     private Integer httpCode = 0;
+    private String token = null;
     private Object response = null;
     private String error = null;
 
@@ -12,6 +13,18 @@ public class Response extends Observable {
         this.httpCode = httpCode;
         this.response = response;
         this.error = error;
+        this.token = null;
+
+        setChanged();
+        notifyObservers();
+    }
+
+    public void setValue(Integer httpCode, Object response, String error, String token)
+    {
+        this.httpCode = httpCode;
+        this.response = response;
+        this.error = error;
+        this.token = token;
 
         setChanged();
         notifyObservers();
@@ -30,4 +43,6 @@ public class Response extends Observable {
     {
         return error;
     }
+
+    public String getToken() { return token; }
 }

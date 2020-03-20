@@ -36,6 +36,7 @@ public class RoniTestFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentRoniTestBinding.inflate(inflater, container, false);
         root = binding.getRoot();
+        initializeErrorHandling();
 
         binding.usernameField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -79,10 +80,10 @@ public class RoniTestFragment extends Fragment {
                     return;
                 }
                 if (binding.lastNameField.getText().toString().matches(NAME_REGEX)) {
-                    binding.lastNameField.setVisibility(View.GONE);
+                    binding.lastNameError.setVisibility(View.GONE);
                     errors[2] = false;
                 } else {
-                    binding.lastNameField.setVisibility(View.VISIBLE);
+                    binding.lastNameError.setVisibility(View.VISIBLE);
                     errors[2] = true;
                 }
             }

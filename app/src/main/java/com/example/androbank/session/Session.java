@@ -14,6 +14,8 @@ public class Session {
     private Session() {
         accounts = Accounts.getAccounts();
         user = User.getUser();
+        errorCode = new MutableLiveData<Integer>(0);
+        errorMessage = new MutableLiveData<String>("");
     }
 
     void setLastErrorMessage(String errorMessage) {

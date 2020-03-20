@@ -10,9 +10,11 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.List;
+import java.util.Map;
 
 public class Transfer {
-    public static final String API_ADDRESS = "https://hello1254841.com";
+    public static final String API_ADDRESS = "http://10.0.2.2:8080";
     static final Integer CONNECTION_TIMEOUT = 5000;
     static final Integer READ_TIMEOUT = 5000;
     protected static String token;
@@ -30,7 +32,7 @@ public class Transfer {
         return token;
     }
 
-    protected static Response sendRequest(Object data, MethodType method, Class resultType, boolean authentication) {
+    protected static Response sendRequest(MethodType method, String address, Object data, Class resultType, boolean authentication) {
         Response response = new Response();
         Thread requestThread = new Thread(() -> {
             // https://github.com/google/gson/blob/master/UserGuide.md
@@ -40,10 +42,14 @@ public class Transfer {
             // https://www.baeldung.com/httpurlconnection-post
             URL url = null;
             try {
-                url = new URL(API_ADDRESS);
+                url = new URL(API_ADDRESS + address);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setConnectTimeout(CONNECTION_TIMEOUT);
                 connection.setReadTimeout(READ_TIMEOUT);
+                // Set token if requested
+                if (authentication) {
+                    connection.setRequestProperty("X-Auth-Token", token);
+                }
                 switch (method) {
                     case GET:
                         connection.setRequestMethod("GET");
@@ -56,13 +62,14 @@ public class Transfer {
                         break;
                 }
                 String responseString = readResponse(connection);
-                handleResponse(responseString, connection.getResponseCode(), response, resultType);
+                String newToken = checkToken(connection);
+                handleResponse(responseString, connection.getResponseCode(), response, newToken, resultType);
             } catch (MalformedURLException e) {
                 System.out.println("Malformed url exception should not occur ever.");
             } catch (ProtocolException e) {
-                e.printStackTrace();
+                response.setValue(400, null, "Unknown protocol error");
             } catch (IOException e) {
-                e.printStackTrace();
+                response.setValue(444, null, "Connection error");
             }
         });
         requestThread.start();
@@ -79,6 +86,17 @@ public class Transfer {
         os.write(input, 0, input.length);
         os.flush();
         os.close();
+    }
+
+    private static String checkToken(HttpURLConnection connection) throws IOException {
+        Map<String, List<String>> headers = connection.getHeaderFields();
+        List<String> tokens = headers.get("X-Auth-Token");
+        String newToken = null;
+        if (tokens != null && tokens.size() != 0) {
+            newToken = tokens.get(0);
+            token = newToken;
+        }
+        return newToken;
     }
 
     private static String readResponse(HttpURLConnection connection) throws IOException {
@@ -100,11 +118,11 @@ public class Transfer {
         return responseString.toString();
     }
 
-    private static void handleResponse(String responseString, Integer statusCode, Response response, Class resultType) {
-        if (statusCode > 299) {
+    private static void handleResponse(String responseString, Integer statusCode, Response response, String token, Class resultType) {
+        if (statusCode < 299) {
             Gson gson = new Gson();
             Object results = gson.fromJson(responseString, resultType);
-            response.setValue(statusCode, results, null);
+            response.setValue(statusCode, results, null, token);
         } else {
             response.setValue(statusCode, null, responseString);
         }

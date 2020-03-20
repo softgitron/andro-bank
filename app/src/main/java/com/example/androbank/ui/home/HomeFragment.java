@@ -30,7 +30,7 @@ public class HomeFragment extends Fragment {
                 fragmentTransaction.replace(R.id.nav_host_fragment, new RoniTestFragment());
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();*/
-                Navigation.findNavController(root).navigate(R.id.roni_test);
+                Navigation.findNavController(root).navigate(R.id.action_nav_home_to_roni_test);
             }
         });
 

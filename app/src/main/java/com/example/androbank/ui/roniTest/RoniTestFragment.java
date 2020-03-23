@@ -3,9 +3,11 @@ package com.example.androbank.ui.roniTest;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -132,18 +134,17 @@ public class RoniTestFragment extends Fragment {
                 if (hasFocus || binding.passwodAgainField.length() == 0) {
                     return;
                 }
-                String password = binding.passwordField.getText().toString();
-                if (password.equals(binding.passwodAgainField.getText().toString()) && password.length() >= 5) {
-                    binding.passwordMachView.setVisibility(View.INVISIBLE);
-                    errors[5] = false;
-                } else {
-                    binding.passwordMachView.setVisibility(View.VISIBLE);
-                    errors[5] = true;
-                }
-                checkSaveButtonStatus();
+                passwordCheck();
             }};
         binding.passwordField.setOnFocusChangeListener(passwordListener);
         binding.passwodAgainField.setOnFocusChangeListener(passwordListener);
+        binding.passwodAgainField.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                passwordCheck();
+                return false;
+            }
+        });
 
         binding.createUserButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,6 +153,18 @@ public class RoniTestFragment extends Fragment {
             }
         });
         return root;
+    }
+
+    private void passwordCheck() {
+        String password = binding.passwordField.getText().toString();
+        if (password.equals(binding.passwodAgainField.getText().toString()) && password.length() >= 5) {
+            binding.passwordMachView.setVisibility(View.INVISIBLE);
+            errors[5] = false;
+        } else {
+            binding.passwordMachView.setVisibility(View.VISIBLE);
+            errors[5] = true;
+        }
+        checkSaveButtonStatus();
     }
 
     private void checkSaveButtonStatus() {
@@ -173,11 +186,11 @@ public class RoniTestFragment extends Fragment {
         String password = binding.passwordField.getText().toString();
         binding.accountCreationError.setVisibility(View.INVISIBLE);
 
-        session.user.createUser(username, firstName, lastName, email, phoneNumber, password).observe(getViewLifecycleOwner(), new Observer<User.LoginStatus>() {
+        session.user.createUser(username, firstName, lastName, email, phoneNumber, password).observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
-            public void onChanged(User.LoginStatus loginStatus) {
+            public void onChanged(User user) {
                 binding.loadingIndicator.setVisibility(View.INVISIBLE);
-                if (loginStatus == User.LoginStatus.LOGGED_IN) {
+                if (user.getLoggedInStatus()) {
                     Navigation.findNavController(root).navigate(R.id.action_roni_test_to_fragment_roni_test_success);
                 }
             }

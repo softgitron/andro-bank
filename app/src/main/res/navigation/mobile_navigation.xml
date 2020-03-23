@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragment_roni_test_success"
-        android:name="com.example.androbank.ui.roniTest.fragment_roni_test_success"
+        android:name="com.example.androbank.ui.roniTest.RoniTestFragmentSuccess"
         android:label="Roni test success"
         tools:layout="@layout/fragment_roni_test_success" />
 </navigation>

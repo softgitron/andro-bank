@@ -18,6 +18,7 @@ public class Transfer {
     static final Integer CONNECTION_TIMEOUT = 5000;
     static final Integer READ_TIMEOUT = 5000;
     protected static String token;
+    private static Boolean isFetching = false;
 
     enum MethodType {
         POST,
@@ -25,19 +26,24 @@ public class Transfer {
         DELETE
     }
 
-    public static void setToken(String newToken) {
-        token = newToken;
-    }
-    public static String getToken() {
-        return token;
-    }
-
     protected static Response sendRequest(MethodType method, String address, Object data, Class resultType, boolean authentication) {
         Response response = new Response();
+        if (isFetching) {
+            Thread errorThread = new Thread(() -> {
+                // This is very hacky should be changed in the future to avoid sleep usage.
+                try { Thread.sleep(100); } catch (Exception e) {}
+                response.setValue(999, null, "Fetching was already ongoing.");
+            });
+            return response;
+        }
+        isFetching = true;
         Thread requestThread = new Thread(() -> {
             // https://github.com/google/gson/blob/master/UserGuide.md
-            Gson gson = new Gson();
-            String json = gson.toJson(data);
+            String json = "{}";
+            if (data != null) {
+                Gson gson = new Gson();
+                json = gson.toJson(data);
+            }
             // https://www.baeldung.com/java-http-request
             // https://www.baeldung.com/httpurlconnection-post
             URL url = null;
@@ -48,6 +54,10 @@ public class Transfer {
                 connection.setReadTimeout(READ_TIMEOUT);
                 // Set token if requested
                 if (authentication) {
+                    if (token == null) {
+                        System.out.println("Application malfunction! No token available.");
+                        System.exit(10);
+                    }
                     connection.setRequestProperty("X-Auth-Token", token);
                 }
                 switch (method) {
@@ -70,6 +80,8 @@ public class Transfer {
                 response.setValue(400, null, "Unknown protocol error");
             } catch (IOException e) {
                 response.setValue(444, null, "Connection error");
+            } finally {
+                isFetching = false;
             }
         });
         requestThread.start();
@@ -88,7 +100,7 @@ public class Transfer {
         os.close();
     }
 
-    private static String checkToken(HttpURLConnection connection) throws IOException {
+    private static String checkToken(HttpURLConnection connection) {
         Map<String, List<String>> headers = connection.getHeaderFields();
         List<String> tokens = headers.get("X-Auth-Token");
         String newToken = null;
@@ -127,4 +139,13 @@ public class Transfer {
             response.setValue(statusCode, null, responseString);
         }
     }
+
+    public static void setToken(String newToken) {
+        token = newToken;
+    }
+    public static String getToken() {
+        return token;
+    }
+    public static Boolean getIsFetching() { return isFetching; }
+    public static void setIsFetching(Boolean value) { isFetching = value; }
 }

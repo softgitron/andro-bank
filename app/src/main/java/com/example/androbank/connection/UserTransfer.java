@@ -1,27 +1,17 @@
 package com.example.androbank.connection;
 
-import java.util.Observable;
+import com.example.androbank.connection.containers.UserContainer;
 
 public class UserTransfer extends Transfer {
     public static Response createUser(String username, String firstName, String lastName, String email, String phoneNumber, String password) {
-        CreateUser createUser = new CreateUser(username, firstName, lastName, email, phoneNumber, password);
+        UserContainer createUser = new UserContainer(username, firstName, lastName, email, phoneNumber, password);
         return sendRequest(MethodType.POST, "/users/createUser", createUser, String.class, false);
     }
-}
 
-class CreateUser {
-        public String username;
-        public String firstName;
-        public String lastName;
-        public String email;
-        public String phoneNumber;
-        public String password;
-        public CreateUser(String username, String firstName, String lastName, String email, String phoneNumber, String password) {
-            this.username = username;
-            this.firstName = firstName;
-            this.lastName = lastName;
-            this.email = email;
-            this.phoneNumber = phoneNumber;
-            this.password = password;
-        }
+    public static Response login(String email, String password) {
+        UserContainer userDetails = new UserContainer();
+        userDetails.email = email;
+        userDetails.password = password;
+        return sendRequest(MethodType.POST, "/users/login", userDetails, UserContainer.class, false);
+    }
 }

@@ -33,6 +33,12 @@ public class HomeFragment extends Fragment {
                 Navigation.findNavController(root).navigate(R.id.action_nav_home_to_roni_test);
             }
         });
+        binding.login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         return root;
     }

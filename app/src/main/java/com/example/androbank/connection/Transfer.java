@@ -1,15 +1,19 @@
 package com.example.androbank.connection;
 
+import android.content.res.Resources;
+
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -148,4 +152,85 @@ public class Transfer {
     }
     public static Boolean getIsFetching() { return isFetching; }
     public static void setIsFetching(Boolean value) { isFetching = value; }
+
+
+    public static class userTransfer {
+        public userTransfer() {
+
+        }
+        public void createUser(String userName, String email, String phoneNumber, String password) {
+
+        }
+
+        public void login(String userName, String password) {
+
+        }
+
+        public void updateDetails(String userName, String email, String phoneNumber) {
+
+        }
+
+        public void updatePassword(String oldPassword, String newPassword) {
+
+        }
+
+    }
+
+    public static class basicTransfer{
+        public basicTransfer() {
+
+        }
+
+        public void newTransaction(String fromAccount, String toAccount, float amount) {
+
+        }
+
+        public void newDeposit(String account, float amount) {
+
+        }
+
+        public void newPayment(String account, float amount) {
+
+        }
+
+        public void getTransactions(String account) {
+
+        }
+    }
+
+    public static class advacedTransfer{
+        public advacedTransfer() {
+
+        }
+
+        public void newFutureTransaction(String fromAccount, String toAccount, float amount, Date date, String requiring) {
+
+        }
+
+        public void removeFuruteTransaction(int transactionId) {
+
+        }
+        public void getFutureTransactions (String account) {
+
+        }
+    }
+
+    public static class cardTransfer{
+        public cardTransfer(){
+
+        }
+
+        public void createCard(String account, String cardNumber) {
+
+        }
+
+        public void removeCard(String cardNumber) {
+
+        }
+
+
+        public void setLimits(String cardNumber, float withdrawLimit, float paymentLimit, Array allowedCountries) {
+
+        }
+    }
 }

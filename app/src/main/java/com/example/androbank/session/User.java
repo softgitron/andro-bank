@@ -79,4 +79,29 @@ public class User {
 
     public Boolean getLoggedInStatus() { return loggedIn; }
     public String getFirstName() { return firstName; }
+
+    public String getName(){
+        String name="";
+        return name;
+    }
+
+    public String setName(){
+
+    }
+
+    public String getEmail(){
+
+    }
+
+    public String setEmail(){
+
+    }
+
+    public String getPhoneNumber (){
+
+    }
+
+    public String setPhoneNumber(){
+
+    }
 }

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@id/nav_home">
 
     <fragment
         android:id="@+id/nav_home"
@@ -14,6 +14,11 @@
         <action
             android:id="@+id/action_nav_home_to_roni_test"
             app:destination="@id/roni_test"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_fade_exit" />
+        <action
+            android:id="@+id/action_nav_home_to_accounts"
+            app:destination="@id/accounts"
             app:enterAnim="@anim/fragment_open_enter"
             app:exitAnim="@anim/fragment_fade_exit" />
     </fragment>
@@ -43,4 +48,19 @@
         android:name="com.example.androbank.ui.roniTest.RoniTestFragmentSuccess"
         android:label="Roni test success"
         tools:layout="@layout/fragment_roni_test_success" />
+    <fragment
+        android:id="@+id/accounts"
+        android:name="com.example.androbank.ui.Accounts"
+        android:label="fragment_accounts"
+        tools:layout="@layout/fragment_accounts" >
+        <action
+            android:id="@+id/action_accounts_to_cards"
+            app:destination="@id/cards" />
+    </fragment>
+    <fragment
+        android:id="@+id/cards"
+        android:name="com.example.androbank.ui.Cards"
+        android:label="fragment_cards"
+        tools:layout="@layout/fragment_cards" />
+
 </navigation>

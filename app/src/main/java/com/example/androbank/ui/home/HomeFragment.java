@@ -1,14 +1,18 @@
 package com.example.androbank.ui.home;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.example.androbank.MainActivity;
 import com.example.androbank.R;
 import com.example.androbank.databinding.FragmentHomeBinding;
 
@@ -20,6 +24,13 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         root = binding.getRoot();
+
+        //Populate spinner
+        Spinner bank_spinner = binding.bankspinner;
+        String[] temp_banks = {"Nordea", "OP", "Dank"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, temp_banks);
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        bank_spinner.setAdapter(adapter);
 
         binding.startRoniTest.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,7 +47,14 @@ public class HomeFragment extends Fragment {
         binding.login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                System.out.println("Let's login");
+            }
+        });
 
+        binding.toAccounts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(root).navigate(R.id.action_nav_home_to_accounts);
             }
         });
 

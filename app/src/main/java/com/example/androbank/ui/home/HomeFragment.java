@@ -47,16 +47,17 @@ public class HomeFragment extends Fragment {
         binding.login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // TODO: Login functionality and checks
                 System.out.println("Let's login");
+
+                Navigation.findNavController(root).navigate((R.id.action_nav_home_to_main_Menu));
             }
         });
 
-        binding.toAccounts.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Navigation.findNavController(root).navigate(R.id.action_nav_home_to_accounts);
-            }
-        });
+        binding.createAccount.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_nav_home_to_roni_test));
+
+
 
         return root;
     }

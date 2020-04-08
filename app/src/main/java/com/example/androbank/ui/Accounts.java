@@ -84,6 +84,27 @@ public class Accounts extends Fragment {
             }
         });
 
+        binding.newCardPayment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(root).navigate(R.id.action_accounts_to_newCardPayment2);
+            }
+        });
+
+        binding.newTransaction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(root).navigate(R.id.action_accounts_to_newPayment);
+            }
+        });
+
+        binding.addMoney.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: Add money
+            }
+        });
+
         return root;
     }
 }

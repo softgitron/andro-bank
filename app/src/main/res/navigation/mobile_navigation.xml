@@ -17,23 +17,10 @@
             app:enterAnim="@anim/fragment_open_enter"
             app:exitAnim="@anim/fragment_fade_exit" />
         <action
-            android:id="@+id/action_nav_home_to_accounts"
-            app:destination="@id/accounts"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_fade_exit" />
+            android:id="@+id/action_nav_home_to_main_Menu"
+            app:destination="@id/main_Menu" />
     </fragment>
 
-    <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.androbank.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
-
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.androbank.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
     <fragment
         android:id="@+id/roni_test"
         android:name="com.example.androbank.ui.roniTest.RoniTestFragment"
@@ -56,11 +43,71 @@
         <action
             android:id="@+id/action_accounts_to_cards"
             app:destination="@id/cards" />
+        <action
+            android:id="@+id/action_accounts_to_newCardPayment2"
+            app:destination="@id/newCardPayment2" />
+        <action
+            android:id="@+id/action_accounts_to_newPayment"
+            app:destination="@id/newPayment" />
     </fragment>
     <fragment
         android:id="@+id/cards"
         android:name="com.example.androbank.ui.Cards"
         android:label="fragment_cards"
-        tools:layout="@layout/fragment_cards" />
+        tools:layout="@layout/fragment_cards" >
+        <action
+            android:id="@+id/action_cards_to_accounts"
+            app:destination="@id/accounts" />
+    </fragment>
+    <fragment
+        android:id="@+id/main_Menu"
+        android:name="com.example.androbank.ui.Main_Menu"
+        android:label="fragment_main__menu"
+        tools:layout="@layout/fragment_main__menu" >
+        <action
+            android:id="@+id/action_main_Menu_to_accounts"
+            app:destination="@id/accounts" />
+        <action
+            android:id="@+id/action_main_Menu_to_userDetails"
+            app:destination="@id/userDetails" />
+        <action
+            android:id="@+id/action_main_Menu_to_transactions"
+            app:destination="@id/transactions" />
+    </fragment>
+    <fragment
+        android:id="@+id/userDetails"
+        android:name="com.example.androbank.ui.UserDetails"
+        android:label="fragment_user_details"
+        tools:layout="@layout/fragment_user_details" >
+        <action
+            android:id="@+id/action_userDetails_to_nav_home"
+            app:destination="@id/nav_home" />
+    </fragment>
+    <fragment
+        android:id="@+id/transactions"
+        android:name="com.example.androbank.ui.Transactions"
+        android:label="fragment_transactions"
+        tools:layout="@layout/fragment_transactions" >
+        <action
+            android:id="@+id/action_transactions_to_main_Menu"
+            app:destination="@id/main_Menu" />
+    </fragment>
+    <fragment
+        android:id="@+id/newPayment"
+        android:name="com.example.androbank.ui.NewPayment"
+        android:label="fragment_new_payment"
+        tools:layout="@layout/fragment_new_payment" >
+        <action
+            android:id="@+id/action_newPayment_to_accounts"
+            app:destination="@id/accounts" />
+    </fragment>
+    <fragment
+        android:id="@+id/newCardPayment2"
+        android:name="com.example.androbank.ui.NewCardPayment"
+        android:label="NewCardPayment" >
+        <action
+            android:id="@+id/action_newCardPayment2_to_accounts"
+            app:destination="@id/accounts" />
+    </fragment>
 
 </navigation>

@@ -36,7 +36,7 @@
             android:id="@+id/textView10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="44dp"
+            android:layout_marginTop="16dp"
             android:text="Enter amount:"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -45,7 +45,7 @@
             app:layout_constraintTop_toBottomOf="@+id/accountDropdown" />
 
         <EditText
-            android:id="@+id/editText3"
+            android:id="@+id/amountInput"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -60,19 +60,19 @@
             android:id="@+id/ownTransferSwitch"
             android:layout_width="172dp"
             android:layout_height="39dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:text="Own transfer"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.167"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText3" />
+            app:layout_constraintTop_toBottomOf="@+id/amountInput" />
 
         <TextView
             android:id="@+id/textView11"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:text="Receiver:"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -108,7 +108,7 @@
             android:id="@+id/textView12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="16dp"
             android:text="Due date:"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -130,7 +130,7 @@
             android:id="@+id/payButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="24dp"
             android:text="Pay"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"

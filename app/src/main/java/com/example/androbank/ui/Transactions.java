@@ -9,6 +9,7 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
 import com.example.androbank.R;
 import com.example.androbank.databinding.FragmentTransactionsBinding;
@@ -22,6 +23,11 @@ public class Transactions extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentTransactionsBinding.inflate(inflater, container, false);
         root = binding.getRoot();
+
+        String[] accounts = {"Account 1", "Account 2", "Account 3"};
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(getActivity(), android.R.layout.simple_spinner_item, accounts);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.accountSelect.setAdapter(adapter);
 
         binding.back.setOnClickListener(new View.OnClickListener() {
             @Override

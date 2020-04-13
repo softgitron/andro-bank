@@ -86,22 +86,22 @@ public class User {
     }
 
     public String setName(){
-
+        return null;
     }
 
     public String getEmail(){
-
+        return null;
     }
 
     public String setEmail(){
-
+        return null;
     }
 
     public String getPhoneNumber (){
-
+        return null;
     }
 
     public String setPhoneNumber(){
-
+        return null;
     }
 }

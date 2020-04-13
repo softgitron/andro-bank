@@ -24,7 +24,7 @@ public class Accounts {
                 Integer httpCode = response.getHttpCode();
                 if (httpCode < 299) {
                     NewAccount newAccount = (NewAccount) response.getResponse();
-                    Account account = new Account(newAccount.accountId, newAccount.iban, 0);
+                    Account account = new Account(newAccount.accountId, newAccount.iban, 0, "debit", true);
                     finalResults.postValue(account);
                 } else {
                     Session session = Session.getSession();

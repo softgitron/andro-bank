@@ -10,16 +10,20 @@ import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
 
 import com.example.androbank.MainActivity;
 import com.example.androbank.R;
 import com.example.androbank.databinding.FragmentHomeBinding;
+import com.example.androbank.session.User;
+import com.example.androbank.session.Session;
 
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     private View root;
+    private Session session = Session.getSession();
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
@@ -47,12 +51,16 @@ public class HomeFragment extends Fragment {
         binding.login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String username = binding.username.getText().toString();
+                String password = binding.password.getText().toString();
 
-                // TODO: Login functionality and checks
-                System.out.println("Let's login");
-
-                Navigation.findNavController(root).navigate((R.id.action_nav_home_to_main_Menu));
-            }
+                session.user.login(username, password).observe(getViewLifecycleOwner(), new Observer<User>() {
+                    @Override
+                    public void onChanged(User user) {
+                        Navigation.findNavController(root).navigate(R.id.action_nav_home_to_main_Menu);
+                    }
+                });
+        }
         });
 
         binding.createAccount.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_nav_home_to_roni_test));

@@ -9,11 +9,11 @@ import java.util.List;
     }
 
     public List<Card> getCardsList () {
-
+        return null;
     }
 
     public Card newCard(Card card) {
-
+        return null;
     }
 }
 */

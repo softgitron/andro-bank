@@ -85,7 +85,7 @@ public class User {
         return name;
     }
 
-    public String setName(){
+    /*public String setName(){
 
     }
 
@@ -103,5 +103,5 @@ public class User {
 
     public String setPhoneNumber(){
 
-    }
+    }*/
 }

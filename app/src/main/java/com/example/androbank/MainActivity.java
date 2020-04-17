@@ -4,11 +4,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
 
+import com.example.androbank.session.Session;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.navigation.NavController;
+import androidx.navigation.NavGraph;
+import androidx.navigation.NavInflater;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -35,9 +38,27 @@ public class MainActivity extends AppCompatActivity {
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavInflater navInflater = navController.getNavInflater();
+        NavGraph graph = navInflater.inflate(R.navigation.mobile_navigation);
+
+        // Load the previous session if possible.
+        Session.getSession().sessionLoad(getBaseContext());
+        if (Session.getSession().user.getEmail() != null) {
+            graph.setStartDestination(R.id.main_Menu);
+            // navController.navigate(R.id.main_Menu);
+        } else {
+            graph.setStartDestination(R.id.nav_home);
+        }
+
+        navController.setGraph(graph);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Session.getSession().sessionDump(getBaseContext());
     }
 
     @Override

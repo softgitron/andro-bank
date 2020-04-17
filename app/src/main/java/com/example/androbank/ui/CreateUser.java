@@ -5,6 +5,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -13,8 +14,11 @@ import androidx.navigation.Navigation;
 
 import com.example.androbank.R;
 import com.example.androbank.databinding.CreateUserBinding;
+import com.example.androbank.session.Bank;
 import com.example.androbank.session.Session;
 import com.example.androbank.session.User;
+
+import java.util.ArrayList;
 
 public class CreateUser extends Fragment {
 
@@ -31,6 +35,7 @@ public class CreateUser extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = CreateUserBinding.inflate(inflater, container, false);
         root = binding.getRoot();
+        populateBankList();
         initializeErrorHandling();
 
         binding.usernameField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -171,6 +176,7 @@ public class CreateUser extends Fragment {
     }
 
     private void handleCreateUserButton() {
+        String bankName = binding.bankSelector.getSelectedItem().toString();
         String username = binding.usernameField.getText().toString();
         String firstName = binding.firstNameField.getText().toString();
         String lastName = binding.lastNameField.getText().toString();
@@ -179,14 +185,29 @@ public class CreateUser extends Fragment {
         String password = binding.passwordField.getText().toString();
         binding.accountCreationError.setVisibility(View.INVISIBLE);
 
-        session.user.createUser(0, username, firstName, lastName, email, phoneNumber, password).observe(getViewLifecycleOwner(), new Observer<User>() {
+        session.user.createUser(bankName, username, firstName, lastName, email, phoneNumber, password).observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
             public void onChanged(User user) {
                 binding.loadingIndicator.setVisibility(View.INVISIBLE);
-                Navigation.findNavController(root).navigate(R.id.action_roni_test_to_fragment_roni_test_success);
+                Navigation.findNavController(root).navigate(R.id.action_createUser_to_main_Menu);
             }
         });
         binding.loadingIndicator.setVisibility(View.VISIBLE);
+    }
+
+    private void populateBankList() {
+        session.banks.getBanksList().observe(getViewLifecycleOwner(), new Observer<ArrayList<Bank>>() {
+            @Override
+            public void onChanged(ArrayList<Bank> banks) {
+                String[] items = new String[banks.size()];
+                for (int i = 0; i < banks.size(); i++) {
+                    items[i] = banks.get(i).name;
+                }
+                // https://stackoverflow.com/questions/5241660/how-to-add-items-to-a-spinner-in-android
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, items);
+                binding.bankSelector.setAdapter(adapter);
+            }
+        });
     }
 
     private void initializeErrorHandling() {

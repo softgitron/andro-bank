@@ -11,12 +11,9 @@ import java.util.Observable;
 import java.util.Observer;
 
 import static com.example.androbank.connection.Transfer.sendRequest;
+import static com.example.androbank.session.SessionUtils.genericErrorHandling;
 
 public class Accounts {
-    private static Accounts instance = new Accounts();
-
-    public static Accounts getAccounts() {return instance;}
-    private Accounts() {}
     private ArrayList<Account> accountList = new ArrayList<Account>();
 
     public MutableLiveData<Account> createAccount() {
@@ -26,17 +23,11 @@ public class Accounts {
             @Override
             public void update(Observable o, Object arg) {
                 Response response = (Response) o;
-                Integer httpCode = response.getHttpCode();
-                if (httpCode < 299) {
-                    AccountContainer newAccount = (AccountContainer) response.getResponse();
-                    Account account = new Account(newAccount.accountId, newAccount.iban, 0, newAccount.type);
-                    accountList.add(account);
-                    finalResults.postValue(account);
-                } else {
-                    Session session = Session.getSession();
-                    session.setLastErrorCode(1);
-                    session.setLastErrorMessage(response.getError());
-                }
+                if (genericErrorHandling(response)) {return;};
+                AccountContainer newAccount = (AccountContainer) response.getResponse();
+                Account account = new Account(newAccount.accountId, newAccount.iban, 0, newAccount.type);
+                accountList.add(account);
+                finalResults.postValue(account);
             }
         });
         return finalResults;

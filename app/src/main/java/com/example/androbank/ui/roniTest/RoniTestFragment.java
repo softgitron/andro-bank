@@ -186,7 +186,7 @@ public class RoniTestFragment extends Fragment {
         String password = binding.passwordField.getText().toString();
         binding.accountCreationError.setVisibility(View.INVISIBLE);
 
-        session.user.createUser(0, username, firstName, lastName, email, phoneNumber, password).observe(getViewLifecycleOwner(), new Observer<User>() {
+        session.user.createUser("Deals", username, firstName, lastName, email, phoneNumber, password).observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
             public void onChanged(User user) {
                 binding.loadingIndicator.setVisibility(View.INVISIBLE);

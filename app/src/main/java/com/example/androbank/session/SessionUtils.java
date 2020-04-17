@@ -10,6 +10,7 @@ public class SessionUtils {
     public static Boolean shouldBeUpdated(Date timestamp) {
         // Check whether data is too old for usage
         // https://www.baeldung.com/java-add-hours-date
+        if (timestamp == null) {return true;}
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(timestamp);
         calendar.add(Calendar.MINUTE, REFRESH_TIME_IN_MINUTES);

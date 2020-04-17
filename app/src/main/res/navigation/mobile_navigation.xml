@@ -92,6 +92,9 @@
         <action
             android:id="@+id/action_userDetails_to_nav_home"
             app:destination="@id/nav_home" />
+        <action
+            android:id="@+id/action_userDetails_to_updateContact"
+            app:destination="@id/updateContact" />
     </fragment>
     <fragment
         android:id="@+id/transactions"
@@ -129,6 +132,14 @@
             app:destination="@id/main_Menu"
             app:popUpTo="@id/mobile_navigation"
             app:popUpToInclusive="true" />
+    <fragment
+        android:id="@+id/updateContact"
+        android:name="com.example.androbank.ui.UpdateContact"
+        android:label="fragment_update_contact"
+        tools:layout="@layout/fragment_update_contact" >
+        <action
+            android:id="@+id/action_updateContact_to_userDetails"
+            app:destination="@id/userDetails" />
     </fragment>
 
 </navigation>

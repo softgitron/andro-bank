@@ -109,7 +109,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:hint="Emal"
+        android:hint="Email"
         android:inputType="textEmailAddress"
         android:minEms="12"
         app:layout_constraintStart_toStartOf="parent"

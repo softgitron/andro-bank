@@ -2,20 +2,30 @@ package com.example.androbank.connection;
 
 import android.content.res.Resources;
 
+import com.example.androbank.containers.AccountContainer;
+import com.example.androbank.containers.BankContainer;
+import com.example.androbank.containers.CardContainer;
+import com.example.androbank.containers.FutureTransactionContainer;
+import com.example.androbank.containers.TransactionContainer;
+import com.example.androbank.containers.UserContainer;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
-import java.net.HttpURLConnection;
+import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class Transfer {
     public static final String API_ADDRESS = "https://qlist.ddns.net";
@@ -54,7 +64,7 @@ public class Transfer {
             URL url = null;
             try {
                 url = new URL(API_ADDRESS + address);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
                 connection.setConnectTimeout(CONNECTION_TIMEOUT);
                 connection.setReadTimeout(READ_TIMEOUT);
                 // Set token if requested
@@ -83,19 +93,21 @@ public class Transfer {
         return response;
     }
 
-    private static void sendRequest(HttpURLConnection connection, MethodType method, String json) throws IOException {
-        connection.setRequestMethod(method.name());
+    private static void sendRequest(HttpsURLConnection connection, MethodType method, String json) throws IOException {
         connection.setRequestProperty("Content-Type", "application/json; utf-8");
         connection.setRequestProperty("Accept", "application/json");
-        connection.setDoOutput(true);
-        OutputStream os = connection.getOutputStream();
-        byte[] input = json.getBytes("utf-8");
-        os.write(input, 0, input.length);
-        os.flush();
-        os.close();
+        connection.setRequestMethod(method.name());
+        if (method != MethodType.GET) {
+            connection.setDoOutput(true);
+            OutputStream os = connection.getOutputStream();
+            byte[] input = json.getBytes("utf-8");
+            os.write(input, 0, input.length);
+            os.flush();
+            os.close();
+        }
     }
 
-    private static String checkToken(HttpURLConnection connection) {
+    private static String checkToken(HttpsURLConnection connection) {
         Map<String, List<String>> headers = connection.getHeaderFields();
         List<String> tokens = headers.get("X-Auth-Token");
         String newToken = null;
@@ -106,7 +118,7 @@ public class Transfer {
         return newToken;
     }
 
-    private static String readResponse(HttpURLConnection connection) throws IOException {
+    private static String readResponse(HttpsURLConnection connection) throws IOException {
         int status = connection.getResponseCode();
         InputStreamReader streamReader = null;
         if (status > 299) {
@@ -127,12 +139,47 @@ public class Transfer {
 
     private static void handleResponse(String responseString, Integer statusCode, Response response, String token, Class resultType) {
         if (statusCode < 299) {
+            Type resultTypeChecked = handleListTypes(responseString, resultType);
             Gson gson = new Gson();
-            Object results = gson.fromJson(responseString, resultType);
+            Object results;
+            if (resultTypeChecked == null) {
+                results = gson.fromJson(responseString, resultType);
+            } else {
+                results = gson.fromJson(responseString, resultTypeChecked);
+            }
             response.setValue(statusCode, results, null, token);
         } else {
             response.setValue(statusCode, null, responseString);
         }
+    }
+
+    // Handles case when return json is a list.
+    // This is again quite hacky but makes calling of the API:s a lot easier
+    // Java does not support proper way to do this actually cleanly
+    private static Type handleListTypes(String responseString, Class resultType) {
+        if (responseString.startsWith("[") && responseString.endsWith("]")) {
+            if (resultType == AccountContainer.class) {
+
+            } else if (resultType == BankContainer.class) {
+                return new TypeToken<ArrayList<BankContainer>>(){}.getType();
+            } else if (resultType == CardContainer.class) {
+                return new TypeToken<ArrayList<CardContainer>>(){}.getType();
+            } else if (resultType == FutureTransactionContainer.class) {
+                return new TypeToken<ArrayList<FutureTransactionContainer>>(){}.getType();
+            } else if (resultType == TransactionContainer.class) {
+                return new TypeToken<ArrayList<TransactionContainer>>(){}.getType();
+            } else if (resultType == UserContainer.class) {
+                return new TypeToken<ArrayList<UserContainer>>(){}.getType();
+            } else if (resultType == String.class) {
+                return new TypeToken<ArrayList<String>>(){}.getType();
+            } else {
+                System.out.println("Fatal error occurred during handling of the response.");
+                System.out.println("Most likely there is incompatible return type selected.");
+                System.out.println("This error should not ever appear,");
+                System.exit(1004);
+            }
+        }
+        return null;
     }
 
     public static void setToken(String newToken) {
@@ -145,7 +192,7 @@ public class Transfer {
     public static void setIsFetching(Boolean value) { isFetching = value; }
 
 
-    public static class userTransfer {
+    /*public static class userTransfer {
         public userTransfer() {
 
         }
@@ -223,5 +270,5 @@ public class Transfer {
         public void setLimits(String cardNumber, float withdrawLimit, float paymentLimit, Array allowedCountries) {
 
         }
-    }
+    }*/
 }

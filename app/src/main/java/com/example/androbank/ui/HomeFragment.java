@@ -1,4 +1,4 @@
-package com.example.androbank.ui.home;
+package com.example.androbank.ui;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,8 +16,12 @@ import androidx.navigation.Navigation;
 import com.example.androbank.MainActivity;
 import com.example.androbank.R;
 import com.example.androbank.databinding.FragmentHomeBinding;
+import com.example.androbank.session.Bank;
 import com.example.androbank.session.User;
 import com.example.androbank.session.Session;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
 
@@ -30,11 +34,9 @@ public class HomeFragment extends Fragment {
         root = binding.getRoot();
 
         //Populate spinner
-        Spinner bank_spinner = binding.bankspinner;
-        String[] temp_banks = {"Nordea", "OP", "Dank"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, temp_banks);
+        populateBankList();
         //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        bank_spinner.setAdapter(adapter);
+        initializeErrorHandling();
 
         binding.startRoniTest.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,10 +53,10 @@ public class HomeFragment extends Fragment {
         binding.login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = binding.username.getText().toString();
+                String email = binding.email.getText().toString();
                 String password = binding.password.getText().toString();
 
-                session.user.login(0, username, password).observe(getViewLifecycleOwner(), new Observer<User>() {
+                session.user.login(0, email, password).observe(getViewLifecycleOwner(), new Observer<User>() {
                     @Override
                     public void onChanged(User user) {
                         Navigation.findNavController(root).navigate(R.id.action_nav_home_to_main_Menu);
@@ -68,5 +70,29 @@ public class HomeFragment extends Fragment {
 
 
         return root;
+    }
+
+    private void populateBankList() {
+        session.banks.getBanksList().observe(getViewLifecycleOwner(), new Observer<ArrayList<Bank>>() {
+            @Override
+            public void onChanged(ArrayList<Bank> banks) {
+                String[] items = new String[banks.size()];
+                for (int i = 0; i < banks.size(); i++) {
+                    items[i] = banks.get(i).name;
+                }
+                // https://stackoverflow.com/questions/5241660/how-to-add-items-to-a-spinner-in-android
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, items);
+                binding.bankspinner.setAdapter(adapter);
+            }
+        });
+    }
+
+    private void initializeErrorHandling() {
+        session.getLastErrorMessage().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                Snackbar.make(getView(), s, Snackbar.LENGTH_LONG).show();
+            }
+        });
     }
 }

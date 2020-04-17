@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.example.androbank.R;
 import com.example.androbank.databinding.FragmentMainMenuBinding;
+import com.example.androbank.session.Session;
 
 public class Main_Menu extends Fragment {
 
@@ -28,6 +29,14 @@ public class Main_Menu extends Fragment {
         binding.viewTransactions.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_main_Menu_to_transactions));
 
         binding.viewUser.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_main_Menu_to_userDetails));
+
+        binding.logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Session.getSession().sessionDestroy(getContext());
+                Navigation.findNavController(root).navigate(R.id.action_main_Menu_to_nav_home);
+            }
+        });
 
         return root;
     }

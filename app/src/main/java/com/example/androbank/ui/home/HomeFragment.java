@@ -54,7 +54,7 @@ public class HomeFragment extends Fragment {
                 String username = binding.username.getText().toString();
                 String password = binding.password.getText().toString();
 
-                session.user.login(username, password).observe(getViewLifecycleOwner(), new Observer<User>() {
+                session.user.login(0, username, password).observe(getViewLifecycleOwner(), new Observer<User>() {
                     @Override
                     public void onChanged(User user) {
                         Navigation.findNavController(root).navigate(R.id.action_nav_home_to_main_Menu);
@@ -63,7 +63,7 @@ public class HomeFragment extends Fragment {
         }
         });
 
-        binding.createAccount.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_nav_home_to_roni_test));
+        binding.createAccount.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_nav_home_to_createUser));
 
 
 

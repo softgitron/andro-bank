@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 public class Session {
     public Accounts accounts;
     public User user;
-    public Bank bank;
+    public Banks banks;
     private MutableLiveData<Integer> errorCode;
     private MutableLiveData<String> errorMessage;
 
@@ -13,6 +13,7 @@ public class Session {
 
     public static Session getSession() {return instance;}
     private Session() {
+        banks = Banks.getBanks();
         accounts = Accounts.getAccounts();
         user = User.getUser();
         errorCode = new MutableLiveData<Integer>(0);

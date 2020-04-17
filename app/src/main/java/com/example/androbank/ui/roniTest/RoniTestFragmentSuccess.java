@@ -57,12 +57,10 @@ public class RoniTestFragmentSuccess extends Fragment {
     private void handleLoginButton() {
         String email = binding.emailField.getText().toString();
         String password = binding.passwordField.getText().toString();
-        session.user.login(email, password).observe(getViewLifecycleOwner(), new Observer<User>() {
+        session.user.login(0, email, password).observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
             public void onChanged(User user) {
-                if (user.getLoggedInStatus()) {
-                    binding.loginStatus.setText("Your first name is: " + user.getFirstName());
-                }
+                binding.loginStatus.setText("Your first name is: " + user.getFirstName());
             }
         });
     }

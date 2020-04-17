@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_nav_home_to_main_Menu"
             app:destination="@id/main_Menu" />
+        <action
+            android:id="@+id/action_nav_home_to_createUser"
+            app:destination="@id/createUser" />
     </fragment>
 
     <fragment
@@ -109,5 +112,10 @@
             android:id="@+id/action_newCardPayment2_to_accounts"
             app:destination="@id/accounts" />
     </fragment>
+    <fragment
+        android:id="@+id/createUser"
+        android:name="com.example.androbank.ui.CreateUser"
+        android:label="create_user"
+        tools:layout="@layout/create_user" />
 
 </navigation>

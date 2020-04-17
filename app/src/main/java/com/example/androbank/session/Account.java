@@ -1,18 +1,22 @@
 package com.example.androbank.session;
 
 public class Account {
+    public enum AccountType {
+        Savings,
+        Credit,
+        Normal
+    }
+
     private Integer accountId = null;
     private String iban = null;
     private Integer balance = null;
-    private String accountType = null;
-    private boolean canMakePayments;
+    private AccountType accountType = null;
 
-    public Account(Integer accountId, String iban, Integer balance, String accountType, boolean canMakePayments) {
+    public Account(Integer accountId, String iban, Integer balance, AccountType accountType) {
         this.accountId = accountId;
         this.iban = iban;
         this.balance = balance;
         this.accountType = accountType;
-        this.canMakePayments = canMakePayments;
     }
 
     public Integer getAccountId() {
@@ -27,14 +31,11 @@ public class Account {
         return balance;
     }
 
-    public String getAccountType () { return accountType;}
+    public AccountType getAccountType () { return accountType;}
 
-    public String setAccountType () {
+    public AccountType setAccountType () {
         return accountType;
     }
-    public boolean getCanMakePayments() {return canMakePayments;}
-
-    public boolean setCanMakePayments() { return canMakePayments;}
 
     public void deposit(float amount) {
 

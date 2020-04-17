@@ -18,24 +18,25 @@ import java.util.List;
 import java.util.Map;
 
 public class Transfer {
-    public static final String API_ADDRESS = "http://10.0.2.2:8080";
+    public static final String API_ADDRESS = "https://qlist.ddns.net";
     static final Integer CONNECTION_TIMEOUT = 5000;
     static final Integer READ_TIMEOUT = 5000;
     protected static String token;
     private static Boolean isFetching = false;
 
-    enum MethodType {
+    public enum MethodType {
         POST,
         GET,
+        PATCH,
         DELETE
     }
 
-    protected static Response sendRequest(MethodType method, String address, Object data, Class resultType, boolean authentication) {
+    public static Response sendRequest(MethodType method, String address, Object data, Class resultType, boolean authentication) {
         Response response = new Response();
         if (isFetching) {
             Thread errorThread = new Thread(() -> {
                 // This is very hacky should be changed in the future to avoid sleep usage.
-                try { Thread.sleep(100); } catch (Exception e) {}
+                try { Thread.sleep(50); } catch (Exception e) {}
                 response.setValue(999, null, "Fetching was already ongoing.");
             });
             return response;
@@ -64,17 +65,7 @@ public class Transfer {
                     }
                     connection.setRequestProperty("X-Auth-Token", token);
                 }
-                switch (method) {
-                    case GET:
-                        connection.setRequestMethod("GET");
-                        break;
-                    case POST:
-                        sendPostRequest(connection, json);
-                        break;
-                    case DELETE:
-                        connection.setRequestMethod("DELETE");
-                        break;
-                }
+                sendRequest(connection, method, json);
                 String responseString = readResponse(connection);
                 String newToken = checkToken(connection);
                 handleResponse(responseString, connection.getResponseCode(), response, newToken, resultType);
@@ -92,8 +83,8 @@ public class Transfer {
         return response;
     }
 
-    private static void sendPostRequest(HttpURLConnection connection, String json) throws IOException {
-        connection.setRequestMethod("POST");
+    private static void sendRequest(HttpURLConnection connection, MethodType method, String json) throws IOException {
+        connection.setRequestMethod(method.name());
         connection.setRequestProperty("Content-Type", "application/json; utf-8");
         connection.setRequestProperty("Accept", "application/json");
         connection.setDoOutput(true);

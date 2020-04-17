@@ -1,31 +1,24 @@
-package com.example.androbank.ui.roniTest;
+package com.example.androbank.ui;
 
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
 import com.example.androbank.R;
-import com.example.androbank.connection.Response;
-import com.example.androbank.databinding.FragmentRoniTestBinding;
+import com.example.androbank.databinding.CreateUserBinding;
 import com.example.androbank.session.Session;
 import com.example.androbank.session.User;
 
-public class RoniTestFragment extends Fragment {
+public class CreateUser extends Fragment {
 
-    private FragmentRoniTestBinding binding;
+    private CreateUserBinding binding;
     private View root;
     private Session session = Session.getSession();
 
@@ -36,7 +29,7 @@ public class RoniTestFragment extends Fragment {
     private boolean[] errors = {true, true, true, true, true, true};
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentRoniTestBinding.inflate(inflater, container, false);
+        binding = CreateUserBinding.inflate(inflater, container, false);
         root = binding.getRoot();
         initializeErrorHandling();
 

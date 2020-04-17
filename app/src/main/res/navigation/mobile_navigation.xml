@@ -126,7 +126,7 @@
         android:id="@+id/createUser"
         android:name="com.example.androbank.ui.CreateUser"
         android:label="Create User"
-        tools:layout="@layout/create_user" >
+        tools:layout="@layout/create_user" />
         <action
             android:id="@+id/action_createUser_to_main_Menu"
             app:destination="@id/main_Menu"

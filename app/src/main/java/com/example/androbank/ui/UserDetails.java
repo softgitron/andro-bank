@@ -39,7 +39,7 @@ public class UserDetails extends Fragment {
         binding.updateDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO Update contacts logic/UI
+                Navigation.findNavController(root).navigate((R.id.action_userDetails_to_updateContact));
             }
         });
 

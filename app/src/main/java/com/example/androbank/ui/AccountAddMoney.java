@@ -10,16 +10,18 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.androbank.databinding.FragmentAddToAccountBinding;
-import com.example.androbank.databinding.FragmentNewCardPaymentBinding;
+import com.example.androbank.databinding.FragmentAccountAddMoneyBinding;
 
-public class AddMoney extends Fragment {
-    private FragmentAddToAccountBinding binding;
+
+public class AccountAddMoney extends Fragment {
+    private FragmentAccountAddMoneyBinding binding;
     private View root;
     private float amount;
+    private String ibanWithBalance;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentAddToAccountBinding.inflate(inflater, container, false);
+        binding = FragmentAccountAddMoneyBinding.inflate(inflater, container, false);
         root = binding.getRoot();
 
         binding.amountInput.addTextChangedListener(new TextWatcher() {
@@ -33,6 +35,16 @@ public class AddMoney extends Fragment {
             }
         });
         return root;
+    }
+
+    /**
+     * Used for getting the data from bundle which Accounts gives to this fragment.
+     */
+    public void onStart() {
+        super.onStart();
+        ibanWithBalance = getArguments().getString("accountData");
+        System.out.println("ADD MONEY RECEIVED STRING: " + ibanWithBalance);
+
     }
 }
 

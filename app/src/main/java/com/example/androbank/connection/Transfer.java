@@ -1,7 +1,5 @@
 package com.example.androbank.connection;
 
-import android.content.res.Resources;
-
 import com.example.androbank.containers.AccountContainer;
 import com.example.androbank.containers.BankContainer;
 import com.example.androbank.containers.CardContainer;
@@ -15,13 +13,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -42,12 +38,20 @@ public class Transfer {
     }
 
     public static Response sendRequest(MethodType method, String address, Object data, Class resultType, boolean authentication) {
+        return doSendRequest(method, address, data, resultType, authentication, true);
+    }
+
+    public static Response sendRequest(MethodType method, String address, Object data, Class resultType, boolean authentication, boolean useCache) {
+        return doSendRequest(method, address, data, resultType, authentication, useCache);
+    }
+
+    private static Response doSendRequest(MethodType method, String address, Object data, Class resultType, boolean authentication, boolean useCache) {
         Response response = new Response();
         if (isFetching) {
             Thread errorThread = new Thread(() -> {
                 // This is very hacky should be changed in the future to avoid sleep usage.
-                try { Thread.sleep(50); } catch (Exception e) {}
-                response.setValue(999, null, "Fetching was already ongoing.");
+                try { Thread.sleep(200); } catch (Exception e) {}
+                response.setValue(999, null, "Fetching was already ongoing.", false);
             });
             return response;
         }
@@ -58,6 +62,17 @@ public class Transfer {
             if (data != null) {
                 Gson gson = new Gson();
                 json = gson.toJson(data);
+            }
+            // Check cache before doing request
+            if (useCache) {
+                // Use cached response if there is one available
+                Response cachedResponse = Cache.getCacheEntry(method, address, json);
+                if (cachedResponse != null) {
+                    response.setValue(cachedResponse.getHttpCode(),
+                            cachedResponse.getResponse(), cachedResponse.getError(), true);
+                    isFetching = false;
+                    return;
+                }
             }
             // https://www.baeldung.com/java-http-request
             // https://www.baeldung.com/httpurlconnection-post
@@ -79,12 +94,17 @@ public class Transfer {
                 String responseString = readResponse(connection);
                 String newToken = checkToken(connection);
                 handleResponse(responseString, connection.getResponseCode(), response, newToken, resultType);
+                // Set new entry to cache if no error
+                if (response.getHttpCode() < 299) {
+                    Cache.newCacheEntry(method, address, json, response);
+                }
             } catch (MalformedURLException e) {
                 System.out.println("Malformed url exception should not occur ever.");
+                System.exit(11);
             } catch (ProtocolException e) {
-                response.setValue(400, null, "Unknown protocol error");
+                response.setValue(400, null, "Unknown protocol error", false);
             } catch (IOException e) {
-                response.setValue(444, null, "Connection error");
+                response.setValue(444, null, "Connection error", false);
             } finally {
                 isFetching = false;
             }
@@ -147,9 +167,9 @@ public class Transfer {
             } else {
                 results = gson.fromJson(responseString, resultTypeChecked);
             }
-            response.setValue(statusCode, results, null, token);
+            response.setValue(statusCode, results, null, false, token);
         } else {
-            response.setValue(statusCode, null, responseString);
+            response.setValue(statusCode, null, responseString, false);
         }
     }
 
@@ -186,7 +206,11 @@ public class Transfer {
         token = newToken;
     }
     public static String getToken() {
-        return token;
+        if (token != null) {
+            return token;
+        } else {
+            return "";
+        }
     }
     public static Boolean getIsFetching() { return isFetching; }
     public static void setIsFetching(Boolean value) { isFetching = value; }

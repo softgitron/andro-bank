@@ -54,6 +54,9 @@
         <action
             android:id="@+id/action_accounts_to_newPayment"
             app:destination="@id/newPayment" />
+        <action
+            android:id="@+id/action_accounts_to_accountAddMoney"
+            app:destination="@id/accountAddMoney" />
     </fragment>
     <fragment
         android:id="@+id/cards"
@@ -140,6 +143,15 @@
         <action
             android:id="@+id/action_updateContact_to_userDetails"
             app:destination="@id/userDetails" />
+    </fragment>
+    <fragment
+        android:id="@+id/accountAddMoney"
+        android:name="com.example.androbank.ui.AccountAddMoney"
+        android:label="fragment_account_add_money"
+        tools:layout="@layout/fragment_account_add_money" >
+        <action
+            android:id="@+id/action_accountAddMoney_to_accounts"
+            app:destination="@id/accounts" />
     </fragment>
 
 </navigation>

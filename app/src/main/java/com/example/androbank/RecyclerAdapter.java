@@ -44,10 +44,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
                         RecyclerViewObject clickedDataItem = adapterList.get(pos);
 
                         if (fragmentInstance instanceof Accounts) {
-                            System.out.println(fragmentInstance.getClass());
-                            ((Accounts)fragmentInstance).hello(clickedDataItem.getCardText());
+                            ((Accounts)fragmentInstance).addMoney(clickedDataItem.getCardText());
                         } else if (fragmentInstance instanceof Cards) {
-                            System.out.println(fragmentInstance.getClass());
                             ((Cards)fragmentInstance).selectCard(clickedDataItem.getCardText());
                         }
                     }

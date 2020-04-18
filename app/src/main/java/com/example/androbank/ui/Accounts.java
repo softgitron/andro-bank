@@ -132,8 +132,10 @@ public class Accounts extends Fragment {
             }
         });
     }
-    public void hello(String iban) {
-        System.out.println("HELLO WORLD!!!!!! " + iban);
+    public void addMoney(String iban) {
+        Bundle bundle = new Bundle();
+        bundle.putString("accountData", iban);
+        Navigation.findNavController(root).navigate(R.id.accountAddMoney, bundle);
     }
 
 }

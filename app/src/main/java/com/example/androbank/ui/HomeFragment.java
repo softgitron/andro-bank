@@ -1,5 +1,6 @@
 package com.example.androbank.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -27,15 +29,19 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     private View root;
     private Session session = Session.getSession();
+    private Context context;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         root = binding.getRoot();
+        context = getContext();
 
         //Populate spinner
         populateBankList();
@@ -80,6 +86,9 @@ public class HomeFragment extends Fragment {
                                         event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
                             if (event == null || !event.isShiftPressed()) {
                                 binding.login.performClick();
+                                // How to close/hide keyboard https://stackoverflow.com/a/17789187
+                                InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(root.getWindowToken(), 0);
                                 return true; // consume.
                             }
                         }

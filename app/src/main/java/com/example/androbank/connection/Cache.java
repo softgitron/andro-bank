@@ -44,6 +44,10 @@ class Cache {
         cacheEntries.add(entry);
     }
 
+    static void emptyCache() {
+        cacheEntries.clear();
+    }
+
     private static Integer validForCaching(String address) {
         switch (address) {
             case "/accounts/getAccounts":

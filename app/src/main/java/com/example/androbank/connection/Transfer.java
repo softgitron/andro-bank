@@ -47,6 +47,7 @@ public class Transfer {
 
     private static Response doSendRequest(MethodType method, String address, Object data, Class resultType, boolean authentication, boolean useCache) {
         Response response = new Response();
+
         if (isFetching) {
             Thread errorThread = new Thread(() -> {
                 // This is very hacky should be changed in the future to avoid sleep usage.
@@ -215,6 +216,9 @@ public class Transfer {
     public static Boolean getIsFetching() { return isFetching; }
     public static void setIsFetching(Boolean value) { isFetching = value; }
 
+    public static void clearCache() {
+        Cache.emptyCache();
+    }
 
     /*public static class userTransfer {
         public userTransfer() {

@@ -1,5 +1,6 @@
 package com.example.androbank.session;
 
+import androidx.constraintlayout.solver.Cache;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.androbank.connection.Response;
@@ -26,10 +27,10 @@ public class Accounts {
                 if (genericErrorHandling(response)) {return;};
                 AccountContainer newAccount = (AccountContainer) response.getResponse();
                 Account account = new Account(newAccount.accountId, newAccount.iban, 0, newAccount.type);
-                accountList.add(account);
                 finalResults.postValue(account);
             }
         });
+        Transfer.clearCache();
         return finalResults;
     }
 
@@ -37,11 +38,12 @@ public class Accounts {
         //TODO periodically update lists of accounts using API
         accountList.clear();
         MutableLiveData<ArrayList<Account>> statusAccounts = new MutableLiveData<ArrayList<Account>>();
-        Response response = sendRequest(Transfer.MethodType.GET, "/accounts/getAccounts", "", AccountContainer.class, true);
+        Response response = sendRequest(Transfer.MethodType.GET, "/accounts/getAccounts", "", AccountContainer.class, true, true);
         response.addObserver(new Observer() {
             @Override
             public void update(Observable o, Object arg) {
                 Response response = (Response) o;
+                System.out.println(response.getResponse().toString());
                 if (genericErrorHandling(response)) {return;};
                 // Save user details to session
                 ArrayList<AccountContainer> accountContainers = (ArrayList<AccountContainer>) response.getResponse();

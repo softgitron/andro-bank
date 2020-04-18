@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
@@ -12,12 +13,14 @@ import android.view.ViewGroup;
 
 import com.example.androbank.R;
 import com.example.androbank.databinding.FragmentMainMenuBinding;
+import com.example.androbank.session.Account;
 import com.example.androbank.session.Session;
 
 public class Main_Menu extends Fragment {
 
     private FragmentMainMenuBinding binding;
     private View root;
+    private Session session = Session.getSession();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,6 +38,18 @@ public class Main_Menu extends Fragment {
             public void onClick(View v) {
                 Session.getSession().sessionDestroy(getContext());
                 Navigation.findNavController(root).navigate(R.id.action_main_Menu_to_nav_home);
+            }
+        });
+
+        binding.createAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                session.accounts.createAccount().observe(getViewLifecycleOwner(), new Observer<Account>() {
+                    @Override
+                    public void onChanged(Account account) {
+                        System.out.println("Account created");
+                    }
+                });
             }
         });
 

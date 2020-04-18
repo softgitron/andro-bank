@@ -63,7 +63,7 @@ public class Accounts extends Fragment {
         mAdapter = new RecyclerAdapter(itemList);
         recyclerView.setAdapter(mAdapter);*/
 
-        //populateAccountList();
+        populateAccountList();
 
         recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override

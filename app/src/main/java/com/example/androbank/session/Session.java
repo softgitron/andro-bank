@@ -81,7 +81,7 @@ public class Session {
     // Was the session loaded successfully
     public Boolean sessionLoad(Context context) {
         String data = loadFile(context);
-        if (data == null) {
+        if (data == null || data == "") {
             return false;
         }
         Type type = new TypeToken<ArrayList<String>>(){}.getType();

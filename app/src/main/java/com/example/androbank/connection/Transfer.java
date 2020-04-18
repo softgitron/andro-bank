@@ -179,7 +179,7 @@ public class Transfer {
     private static Type handleListTypes(String responseString, Class resultType) {
         if (responseString.startsWith("[") && responseString.endsWith("]")) {
             if (resultType == AccountContainer.class) {
-
+                return new TypeToken<ArrayList<AccountContainer>>(){}.getType();
             } else if (resultType == BankContainer.class) {
                 return new TypeToken<ArrayList<BankContainer>>(){}.getType();
             } else if (resultType == CardContainer.class) {

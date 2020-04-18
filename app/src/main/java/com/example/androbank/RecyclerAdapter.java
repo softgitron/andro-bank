@@ -42,7 +42,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
                     // check if item still exists
                     if(pos != RecyclerView.NO_POSITION){
                         RecyclerViewObject clickedDataItem = adapterList.get(pos);
-                        
+
                         if (fragmentInstance instanceof Accounts) {
                             System.out.println(fragmentInstance.getClass());
                             ((Accounts)fragmentInstance).hello(clickedDataItem.getCardText());

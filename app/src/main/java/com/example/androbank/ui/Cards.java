@@ -35,9 +35,15 @@ public class Cards extends Fragment {
         itemList.add(new RecyclerViewObject(R.drawable.ic_forward, "Card 2 - 9812 1999 6666"));
         itemList.add(new RecyclerViewObject(R.drawable.ic_forward, "Card 3 - 3230 0392 0001"));
 
-        mAdapter = new RecyclerAdapter(itemList);
+
+        mAdapter = new RecyclerAdapter(itemList, Cards.this);
         recyclerView.setAdapter(mAdapter);
 
         return rootView;
+    }
+
+    // TODO Finish implementation.
+    public void selectCard(String cardData) {
+        System.out.println("CARD + '" + cardData + "' WAS SELECTED!");
     }
 }

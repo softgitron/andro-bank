@@ -1,5 +1,6 @@
 package com.example.androbank.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -32,6 +33,8 @@ public class Accounts extends Fragment {
     private FragmentAccountsBinding binding;
     private View root;
     private Session session = Session.getSession();
+    private Context context = getContext();
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,6 +65,7 @@ public class Accounts extends Fragment {
         //get adapter
         mAdapter = new RecyclerAdapter(itemList);
         recyclerView.setAdapter(mAdapter);*/
+
 
         populateAccountList();
 
@@ -123,9 +127,13 @@ public class Accounts extends Fragment {
                     String a = accounts.get(i).getIban() + " - " + accounts.get(i).getBalance() + "€";
                     itemList.add(new RecyclerViewObject(R.drawable.ic_forward, a));
                 }
-                mAdapter = new RecyclerAdapter(itemList);
+                mAdapter = new RecyclerAdapter(itemList, Accounts.this);
                 recyclerView.setAdapter(mAdapter);
             }
         });
     }
+    public void hello(String iban) {
+        System.out.println("HELLO WORLD!!!!!! " + iban);
+    }
+
 }

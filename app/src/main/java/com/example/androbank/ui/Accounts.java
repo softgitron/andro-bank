@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,6 +19,8 @@ import com.example.androbank.R;
 import com.example.androbank.RecyclerAdapter;
 import com.example.androbank.databinding.FragmentAccountsBinding;
 import com.example.androbank.databinding.FragmentHomeBinding;
+import com.example.androbank.session.Account;
+import com.example.androbank.session.Session;
 
 import java.util.ArrayList;
 
@@ -28,6 +31,7 @@ public class Accounts extends Fragment {
 
     private FragmentAccountsBinding binding;
     private View root;
+    private Session session = Session.getSession();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,7 +50,7 @@ public class Accounts extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
 
-        ArrayList<RecyclerViewObject> itemList = new ArrayList<>();
+        /*ArrayList<RecyclerViewObject> itemList = new ArrayList<>();
         itemList.add(new RecyclerViewObject(R.drawable.ic_forward, "Account 1 - 100 €"));
         itemList.add(new RecyclerViewObject(R.drawable.ic_forward, "Account 2 - 1440 €"));
         itemList.add(new RecyclerViewObject(R.drawable.ic_forward, "Account 3 - 30 €"));
@@ -57,7 +61,9 @@ public class Accounts extends Fragment {
 
         //get adapter
         mAdapter = new RecyclerAdapter(itemList);
-        recyclerView.setAdapter(mAdapter);
+        recyclerView.setAdapter(mAdapter);*/
+
+        //populateAccountList();
 
         recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
@@ -106,5 +112,20 @@ public class Accounts extends Fragment {
         });
 
         return root;
+    }
+
+    private void populateAccountList() {
+        session.accounts.getAccountsList().observe(getViewLifecycleOwner(), new Observer<ArrayList<Account>>() {
+            @Override
+            public void onChanged(ArrayList<Account> accounts) {
+                ArrayList<RecyclerViewObject> itemList = new ArrayList<>();
+                for (int i = 0; i < accounts.size(); i++){
+                    String a = accounts.get(i).getIban() + " - " + accounts.get(i).getBalance() + "€";
+                    itemList.add(new RecyclerViewObject(R.drawable.ic_forward, a));
+                }
+                mAdapter = new RecyclerAdapter(itemList);
+                recyclerView.setAdapter(mAdapter);
+            }
+        });
     }
 }

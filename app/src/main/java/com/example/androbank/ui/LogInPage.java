@@ -21,7 +21,7 @@ import androidx.navigation.Navigation;
 
 import com.example.androbank.MainActivity;
 import com.example.androbank.R;
-import com.example.androbank.databinding.FragmentHomeBinding;
+import com.example.androbank.databinding.FragmentLogInPageBinding;
 import com.example.androbank.session.Bank;
 import com.example.androbank.session.User;
 import com.example.androbank.session.Session;
@@ -31,15 +31,15 @@ import java.util.ArrayList;
 
 import static androidx.core.content.ContextCompat.getSystemService;
 
-public class HomeFragment extends Fragment {
+public class LogInPage extends Fragment {
 
-    private FragmentHomeBinding binding;
+    private FragmentLogInPageBinding binding;
     private View root;
     private Session session = Session.getSession();
     private Context context;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        binding = FragmentLogInPageBinding.inflate(inflater, container, false);
         root = binding.getRoot();
         context = getContext();
 

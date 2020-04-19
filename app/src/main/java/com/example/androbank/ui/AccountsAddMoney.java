@@ -10,18 +10,18 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.androbank.databinding.FragmentAccountAddMoneyBinding;
+import com.example.androbank.databinding.FragmentAccountsAddMoneyBinding;
 
 
-public class AccountAddMoney extends Fragment {
-    private FragmentAccountAddMoneyBinding binding;
+public class AccountsAddMoney extends Fragment {
+    private  FragmentAccountsAddMoneyBinding binding;
     private View root;
     private float amount;
     private String ibanWithBalance;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentAccountAddMoneyBinding.inflate(inflater, container, false);
+        binding = FragmentAccountsAddMoneyBinding.inflate(inflater, container, false);
         root = binding.getRoot();
 
         binding.amountInput.addTextChangedListener(new TextWatcher() {

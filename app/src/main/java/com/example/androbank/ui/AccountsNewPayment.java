@@ -15,14 +15,14 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 
 import com.example.androbank.R;
-import com.example.androbank.databinding.FragmentNewPaymentBinding;
+import com.example.androbank.databinding.FragmentAccountsNewPaymentBinding;
 
 import java.time.LocalDate;
 
 
-public class NewPayment extends Fragment {
+public class AccountsNewPayment extends Fragment {
 
-    private FragmentNewPaymentBinding binding;
+    private FragmentAccountsNewPaymentBinding binding;
     private View root;
     private String account;
     private float amount;
@@ -34,7 +34,7 @@ public class NewPayment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentNewPaymentBinding.inflate(inflater, container, false);
+        binding = FragmentAccountsNewPaymentBinding.inflate(inflater, container, false);
         root = binding.getRoot();
 
         duedate = LocalDate.now();

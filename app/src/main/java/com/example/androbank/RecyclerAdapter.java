@@ -1,6 +1,5 @@
 package com.example.androbank;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,10 +7,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androbank.ui.Accounts;
-import com.example.androbank.ui.Cards;
+import com.example.androbank.ui.AccountsCards;
 import com.example.androbank.ui.RecyclerViewObject;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.RecyclerViewHolder> {
     private ArrayList<RecyclerViewObject> adapterList;
-    private Object fragmentInstance;
+    private Fragment fragmentInstance;
 
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder {
@@ -45,8 +45,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
 
                         if (fragmentInstance instanceof Accounts) {
                             ((Accounts)fragmentInstance).addMoney(clickedDataItem.getCardText());
-                        } else if (fragmentInstance instanceof Cards) {
-                            ((Cards)fragmentInstance).selectCard(clickedDataItem.getCardText());
+                        } else if (fragmentInstance instanceof AccountsCards) {
+                            ((AccountsCards)fragmentInstance).selectCard(clickedDataItem.getCardText());
                         }
                     }
                 }
@@ -54,11 +54,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
         }
     }
 
-    /**
+    /** Constructor
      * @param adapterList List containing the data for the recycler view
      * @param fragmentInstance Instance of Accounts or Cards. Needed for accessing their functions.
      */
-    public RecyclerAdapter(ArrayList<RecyclerViewObject> adapterList, Object fragmentInstance) {
+    public RecyclerAdapter(ArrayList<RecyclerViewObject> adapterList, Fragment fragmentInstance) {
         this.adapterList = adapterList;
         this.fragmentInstance = fragmentInstance;
     }

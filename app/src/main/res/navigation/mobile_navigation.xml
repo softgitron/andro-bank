@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.example.androbank.ui.HomeFragment"
+        android:name="com.example.androbank.ui.LogInPage"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home">
+        tools:layout="@layout/fragment_log_in_page">
 
         <action
             android:id="@+id/action_nav_home_to_roni_test"
@@ -60,9 +60,9 @@
     </fragment>
     <fragment
         android:id="@+id/cards"
-        android:name="com.example.androbank.ui.Cards"
+        android:name="com.example.androbank.ui.AccountsCards"
         android:label="fragment_cards"
-        tools:layout="@layout/fragment_cards" >
+        tools:layout="@layout/fragment_accounts_cards" >
         <action
             android:id="@+id/action_cards_to_accounts"
             app:destination="@id/accounts" />
@@ -110,16 +110,16 @@
     </fragment>
     <fragment
         android:id="@+id/newPayment"
-        android:name="com.example.androbank.ui.NewPayment"
+        android:name="com.example.androbank.ui.AccountsNewPayment"
         android:label="fragment_new_payment"
-        tools:layout="@layout/fragment_new_payment" >
+        tools:layout="@layout/fragment_accounts_new_payment" >
         <action
             android:id="@+id/action_newPayment_to_accounts"
             app:destination="@id/accounts" />
     </fragment>
     <fragment
         android:id="@+id/newCardPayment2"
-        android:name="com.example.androbank.ui.NewCardPayment"
+        android:name="com.example.androbank.ui.AccountsNewCardPayment"
         android:label="NewCardPayment" >
         <action
             android:id="@+id/action_newCardPayment2_to_accounts"
@@ -146,9 +146,9 @@
     </fragment>
     <fragment
         android:id="@+id/accountAddMoney"
-        android:name="com.example.androbank.ui.AccountAddMoney"
+        android:name="com.example.androbank.ui.AccountsAddMoney"
         android:label="fragment_account_add_money"
-        tools:layout="@layout/fragment_account_add_money" >
+        tools:layout="@layout/fragment_accounts_add_money" >
         <action
             android:id="@+id/action_accountAddMoney_to_accounts"
             app:destination="@id/accounts" />

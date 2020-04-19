@@ -117,7 +117,8 @@ public class Accounts extends Fragment {
             public void onChanged(ArrayList<Account> accounts) {
                 ArrayList<RecyclerViewObject> itemList = new ArrayList<>();
                 for (int i = 0; i < accounts.size(); i++){
-                    String a = accounts.get(i).getIban() + " - " + accounts.get(i).getBalance() + "€";
+                    String balance = String.format("%.2f",  (float) accounts.get(i).getBalance() / 100 );
+                    String a = accounts.get(i).getIban() + " - " + balance + "€";
                     itemList.add(new RecyclerViewObject(R.drawable.ic_forward, a));
                 }
                 mAdapter = new RecyclerAdapter(itemList, Accounts.this);

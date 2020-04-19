@@ -168,6 +168,7 @@ public class Transfer {
             } else {
                 results = gson.fromJson(responseString, resultTypeChecked);
             }
+            System.out.println(statusCode);
             response.setValue(statusCode, results, null, false, token);
         } else {
             response.setValue(statusCode, null, responseString, false);

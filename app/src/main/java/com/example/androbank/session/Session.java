@@ -24,6 +24,7 @@ public class Session {
     public Accounts accounts;
     public User user;
     public Banks banks;
+    public Transactions transactions;
     private MutableLiveData<Integer> errorCode;
     private MutableLiveData<String> errorMessage;
 
@@ -38,6 +39,7 @@ public class Session {
         banks = new Banks();
         accounts = new Accounts();
         user = new User();
+        transactions = new Transactions();
         errorCode = new MutableLiveData<Integer>();
         errorMessage = new MutableLiveData<String>();
     }

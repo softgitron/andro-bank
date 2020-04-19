@@ -56,4 +56,12 @@ public class Accounts {
         });
         return statusAccounts;
     }
+    public Integer findAccountIdByIban(String iban) {
+        for (Account account: this.accountList) {
+            if(account.getIban().equals(iban) ) {
+                return  account.getAccountId();
+            }
+        }
+        return null;
+    }
 }

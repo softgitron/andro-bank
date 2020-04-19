@@ -36,4 +36,33 @@ public class Transactions {
         });
         return finalResult;
     }
+
+
+
+    /**
+     * Sends request to server to add money.
+     * @param accountId Id of the account money is to be added.
+     * @param moneyToAdd Amount of money to be added.
+     * @return Return the current account on which the money was added.
+     */
+    public MutableLiveData<Account> depositMoney(Integer accountId, float moneyToAdd) {
+        MutableLiveData<Account> finalResult = new MutableLiveData<Account>();
+        AccountContainer requestContainer = new AccountContainer();
+
+        requestContainer.accountId = accountId;
+        requestContainer.balance = Math.round(moneyToAdd * 100);
+
+        Response response = sendRequest(Transfer.MethodType.POST, "/accounts/deposit", requestContainer, AccountContainer.class, true);
+        response.addObserver(new Observer() {
+            @Override
+            public void update(Observable observable, Object o) {
+                Response response = (Response) o;
+                if (genericErrorHandling(response)) {return;};
+                AccountContainer newAccount = (AccountContainer) response.getResponse();
+                Account account = new Account(newAccount.accountId, newAccount.iban, newAccount.balance, newAccount.type);
+                finalResult.postValue(account);
+            }
+        });
+        return finalResult;
+    }
 }

@@ -107,12 +107,6 @@ public class Accounts extends Fragment {
             }
         });
 
-        binding.addMoney.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO: Add money
-            }
-        });
 
         return root;
     }

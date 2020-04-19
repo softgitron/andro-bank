@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.navigation.Navigation;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,24 +14,22 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 
-import com.example.androbank.R;
 import com.example.androbank.databinding.FragmentAccountsNewPaymentBinding;
 import com.example.androbank.session.Account;
 import com.example.androbank.session.Session;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 
 public class AccountsNewPayment extends Fragment {
 
     private FragmentAccountsNewPaymentBinding binding;
     private View root;
-    private String account;
+    private String fromAccountIban;
     private float amount;
-    private String receiver;
+    private String toAccountIban;
     private LocalDate duedate;
     private String option;
     private Session session = Session.getSession();
@@ -51,10 +48,10 @@ public class AccountsNewPayment extends Fragment {
         binding.payButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println(account+" "+amount+" "+ receiver +" "+duedate+" "+option);
+                System.out.println(fromAccountIban +" "+amount+" "+ toAccountIban +" "+duedate+" "+option);
                 makePayment();
                 //TODO: Payment processing
-                Navigation.findNavController(root).navigate(R.id.action_newPayment_to_accounts);
+                //Navigation.findNavController(root).navigate(R.id.action_newPayment_to_accounts);
             }
         });
 
@@ -65,7 +62,8 @@ public class AccountsNewPayment extends Fragment {
                 ArrayList<String> accountStrings = new ArrayList<String>();
                 myAccounts = accounts;
                 for (Account account : accounts) {
-                    accountStrings.add(account.getIban());
+                    String bal = String.format("%.2f",  (float) account.getBalance() / 100 );
+                    accountStrings.add(account.getIban() + " - "+ bal + "€");
                 }
                 ArrayAdapter<String> accountadapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, accountStrings);
                 accountadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -74,7 +72,8 @@ public class AccountsNewPayment extends Fragment {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         String selectedItem = adapterView.getSelectedItem().toString();
-                        account = selectedItem;
+                        fromAccountIban = selectedItem.split(" -")[0];
+                        System.out.println(fromAccountIban);
                     }
                     @Override
                     public void onNothingSelected(AdapterView<?> adapterView) {
@@ -115,7 +114,8 @@ public class AccountsNewPayment extends Fragment {
             }
             @Override
             public void afterTextChanged(Editable editable) {
-                amount = Float.parseFloat(editable.toString());
+
+                if (editable.length() != 0) amount = Float.parseFloat(editable.toString());
                 //System.out.println(amount);
             }
         });
@@ -132,7 +132,7 @@ public class AccountsNewPayment extends Fragment {
             }
             @Override
             public void afterTextChanged(Editable editable) {
-                receiver = editable.toString();
+                if (editable.length() != 0) toAccountIban = editable.toString();
                 //System.out.println(amount);
             }
         });
@@ -152,17 +152,20 @@ public class AccountsNewPayment extends Fragment {
     }
 
     public void makePayment() {
-        Integer fromAccount = null;
+        Integer fromAccountId = null;
         for (Account ac : myAccounts) {
-            if (ac.getIban() == account) {
-                fromAccount = ac.getAccountId();
+            //System.out.println(fromAccountIban + ac.getIban());
+            if (ac.getIban().equals(fromAccountIban)) {
+                fromAccountId = ac.getAccountId();
+                System.out.println(ac.getAccountId());
             }
         }
-        session.transactions.makeTransaction(fromAccount, receiver, Math.round(amount*100)).observe(getViewLifecycleOwner(), new Observer<Account>() {
+        if (fromAccountId != null) session.transactions.makeTransaction(fromAccountId, toAccountIban, Math.round(amount*100)).observe(getViewLifecycleOwner(), new Observer<Account>() {
             @Override
             public void onChanged(Account account) {
                 System.out.println("Payment made!");
             }
         });
+        else Snackbar.make(getView(), "There was an error picking Account Id", Snackbar.LENGTH_LONG).show();
     }
 }

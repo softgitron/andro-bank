@@ -46,7 +46,7 @@ public class AccountsAddMoney extends Fragment {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
             @Override
             public void afterTextChanged(Editable editable) {
-                amount = Float.parseFloat(editable.toString());
+                if (editable.length() != 0) amount = Float.parseFloat(editable.toString());
             }
         });
 

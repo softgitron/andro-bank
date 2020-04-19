@@ -37,6 +37,11 @@ public class Transactions {
         return finalResult;
     }
 
+    /**
+     * Gets all user's transactions.
+     * @param accountId
+     * @return
+     */
     public MutableLiveData<ArrayList<Transaction>> getTransactions(Integer accountId) {
         MutableLiveData<ArrayList<Transaction>> finalResult = new MutableLiveData<ArrayList<Transaction>>();
         AccountContainer requestContainer = new AccountContainer();

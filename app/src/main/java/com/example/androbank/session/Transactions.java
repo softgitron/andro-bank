@@ -17,11 +17,11 @@ import java.util.Observer;
 public class Transactions {
     private ArrayList<Transaction> transactionsList = new ArrayList<Transaction>();
 
-    public MutableLiveData<Account> makeTransaction(Integer fromAccountId, Integer toAccountId, Integer amount) {
+    public MutableLiveData<Account> makeTransaction(Integer fromAccountId, String toAccountIban, Integer amount) {
         MutableLiveData<Account> finalResult = new MutableLiveData<Account>();
         TransactionContainer requestContainer = new TransactionContainer();
         requestContainer.fromAccountId = fromAccountId;
-        requestContainer.toAccountId = toAccountId;
+        requestContainer.toAccountIban = toAccountIban;
         requestContainer.amount = amount;
         Response response = sendRequest(Transfer.MethodType.POST, "/accounts/transfer", requestContainer, AccountContainer.class, true);
         response.addObserver(new Observer() {
@@ -32,6 +32,27 @@ public class Transactions {
                 AccountContainer newAccount = (AccountContainer) response.getResponse();
                 Account account = new Account(newAccount.accountId, newAccount.iban, newAccount.balance, newAccount.type);
                 finalResult.postValue(account);
+            }
+        });
+        return finalResult;
+    }
+
+    public MutableLiveData<ArrayList<Transaction>> getTransactions(Integer accountId) {
+        MutableLiveData<ArrayList<Transaction>> finalResult = new MutableLiveData<ArrayList<Transaction>>();
+        AccountContainer requestContainer = new AccountContainer();
+        requestContainer.accountId = accountId;
+        Response response = sendRequest(Transfer.MethodType.POST, "/transactions/getTransactions", requestContainer, TransactionContainer.class, true);
+        response.addObserver(new Observer() {
+            @Override
+            public void update(Observable observable, Object o) {
+                Response response = (Response) o;
+                if (genericErrorHandling(response)) {return;};
+                ArrayList<TransactionContainer> transactionContainers = (ArrayList<TransactionContainer>) response.getResponse();
+                for (TransactionContainer transactionContainer : transactionContainers) {
+                    Transaction transaction = new Transaction(transactionContainer.fromAccountIban, transactionContainer.toAccountIban, transactionContainer.amount, transactionContainer.time);
+                    transactionsList.add(transaction);
+                }
+                finalResult.postValue(transactionsList);
             }
         });
         return finalResult;

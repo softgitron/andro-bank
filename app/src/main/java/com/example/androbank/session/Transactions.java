@@ -37,7 +37,26 @@ public class Transactions {
         return finalResult;
     }
 
-
+    public MutableLiveData<ArrayList<Transaction>> getTransactions(Integer accountId) {
+        MutableLiveData<ArrayList<Transaction>> finalResult = new MutableLiveData<ArrayList<Transaction>>();
+        AccountContainer requestContainer = new AccountContainer();
+        requestContainer.accountId = accountId;
+        Response response = sendRequest(Transfer.MethodType.POST, "/transactions/getTransactions", requestContainer, TransactionContainer.class, true);
+        response.addObserver(new Observer() {
+            @Override
+            public void update(Observable observable, Object o) {
+                Response response = (Response) o;
+                if (genericErrorHandling(response)) {return;};
+                ArrayList<TransactionContainer> transactionContainers = (ArrayList<TransactionContainer>) response.getResponse();
+                for (TransactionContainer transactionContainer : transactionContainers) {
+                    Transaction transaction = new Transaction(transactionContainer.fromAccountIban, transactionContainer.toAccountIban, transactionContainer.amount, transactionContainer.time);
+                    transactionsList.add(transaction);
+                }
+                finalResult.postValue(transactionsList);
+            }
+        });
+        return finalResult;
+    }
 
     /**
      * Sends request to server to add money.
@@ -65,4 +84,5 @@ public class Transactions {
         });
         return finalResult;
     }
+
 }

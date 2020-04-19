@@ -12,7 +12,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import com.example.androbank.R;
+import com.example.androbank.connection.Transfer;
 import com.example.androbank.databinding.FragmentTransactionsBinding;
+import com.example.androbank.session.Session;
 
 public class Transactions extends Fragment {
 
@@ -33,6 +35,7 @@ public class Transactions extends Fragment {
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(root).navigate(R.id.action_transactions_to_main_Menu);
+
             }
         });
 

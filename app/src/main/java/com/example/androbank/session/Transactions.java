@@ -6,7 +6,6 @@ import com.example.androbank.connection.Response;
 import com.example.androbank.connection.Transfer;
 import com.example.androbank.containers.AccountContainer;
 import com.example.androbank.containers.TransactionContainer;
-import com.google.android.material.snackbar.Snackbar;
 
 import static com.example.androbank.connection.Transfer.sendRequest;
 import static com.example.androbank.session.SessionUtils.genericErrorHandling;
@@ -18,11 +17,11 @@ import java.util.Observer;
 public class Transactions {
     private ArrayList<Transaction> transactionsList = new ArrayList<Transaction>();
 
-    public MutableLiveData<Account> makeTransaction(Integer fromAccountId, Integer toAccountId, Integer amount) {
+    public MutableLiveData<Account> makeTransaction(Integer fromAccountId, String toAccountIban, Integer amount) {
         MutableLiveData<Account> finalResult = new MutableLiveData<Account>();
         TransactionContainer requestContainer = new TransactionContainer();
         requestContainer.fromAccountId = fromAccountId;
-        requestContainer.toAccountId = toAccountId;
+        requestContainer.toAccountIban = toAccountIban;
         requestContainer.amount = amount;
         Response response = sendRequest(Transfer.MethodType.POST, "/accounts/transfer", requestContainer, AccountContainer.class, true);
         response.addObserver(new Observer() {

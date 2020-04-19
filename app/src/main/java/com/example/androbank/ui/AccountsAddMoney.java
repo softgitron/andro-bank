@@ -43,6 +43,7 @@ public class AccountsAddMoney extends Fragment {
     public void onStart() {
         super.onStart();
         ibanWithBalance = getArguments().getString("accountData");
+        binding.addMoneyAccountString.setText(ibanWithBalance);
         System.out.println("ADD MONEY RECEIVED STRING: " + ibanWithBalance);
 
     }

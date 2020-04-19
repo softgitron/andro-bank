@@ -15,19 +15,19 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import com.example.androbank.R;
-import com.example.androbank.databinding.FragmentAccountsCardsNewCardPaymentBinding;
+import com.example.androbank.databinding.FragmentAccountsNewCardPaymentBinding;
 
 
 public class AccountsNewCardPayment extends Fragment {
 
-    private FragmentAccountsCardsNewCardPaymentBinding binding;
+    private FragmentAccountsNewCardPaymentBinding binding;
     private View root;
     private String card;
     private float amount;
     private String receiver;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentAccountsCardsNewCardPaymentBinding.inflate(inflater, container, false);
+        binding = FragmentAccountsNewCardPaymentBinding.inflate(inflater, container, false);
         root = binding.getRoot();
 
         binding.payNow.setOnClickListener(new View.OnClickListener() {

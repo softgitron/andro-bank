@@ -34,9 +34,9 @@ public class AccountsAddMoney extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentAccountsAddMoneyBinding.inflate(inflater, container, false);
         root = binding.getRoot();
-        context = getContext();
+        context = getActivity();
         session = Session.getSession();
-        binding.addMoneyButton.setEnabled(true);
+        //binding.addMoneyButton.setEnabled(true);
 
 
         binding.amountInput.addTextChangedListener(new TextWatcher() {
@@ -58,19 +58,26 @@ public class AccountsAddMoney extends Fragment {
                 if (accountdId == null) {
                     System.err.println("Account was not found from the list");
                     System.exit(1);
-                } else  if (amount > 0.001) {
+                } else  if (amount >= 0.01 && amount <= 9000) {
                     session.transactions.depositMoney(accountdId, amount).observe(getViewLifecycleOwner(), new Observer<Account>() {
                         @Override
                         public void onChanged(Account account) {
                             // If we get this far the transaction has gone through, since there is generic error handling in sendRequest which is called from session.transaction.
-                            binding.addMoneyButton.setEnabled(false);
+                            Snackbar.make(getView(), "Money was added.", Snackbar.LENGTH_LONG).show();
+                            //binding.addMoneyButton.setEnabled(false);
                             Transfer.clearCache();
-                            InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
-                            imm.hideSoftInputFromWindow(root.getWindowToken(), 0);
+                            closeKeyboard();
+                            Navigation.findNavController(root).popBackStack();
                         }
                     });
                 } else {
-                    Snackbar.make(getView(), "Money to be added has to be greater than 0.", Snackbar.LENGTH_LONG).show();
+                    closeKeyboard();
+                    if (amount < 0.01) {
+                        Snackbar.make(getView(), "Money to be added has to be at least 1 cent", Snackbar.LENGTH_LONG).show();
+                    } else {
+                        Snackbar.make(getView(), "Its over 9000! Maximum deposit is 9000.", Snackbar.LENGTH_LONG).show();
+                    }
+
                 }
 
             }
@@ -87,6 +94,11 @@ public class AccountsAddMoney extends Fragment {
         super.onStart();
         ibanWithBalance = getArguments().getString("accountData");
         binding.addMoneyAccountString.setText(ibanWithBalance);
+    }
+
+    private void closeKeyboard() {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(root.getWindowToken(), 0);
     }
 }
 

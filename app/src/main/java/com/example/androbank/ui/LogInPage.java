@@ -65,8 +65,8 @@ public class LogInPage extends Fragment {
             public void onClick(View v) {
                 String email = binding.email.getText().toString();
                 String password = binding.password.getText().toString();
-                // Todo I don't think login bankId should be always 0? Basically missing the Spinner event listener from the bankSpinner.
-                session.user.login(0, email, password).observe(getViewLifecycleOwner(), new Observer<User>() {
+                int bankId = binding.bankspinner.getSelectedItemPosition();
+                session.user.login(bankId, email, password).observe(getViewLifecycleOwner(), new Observer<User>() {
                     @Override
                     public void onChanged(User user) {
                         Navigation.findNavController(root).navigate(R.id.action_nav_home_to_main_Menu);

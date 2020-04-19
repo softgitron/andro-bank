@@ -75,6 +75,42 @@ public class User {
         return statusUser;
     }
 
+    /**
+     * Sends the updated user info to the server and directly modifies current session
+     * user details with the values given back by the server.
+     * @param username New username for current user.
+     * @param firstName New firstName for current user.
+     * @param lastName New lastName for current user.
+     * @param email New email for current user.
+     * @param phoneNumber New phoneNumber for current user.
+     * @return User status for callback.
+     */
+    public MutableLiveData<User> updateUser(String username, String firstName, String lastName, String email, String phoneNumber) {
+        // Todo Api dock documentation is lacking!!!!! Section: User - Update details of the user
+        Session session = Session.getSession();
+        UserContainer updateUser = new UserContainer();
+        updateUser.username = username;
+        updateUser.firstName = firstName;
+        updateUser.lastName = lastName;
+        updateUser.email = email;
+        updateUser.phoneNumber = phoneNumber;
+
+        MutableLiveData<User> statusUser = new MutableLiveData<User>();
+        Response response = sendRequest(Transfer.MethodType.POST, "/users/updateUserDetails", updateUser, UserContainer.class, false);
+        response.addObserver(new Observer() {
+            @Override
+            public void update(Observable o, Object arg) {
+                Response response = (Response) o;
+                if (genericErrorHandling(response)) {System.out.println(response);return;};
+                UserContainer userDetails = (UserContainer) response.getResponse();
+                unpackUserContainer(userDetails);
+                session.banks.setCurrentBank(userDetails.bankId);
+                statusUser.postValue(instance);
+            }
+        });
+        return statusUser;
+    }
+
     private void unpackUserContainer(UserContainer userDetails) {
         username = userDetails.username;
         firstName = userDetails.firstName;

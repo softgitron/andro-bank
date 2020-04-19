@@ -15,11 +15,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="164dp"
-            android:text="Button"
+            android:text="Update User Details"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Update Contact Details" />
+            tools:text="Update User Details" />
 
         <Button
             android:id="@+id/changePassword"

@@ -81,7 +81,7 @@ public class Transactions {
             @Override
             public void update(Observable o, Object arg) {
                 Response response = (Response) o;
-                if (genericErrorHandling(response)) {System.out.println(response.getError());return;};
+                if (genericErrorHandling(response)) {return;};
                 AccountContainer newAccount = (AccountContainer) response.getResponse();
                 Account account = new Account(newAccount.accountId, newAccount.iban, newAccount.balance, newAccount.type);
                 finalResult.postValue(account);

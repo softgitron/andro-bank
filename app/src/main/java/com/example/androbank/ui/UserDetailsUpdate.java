@@ -11,14 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.androbank.R;
-import com.example.androbank.databinding.FragmentUpdateContactBinding;
-import com.example.androbank.databinding.FragmentUserDetailsBinding;
+import com.example.androbank.databinding.FragmentUserDetailsUpdateBinding;
 import com.example.androbank.session.Session;
+import com.example.androbank.session.User;
+import com.google.android.material.snackbar.Snackbar;
 
 
-public class UpdateContact extends Fragment {
+public class UserDetailsUpdate extends Fragment {
 
-    private FragmentUpdateContactBinding binding;
+    private FragmentUserDetailsUpdateBinding binding;
     private View root;
     private Session session = Session.getSession();
 
@@ -26,28 +27,24 @@ public class UpdateContact extends Fragment {
     private final String NAME_REGEX = "^[A-Za-z]{2,}$";
     private final String EMAIL_REGEX = "^[A-Za-z0-9_.]{2,}@[A-Za-z0-9_]{2,}\\.[A-Za-z]{2,3}$";
     // First error flags for username, first name, last name, email, phone number and password
-    private boolean[] errors = {true, true, true, true, true, true};
+    private boolean[] errors = {true, true, true, true, true};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentUpdateContactBinding.inflate(inflater, container, false);
+        binding = FragmentUserDetailsUpdateBinding.inflate(inflater, container, false);
         root = binding.getRoot();
         initializeErrorHandling();
 
-
+        checkSaveButtonStatus();
         binding.update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 handleUpdateButton();
             }
         });
-        binding.back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(root).navigate(R.id.action_updateContact_to_userDetails);
-            }
-        });
+
+
         binding.phone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -78,6 +75,7 @@ public class UpdateContact extends Fragment {
                     binding.firstNameError2.setVisibility(View.VISIBLE);
                     errors[1] = true;
                 }
+                checkSaveButtonStatus();
             }
         });
 
@@ -94,6 +92,7 @@ public class UpdateContact extends Fragment {
                     binding.lastNameError2.setVisibility(View.VISIBLE);
                     errors[2] = true;
                 }
+                checkSaveButtonStatus();
             }
         });
 
@@ -115,6 +114,7 @@ public class UpdateContact extends Fragment {
                 checkSaveButtonStatus();
             }
         });
+        //Todo I think this should be text Listener so it is faster to check the input. Because now user has to move focus.
         binding.username.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -153,9 +153,17 @@ public class UpdateContact extends Fragment {
         String last = binding.last.getText().toString();
         String phone = binding.phone.getText().toString();
 
+        session.user.updateUser(username, first, last, email, phone).observe(getViewLifecycleOwner(), new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                Snackbar.make(getView(), "User was updated!", Snackbar.LENGTH_LONG).show();
+                binding.update.setEnabled(false);
+                System.out.println(user.getUsername() + " ; " + user.getFirstName() + " ; " + user.getLastName() + " ; " + user.getEmail() + " ; " + user.getPhoneNumber());
+            }
+        });
         // TODO update logic
 
-        Navigation.findNavController(root).navigate(R.id.action_updateContact_to_userDetails);
+        //Navigation.findNavController(root).navigate(R.id.action_updateContact_to_userDetails);
     }
     private void initializeErrorHandling() {
         session.getLastErrorMessage().observe(getViewLifecycleOwner(), new Observer<String>() {

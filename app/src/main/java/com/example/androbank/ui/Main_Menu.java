@@ -41,18 +41,6 @@ public class Main_Menu extends Fragment {
             }
         });
 
-        binding.createAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                session.accounts.createAccount().observe(getViewLifecycleOwner(), new Observer<Account>() {
-                    @Override
-                    public void onChanged(Account account) {
-                        System.out.println("Account created");
-                    }
-                });
-            }
-        });
-
         return root;
     }
 }

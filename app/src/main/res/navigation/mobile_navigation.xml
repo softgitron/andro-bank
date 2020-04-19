@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/nav_home"
         android:name="com.example.androbank.ui.LogInPage"
-        android:label="@string/menu_home"
+        android:label="Home"
         tools:layout="@layout/fragment_log_in_page">
 
         <action
@@ -43,14 +43,14 @@
     <fragment
         android:id="@+id/accounts"
         android:name="com.example.androbank.ui.Accounts"
-        android:label="fragment_accounts"
+        android:label="Accounts"
         tools:layout="@layout/fragment_accounts" >
         <action
             android:id="@+id/action_accounts_to_cards"
             app:destination="@id/cards" />
         <action
             android:id="@+id/action_accounts_to_newCardPayment2"
-            app:destination="@id/newCardPayment2" />
+            app:destination="@id/newCardPayment" />
         <action
             android:id="@+id/action_accounts_to_newPayment"
             app:destination="@id/newPayment" />
@@ -61,7 +61,7 @@
     <fragment
         android:id="@+id/cards"
         android:name="com.example.androbank.ui.AccountsCards"
-        android:label="fragment_cards"
+        android:label="Cards"
         tools:layout="@layout/fragment_accounts_cards" >
         <action
             android:id="@+id/action_cards_to_accounts"
@@ -90,7 +90,7 @@
     <fragment
         android:id="@+id/userDetails"
         android:name="com.example.androbank.ui.UserDetails"
-        android:label="fragment_user_details"
+        android:label="User Details"
         tools:layout="@layout/fragment_user_details" >
         <action
             android:id="@+id/action_userDetails_to_nav_home"
@@ -102,8 +102,8 @@
     <fragment
         android:id="@+id/transactions"
         android:name="com.example.androbank.ui.Transactions"
-        android:label="fragment_transactions"
-        tools:layout="@layout/fragment_transactions" >
+        android:label="Transactions"
+        tools:layout="@layout/fragment_transactions">
         <action
             android:id="@+id/action_transactions_to_main_Menu"
             app:destination="@id/main_Menu" />
@@ -111,16 +111,17 @@
     <fragment
         android:id="@+id/newPayment"
         android:name="com.example.androbank.ui.AccountsNewPayment"
-        android:label="fragment_new_payment"
-        tools:layout="@layout/fragment_accounts_new_payment" >
+        android:label="New Payment"
+        tools:layout="@layout/fragment_accounts_new_payment">
         <action
             android:id="@+id/action_newPayment_to_accounts"
             app:destination="@id/accounts" />
     </fragment>
     <fragment
-        android:id="@+id/newCardPayment2"
+        android:id="@+id/newCardPayment"
         android:name="com.example.androbank.ui.AccountsNewCardPayment"
-        android:label="NewCardPayment" >
+        android:label="NewCardPayment"
+        tools:layout="@layout/fragment_accounts_new_card_payment">
         <action
             android:id="@+id/action_newCardPayment2_to_accounts"
             app:destination="@id/accounts" />
@@ -137,9 +138,9 @@
             app:popUpToInclusive="true" />
     <fragment
         android:id="@+id/updateContact"
-        android:name="com.example.androbank.ui.UpdateContact"
-        android:label="fragment_update_contact"
-        tools:layout="@layout/fragment_update_contact" >
+        android:name="com.example.androbank.ui.UserDetailsUpdate"
+        android:label="Update User Details"
+        tools:layout="@layout/fragment_user_details_update">
         <action
             android:id="@+id/action_updateContact_to_userDetails"
             app:destination="@id/userDetails" />
@@ -147,8 +148,8 @@
     <fragment
         android:id="@+id/accountAddMoney"
         android:name="com.example.androbank.ui.AccountsAddMoney"
-        android:label="fragment_account_add_money"
-        tools:layout="@layout/fragment_accounts_add_money" >
+        android:label="Deposit Money"
+        tools:layout="@layout/fragment_accounts_add_money">
         <action
             android:id="@+id/action_accountAddMoney_to_accounts"
             app:destination="@id/accounts" />

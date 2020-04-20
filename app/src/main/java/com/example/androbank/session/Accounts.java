@@ -27,6 +27,7 @@ public class Accounts {
                 if (genericErrorHandling(response)) {return;};
                 AccountContainer newAccount = (AccountContainer) response.getResponse();
                 Account account = new Account(newAccount.accountId, newAccount.iban, 0, newAccount.type);
+                accountList.add(account);
                 finalResults.postValue(account);
             }
         });

@@ -97,7 +97,7 @@ public class LogInPage extends Fragment {
                 }
         );
 
-        binding.createAccount.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_nav_home_to_createUser));
+        binding.createUser.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_nav_home_to_createUser));
 
 
 

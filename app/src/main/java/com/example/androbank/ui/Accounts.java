@@ -68,22 +68,7 @@ public class Accounts extends Fragment {
 
         populateAccountList();
 
-        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            @Override
-            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-                return false;
-            }
 
-            @Override
-            public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-            }
-        });
 
         //Buttons
         binding.viewCards.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +92,19 @@ public class Accounts extends Fragment {
             }
         });
 
+        binding.createAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                session.accounts.createAccount().observe(getViewLifecycleOwner(), new Observer<Account>() {
+                    @Override
+                    public void onChanged(Account account) {
+                        System.out.println("Account created");
+                        populateAccountList();
+                    }
+                });
+            }
+        });
+
 
         return root;
     }
@@ -115,14 +113,32 @@ public class Accounts extends Fragment {
         session.accounts.getAccountsList().observe(getViewLifecycleOwner(), new Observer<ArrayList<Account>>() {
             @Override
             public void onChanged(ArrayList<Account> accounts) {
+                System.out.println("Arraylist retrieved");
                 ArrayList<RecyclerViewObject> itemList = new ArrayList<>();
                 for (int i = 0; i < accounts.size(); i++){
-                    String balance = String.format("%.2f",  (float) accounts.get(i).getBalance() / 100 );
+                    String balance = String.format("%.2f",  (float) accounts.get(i).getBalance() / (float) 100 );
                     String a = accounts.get(i).getIban() + " - " + balance + "€";
                     itemList.add(new RecyclerViewObject(R.drawable.ic_forward, a));
                 }
                 mAdapter = new RecyclerAdapter(itemList, Accounts.this);
                 recyclerView.setAdapter(mAdapter);
+
+                recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+                    @Override
+                    public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+                        return false;
+                    }
+
+                    @Override
+                    public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+
+                    }
+
+                    @Override
+                    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+                    }
+                });
             }
         });
     }

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.androbank.connection.Response;
 import com.example.androbank.connection.Transfer;
 import com.example.androbank.containers.*;
+import com.google.gson.Gson;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -21,16 +22,12 @@ public class User {
     private String email;
     private String phoneNumber;
 
-    public static User getUser() {
-        return instance;
-    }
+    public User() {instance = this;}
 
-    private User() {
-    }
-
-    public MutableLiveData<User> createUser(Integer bankId, String username, String firstName, String lastName, String email, String phoneNumber, String password) {
+    public MutableLiveData<User> createUser(String bankName, String username, String firstName, String lastName, String email, String phoneNumber, String password) {
+        Session session = Session.getSession();
         UserContainer createUser = new UserContainer();
-        createUser.bankId = bankId;
+        createUser.bankId = session.banks.getBankIdByName(bankName);
         createUser.username = username;
         createUser.firstName = firstName;
         createUser.lastName = lastName;
@@ -48,13 +45,15 @@ public class User {
                 // Save user details to session
                 UserContainer userDetails = (UserContainer) response.getResponse();
                 unpackUserContainer(userDetails);
-                statusUser.postValue(getUser());
+                session.banks.setCurrentBank(userDetails.bankId);
+                statusUser.postValue(instance);
             }
         });
         return statusUser;
     }
 
     public MutableLiveData<User> login(Integer loginBankId, String loginEmail, String loginPassword) {
+        Session session = Session.getSession();
         UserContainer loginUser = new UserContainer();
         loginUser.email = loginEmail;
         loginUser.password = loginPassword;
@@ -69,7 +68,44 @@ public class User {
                 if (genericErrorHandling(response)) {return;};
                 UserContainer userDetails = (UserContainer) response.getResponse();
                 unpackUserContainer(userDetails);
-                statusUser.postValue(getUser());
+                session.banks.setCurrentBank(userDetails.bankId);
+                statusUser.postValue(instance);
+            }
+        });
+        return statusUser;
+    }
+
+    /**
+     * Sends the updated user info to the server and directly modifies current session
+     * user details with the values given back by the server.
+     * @param username New username for current user.
+     * @param firstName New firstName for current user.
+     * @param lastName New lastName for current user.
+     * @param email New email for current user.
+     * @param phoneNumber New phoneNumber for current user.
+     * @return User status for callback.
+     */
+    public MutableLiveData<User> updateUser(String username, String firstName, String lastName, String email, String phoneNumber) {
+        // Todo Api dock documentation is lacking!!!!! Section: User - Update details of the user
+        Session session = Session.getSession();
+        UserContainer updateUser = new UserContainer();
+        updateUser.username = username;
+        updateUser.firstName = firstName;
+        updateUser.lastName = lastName;
+        updateUser.email = email;
+        updateUser.phoneNumber = phoneNumber;
+
+        MutableLiveData<User> statusUser = new MutableLiveData<User>();
+        Response response = sendRequest(Transfer.MethodType.POST, "/users/updateUserDetails", updateUser, UserContainer.class, false);
+        response.addObserver(new Observer() {
+            @Override
+            public void update(Observable o, Object arg) {
+                Response response = (Response) o;
+                if (genericErrorHandling(response)) {System.out.println(response);return;};
+                UserContainer userDetails = (UserContainer) response.getResponse();
+                unpackUserContainer(userDetails);
+                session.banks.setCurrentBank(userDetails.bankId);
+                statusUser.postValue(instance);
             }
         });
         return statusUser;
@@ -83,32 +119,40 @@ public class User {
         phoneNumber = userDetails.phoneNumber;
     }
 
+    private UserContainer packUserContainer() {
+        UserContainer container = new UserContainer();
+        container.username = username;
+        container.firstName = firstName;
+        container.lastName = lastName;
+        container.email = email;
+        container.phoneNumber = phoneNumber;
+        return container;
+    }
+
+    public String getUsername() {
+        return username;
+    }
     public String getFirstName() {
         return firstName;
     }
-
-    public String getName() {
-        String name = "";
-        return name;
+    public String getLastName() {
+        return lastName;
     }
-
-    public String setName() {
-        return null;
-    }
-
     public String getEmail() {
-        return null;
+        return email;
     }
-
-    public String setEmail() {
-        return null;
-    }
-
     public String getPhoneNumber() {
-        return null;
+        return phoneNumber;
     }
 
-    public String setPhoneNumber() {
-        return null;
+
+    String dump() {
+        Gson gson = new Gson();
+        return gson.toJson(packUserContainer());
+    }
+
+    void load(String data) {
+        Gson gson = new Gson();
+        unpackUserContainer(gson.fromJson(data, UserContainer.class));
     }
 }

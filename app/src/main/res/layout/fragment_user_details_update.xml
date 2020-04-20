@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.UpdateContact">
+    tools:context=".ui.UserDetailsUpdate">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -24,7 +24,7 @@
             android:id="@+id/email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="92dp"
+            android:layout_marginTop="64dp"
             android:ems="10"
             android:hint="Email"
             android:inputType="textPersonName"
@@ -47,7 +47,7 @@
             android:id="@+id/username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="40dp"
             android:ems="10"
             android:hint="Username"
             android:inputType="textPersonName"
@@ -57,8 +57,8 @@
 
         <TextView
             android:id="@+id/usernameError2"
-            android:layout_width="10dp"
-            android:layout_height="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Should be longer than 3 characters\nand contain only letters, numbers,\ndots and underscores"
             android:textColor="#E57373"
             android:visibility="gone"
@@ -70,7 +70,7 @@
             android:id="@+id/first"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="40dp"
             android:ems="10"
             android:hint="First name"
             android:inputType="textPersonName"
@@ -80,8 +80,8 @@
 
         <TextView
             android:id="@+id/firstNameError2"
-            android:layout_width="0dp"
-            android:layout_height="51dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Should be filled and contain only letters"
             android:textColor="#E57373"
             android:visibility="gone"
@@ -93,7 +93,7 @@
             android:id="@+id/last"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="40dp"
             android:ems="10"
             android:hint="Last name"
             android:inputType="textPersonName"
@@ -103,8 +103,8 @@
 
         <TextView
             android:id="@+id/lastNameError2"
-            android:layout_width="0dp"
-            android:layout_height="327dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Should be filled and contain only letters"
             android:textColor="#E57373"
             android:visibility="gone"
@@ -116,7 +116,7 @@
             android:id="@+id/phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="40dp"
             android:ems="10"
             android:hint="Phone number"
             android:inputType="phone"
@@ -146,15 +146,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/phone" />
 
-        <Button
-            android:id="@+id/back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
-            android:text="Back"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/update" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

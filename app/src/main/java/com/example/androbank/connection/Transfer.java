@@ -1,21 +1,27 @@
 package com.example.androbank.connection;
 
-import android.content.res.Resources;
-
+import com.example.androbank.containers.AccountContainer;
+import com.example.androbank.containers.BankContainer;
+import com.example.androbank.containers.CardContainer;
+import com.example.androbank.containers.FutureTransactionContainer;
+import com.example.androbank.containers.TransactionContainer;
+import com.example.androbank.containers.UserContainer;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.lang.reflect.Array;
-import java.net.HttpURLConnection;
+import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class Transfer {
     public static final String API_ADDRESS = "https://qlist.ddns.net";
@@ -32,12 +38,21 @@ public class Transfer {
     }
 
     public static Response sendRequest(MethodType method, String address, Object data, Class resultType, boolean authentication) {
+        return doSendRequest(method, address, data, resultType, authentication, true);
+    }
+
+    public static Response sendRequest(MethodType method, String address, Object data, Class resultType, boolean authentication, boolean useCache) {
+        return doSendRequest(method, address, data, resultType, authentication, useCache);
+    }
+
+    private static Response doSendRequest(MethodType method, String address, Object data, Class resultType, boolean authentication, boolean useCache) {
         Response response = new Response();
+
         if (isFetching) {
             Thread errorThread = new Thread(() -> {
                 // This is very hacky should be changed in the future to avoid sleep usage.
-                try { Thread.sleep(50); } catch (Exception e) {}
-                response.setValue(999, null, "Fetching was already ongoing.");
+                try { Thread.sleep(200); } catch (Exception e) {}
+                response.setValue(999, null, "Fetching was already ongoing.", false);
             });
             return response;
         }
@@ -49,12 +64,23 @@ public class Transfer {
                 Gson gson = new Gson();
                 json = gson.toJson(data);
             }
+            // Check cache before doing request
+            if (useCache) {
+                // Use cached response if there is one available
+                Response cachedResponse = Cache.getCacheEntry(method, address, json);
+                if (cachedResponse != null) {
+                    response.setValue(cachedResponse.getHttpCode(),
+                            cachedResponse.getResponse(), cachedResponse.getError(), true);
+                    isFetching = false;
+                    return;
+                }
+            }
             // https://www.baeldung.com/java-http-request
             // https://www.baeldung.com/httpurlconnection-post
             URL url = null;
             try {
                 url = new URL(API_ADDRESS + address);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
                 connection.setConnectTimeout(CONNECTION_TIMEOUT);
                 connection.setReadTimeout(READ_TIMEOUT);
                 // Set token if requested
@@ -69,12 +95,17 @@ public class Transfer {
                 String responseString = readResponse(connection);
                 String newToken = checkToken(connection);
                 handleResponse(responseString, connection.getResponseCode(), response, newToken, resultType);
+                // Set new entry to cache if no error
+                if (response.getHttpCode() < 299) {
+                    Cache.newCacheEntry(method, address, json, response);
+                }
             } catch (MalformedURLException e) {
                 System.out.println("Malformed url exception should not occur ever.");
+                System.exit(11);
             } catch (ProtocolException e) {
-                response.setValue(400, null, "Unknown protocol error");
+                response.setValue(400, null, "Unknown protocol error", false);
             } catch (IOException e) {
-                response.setValue(444, null, "Connection error");
+                response.setValue(444, null, "Connection error", false);
             } finally {
                 isFetching = false;
             }
@@ -83,19 +114,21 @@ public class Transfer {
         return response;
     }
 
-    private static void sendRequest(HttpURLConnection connection, MethodType method, String json) throws IOException {
-        connection.setRequestMethod(method.name());
+    private static void sendRequest(HttpsURLConnection connection, MethodType method, String json) throws IOException {
         connection.setRequestProperty("Content-Type", "application/json; utf-8");
         connection.setRequestProperty("Accept", "application/json");
-        connection.setDoOutput(true);
-        OutputStream os = connection.getOutputStream();
-        byte[] input = json.getBytes("utf-8");
-        os.write(input, 0, input.length);
-        os.flush();
-        os.close();
+        connection.setRequestMethod(method.name());
+        if (method != MethodType.GET) {
+            connection.setDoOutput(true);
+            OutputStream os = connection.getOutputStream();
+            byte[] input = json.getBytes("utf-8");
+            os.write(input, 0, input.length);
+            os.flush();
+            os.close();
+        }
     }
 
-    private static String checkToken(HttpURLConnection connection) {
+    private static String checkToken(HttpsURLConnection connection) {
         Map<String, List<String>> headers = connection.getHeaderFields();
         List<String> tokens = headers.get("X-Auth-Token");
         String newToken = null;
@@ -106,7 +139,7 @@ public class Transfer {
         return newToken;
     }
 
-    private static String readResponse(HttpURLConnection connection) throws IOException {
+    private static String readResponse(HttpsURLConnection connection) throws IOException {
         int status = connection.getResponseCode();
         InputStreamReader streamReader = null;
         if (status > 299) {
@@ -127,25 +160,67 @@ public class Transfer {
 
     private static void handleResponse(String responseString, Integer statusCode, Response response, String token, Class resultType) {
         if (statusCode < 299) {
+            Type resultTypeChecked = handleListTypes(responseString, resultType);
             Gson gson = new Gson();
-            Object results = gson.fromJson(responseString, resultType);
-            response.setValue(statusCode, results, null, token);
+            Object results;
+            if (resultTypeChecked == null) {
+                results = gson.fromJson(responseString, resultType);
+            } else {
+                results = gson.fromJson(responseString, resultTypeChecked);
+            }
+            response.setValue(statusCode, results, null, false, token);
         } else {
-            response.setValue(statusCode, null, responseString);
+            response.setValue(statusCode, null, responseString, false);
         }
+    }
+
+    // Handles case when return json is a list.
+    // This is again quite hacky but makes calling of the API:s a lot easier
+    // Java does not support proper way to do this actually cleanly
+    private static Type handleListTypes(String responseString, Class resultType) {
+        if (responseString.startsWith("[") && responseString.endsWith("]")) {
+            if (resultType == AccountContainer.class) {
+                return new TypeToken<ArrayList<AccountContainer>>(){}.getType();
+            } else if (resultType == BankContainer.class) {
+                return new TypeToken<ArrayList<BankContainer>>(){}.getType();
+            } else if (resultType == CardContainer.class) {
+                return new TypeToken<ArrayList<CardContainer>>(){}.getType();
+            } else if (resultType == FutureTransactionContainer.class) {
+                return new TypeToken<ArrayList<FutureTransactionContainer>>(){}.getType();
+            } else if (resultType == TransactionContainer.class) {
+                return new TypeToken<ArrayList<TransactionContainer>>(){}.getType();
+            } else if (resultType == UserContainer.class) {
+                return new TypeToken<ArrayList<UserContainer>>(){}.getType();
+            } else if (resultType == String.class) {
+                return new TypeToken<ArrayList<String>>(){}.getType();
+            } else {
+                System.out.println("Fatal error occurred during handling of the response.");
+                System.out.println("Most likely there is incompatible return type selected.");
+                System.out.println("This error should not ever appear,");
+                System.exit(1004);
+            }
+        }
+        return null;
     }
 
     public static void setToken(String newToken) {
         token = newToken;
     }
     public static String getToken() {
-        return token;
+        if (token != null) {
+            return token;
+        } else {
+            return "";
+        }
     }
     public static Boolean getIsFetching() { return isFetching; }
     public static void setIsFetching(Boolean value) { isFetching = value; }
 
+    public static void clearCache() {
+        Cache.emptyCache();
+    }
 
-    public static class userTransfer {
+    /*public static class userTransfer {
         public userTransfer() {
 
         }
@@ -223,5 +298,5 @@ public class Transfer {
         public void setLimits(String cardNumber, float withdrawLimit, float paymentLimit, Array allowedCountries) {
 
         }
-    }
+    }*/
 }

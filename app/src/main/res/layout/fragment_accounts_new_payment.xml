@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.NewPayment">
+    tools:context=".ui.AccountsNewPayment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -57,16 +57,16 @@
             app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
         <Switch
-            android:id="@+id/ownTransferSwitch"
-            android:layout_width="172dp"
+            android:id="@+id/dueDateSwitch"
+            android:layout_width="230dp"
             android:layout_height="39dp"
             android:layout_marginTop="16dp"
-            android:text="Own transfer"
+            android:text="Declare Payment Date"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.167"
+            app:layout_constraintHorizontal_bias="0.22"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/amountInput" />
+            app:layout_constraintTop_toBottomOf="@+id/receiverInput" />
 
         <TextView
             android:id="@+id/textView11"
@@ -78,7 +78,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.117"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ownTransferSwitch" />
+            app:layout_constraintTop_toBottomOf="@+id/amountInput" />
 
         <EditText
             android:id="@+id/receiverInput"
@@ -98,6 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:ems="10"
+            android:enabled="false"
             android:inputType="date"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.202"
@@ -114,7 +115,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.119"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/receiverInput" />
+            app:layout_constraintTop_toBottomOf="@+id/dueDateSwitch" />
 
         <Spinner
             android:id="@+id/recurringOptions"

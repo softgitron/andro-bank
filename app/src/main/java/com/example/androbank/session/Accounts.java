@@ -1,5 +1,6 @@
 package com.example.androbank.session;
 
+import androidx.constraintlayout.solver.Cache;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.androbank.connection.Response;
@@ -11,12 +12,9 @@ import java.util.Observable;
 import java.util.Observer;
 
 import static com.example.androbank.connection.Transfer.sendRequest;
+import static com.example.androbank.session.SessionUtils.genericErrorHandling;
 
 public class Accounts {
-    private static Accounts instance = new Accounts();
-
-    public static Accounts getAccounts() {return instance;}
-    private Accounts() {}
     private ArrayList<Account> accountList = new ArrayList<Account>();
 
     public MutableLiveData<Account> createAccount() {
@@ -26,24 +24,45 @@ public class Accounts {
             @Override
             public void update(Observable o, Object arg) {
                 Response response = (Response) o;
-                Integer httpCode = response.getHttpCode();
-                if (httpCode < 299) {
-                    AccountContainer newAccount = (AccountContainer) response.getResponse();
-                    Account account = new Account(newAccount.accountId, newAccount.iban, 0, newAccount.type);
-                    accountList.add(account);
-                    finalResults.postValue(account);
-                } else {
-                    Session session = Session.getSession();
-                    session.setLastErrorCode(1);
-                    session.setLastErrorMessage(response.getError());
-                }
+                if (genericErrorHandling(response)) {return;};
+                AccountContainer newAccount = (AccountContainer) response.getResponse();
+                Account account = new Account(newAccount.accountId, newAccount.iban, 0, newAccount.type);
+                accountList.add(account);
+                finalResults.postValue(account);
             }
         });
+        Transfer.clearCache();
         return finalResults;
     }
 
-    public ArrayList<Account> getAccountsList() {
+    public MutableLiveData<ArrayList<Account>> getAccountsList() {
         //TODO periodically update lists of accounts using API
-        return accountList;
+        accountList.clear();
+        MutableLiveData<ArrayList<Account>> statusAccounts = new MutableLiveData<ArrayList<Account>>();
+        Response response = sendRequest(Transfer.MethodType.GET, "/accounts/getAccounts", "", AccountContainer.class, true, false);
+        response.addObserver(new Observer() {
+            @Override
+            public void update(Observable o, Object arg) {
+                Response response = (Response) o;
+                System.out.println("Session.Accounts prints: " + response.getResponse().toString());
+                if (genericErrorHandling(response)) {return;};
+                // Save user details to session
+                ArrayList<AccountContainer> accountContainers = (ArrayList<AccountContainer>) response.getResponse();
+                for (AccountContainer accountContainer : accountContainers) {
+                    Account account = new Account(accountContainer.accountId, accountContainer.iban, accountContainer.balance, accountContainer.type);
+                    accountList.add(account);
+                }
+                statusAccounts.postValue(accountList);
+            }
+        });
+        return statusAccounts;
+    }
+    public Integer findAccountIdByIban(String iban) {
+        for (Account account: this.accountList) {
+            if(account.getIban().equals(iban) ) {
+                return  account.getAccountId();
+            }
+        }
+        return null;
     }
 }

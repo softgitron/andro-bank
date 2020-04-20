@@ -67,8 +67,8 @@ public class AccountsNewPayment extends Fragment {
                 }
                 ArrayAdapter<String> accountadapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, accountStrings);
                 accountadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                binding.accountDropdown.setAdapter(accountadapter);
-                binding.accountDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                binding.accountSpinner.setAdapter(accountadapter);
+                binding.accountSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         String selectedItem = adapterView.getSelectedItem().toString();
@@ -81,9 +81,6 @@ public class AccountsNewPayment extends Fragment {
                 });
             }
         });
-        //String[] accounts = {"Account 1", "Account 2", "Account 3"};
-        //ArrayAdapter<CharSequence> accountsadapter = new ArrayAdapter<CharSequence>(getActivity(), android.R.layout.simple_spinner_item, accounts);
-
 
         // Options spinner
         String[] options = {"Only once", "Every week", "Every month"};

@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.AccountsNewPayment">
+    tools:context=".ui.AccountsNewCard">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textView9"
+            android:id="@+id/textAccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
@@ -26,116 +26,91 @@
             android:id="@+id/accountSpinner"
             android:layout_width="326dp"
             android:layout_height="40dp"
-            android:layout_marginTop="68dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.47"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/textAccount" />
 
         <TextView
-            android:id="@+id/textView10"
+            android:id="@+id/textWithdraw"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Enter amount:"
+            android:layout_marginTop="24dp"
+            android:text="Withdraw limit (€):"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.132"
+            app:layout_constraintHorizontal_bias="0.15"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/accountSpinner" />
+            app:layout_constraintTop_toBottomOf="@+id/accountSpinner" />
 
         <EditText
-            android:id="@+id/amountInput"
+            android:id="@+id/inputWithdraw"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
             android:ems="10"
             android:inputType="numberDecimal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.202"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView10" />
-
-        <Switch
-            android:id="@+id/dueDateSwitch"
-            android:layout_width="230dp"
-            android:layout_height="39dp"
-            android:layout_marginTop="16dp"
-            android:text="Declare Payment Date"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.22"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/receiverInput" />
+            app:layout_constraintTop_toBottomOf="@+id/textWithdraw" />
 
         <TextView
-            android:id="@+id/textView11"
+            android:id="@+id/textSpend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Receiver:"
+            android:layout_marginTop="24dp"
+            android:text="Spending limit (€):"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.117"
+            app:layout_constraintHorizontal_bias="0.149"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/amountInput" />
+            app:layout_constraintTop_toBottomOf="@+id/inputWithdraw" />
 
         <EditText
-            android:id="@+id/receiverInput"
-            android:layout_width="297dp"
-            android:layout_height="43dp"
-            android:layout_marginTop="12dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.35"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView11" />
-
-        <EditText
-            android:id="@+id/dueDateInput"
+            android:id="@+id/inputSpend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
             android:ems="10"
-            android:enabled="false"
-            android:inputType="date"
+            android:inputType="numberDecimal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.202"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView12" />
+            app:layout_constraintTop_toBottomOf="@+id/textSpend" />
 
         <TextView
-            android:id="@+id/textView12"
+            android:id="@+id/textArea"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Due date:"
+            android:layout_marginTop="24dp"
+            android:text="Define Limited Area:"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.119"
+            app:layout_constraintHorizontal_bias="0.159"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dueDateSwitch" />
+            app:layout_constraintTop_toBottomOf="@+id/inputSpend" />
 
         <Spinner
-            android:id="@+id/recurringOptions"
-            android:layout_width="317dp"
-            android:layout_height="42dp"
-            android:layout_marginTop="24dp"
+            android:id="@+id/areaSpinner"
+            android:layout_width="326dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.425"
+            app:layout_constraintHorizontal_bias="0.47"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dueDateInput" />
+            app:layout_constraintTop_toBottomOf="@+id/textArea" />
 
         <Button
-            android:id="@+id/payButton"
+            android:id="@+id/createCardButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="Pay"
+            android:layout_marginTop="32dp"
+            android:text="Create new Card"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recurringOptions" />
+            app:layout_constraintTop_toBottomOf="@+id/areaSpinner" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

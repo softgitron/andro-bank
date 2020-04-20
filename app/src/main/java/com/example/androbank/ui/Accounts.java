@@ -40,34 +40,11 @@ public class Accounts extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentAccountsBinding.inflate(inflater, container, false);
         root = binding.getRoot();
-        //inflate fragment
-
-        //View rootView = inflater.inflate(R.layout.fragment_accounts, container, false);
 
         //find recycler view, set up layout manager
         recyclerView = binding.accountsListView;
-        //recyclerView = (RecyclerView) rootView.findViewById(R.id.accountsListView);
-
-        recyclerView.setHasFixedSize(true); //lista ei kasva kesken suorituksen (tehostaa suoritusta?)
         mLayoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(mLayoutManager);
-
-        /*ArrayList<RecyclerViewObject> itemList = new ArrayList<>();
-        itemList.add(new RecyclerViewObject(R.drawable.ic_forward, "Account 1 - 100 €"));
-        itemList.add(new RecyclerViewObject(R.drawable.ic_forward, "Account 2 - 1440 €"));
-        itemList.add(new RecyclerViewObject(R.drawable.ic_forward, "Account 3 - 30 €"));
-        itemList.add(new RecyclerViewObject(R.drawable.ic_forward, "Account 4 - 100 €"));
-        itemList.add(new RecyclerViewObject(R.drawable.ic_forward, "Account 5 - 1440 €"));
-        itemList.add(new RecyclerViewObject(R.drawable.ic_forward, "Account 6 - 30 €"));
-        itemList.add(new RecyclerViewObject(R.drawable.ic_forward, "Account 7 - 100 €"));
-
-        //get adapter
-        mAdapter = new RecyclerAdapter(itemList);
-        recyclerView.setAdapter(mAdapter);*/
-
-
         populateAccountList();
-
 
 
         //Buttons
@@ -104,8 +81,6 @@ public class Accounts extends Fragment {
                 });
             }
         });
-
-
         return root;
     }
 
@@ -121,24 +96,9 @@ public class Accounts extends Fragment {
                     itemList.add(new RecyclerViewObject(R.drawable.ic_forward, a));
                 }
                 mAdapter = new RecyclerAdapter(itemList, Accounts.this);
+                recyclerView.setLayoutManager(mLayoutManager);
+                recyclerView.setHasFixedSize(true); //lista ei kasva kesken suorituksen (tehostaa suoritusta?)
                 recyclerView.setAdapter(mAdapter);
-
-                recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-                    @Override
-                    public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-                        return false;
-                    }
-
-                    @Override
-                    public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-
-                    }
-
-                    @Override
-                    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-                    }
-                });
             }
         });
     }

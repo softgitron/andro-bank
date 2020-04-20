@@ -101,8 +101,10 @@ public class User {
             @Override
             public void update(Observable o, Object arg) {
                 Response response = (Response) o;
-                if (genericErrorHandling(response)) {System.out.println(response);return;};
+
+                if (genericErrorHandling(response)) {return;};
                 UserContainer userDetails = (UserContainer) response.getResponse();
+                System.out.println(userDetails.email);
                 unpackUserContainer(userDetails);
                 session.banks.setCurrentBank(userDetails.bankId);
                 statusUser.postValue(instance);

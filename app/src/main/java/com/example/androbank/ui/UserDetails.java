@@ -26,6 +26,7 @@ public class UserDetails extends Fragment {
         binding.changePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Navigation.findNavController(root).navigate(R.id.userDetailsChangePassword);
                 //TODO Change password logic
             }
         });

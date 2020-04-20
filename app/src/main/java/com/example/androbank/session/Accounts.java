@@ -57,6 +57,12 @@ public class Accounts {
         });
         return statusAccounts;
     }
+
+    /**
+     *  Simple search function for the Accounts arrayList.
+     * @param iban IBAN string used for finding account id.
+     * @return Returns the account id belonging to the given IBAN or null if it does not exists.
+     */
     public Integer findAccountIdByIban(String iban) {
         for (Account account: this.accountList) {
             if(account.getIban().equals(iban) ) {

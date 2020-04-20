@@ -3,16 +3,13 @@ package com.example.androbank.ui;
 import android.content.Context;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -55,7 +52,7 @@ public class Accounts extends Fragment {
             }
         });
 
-        binding.newCardPayment.setOnClickListener(new View.OnClickListener() {
+        binding.AccountsNewCardPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(root).navigate(R.id.action_accounts_to_newCardPayment2);
@@ -105,7 +102,7 @@ public class Accounts extends Fragment {
     public void addMoney(String iban) {
         Bundle bundle = new Bundle();
         bundle.putString("accountData", iban);
-        Navigation.findNavController(root).navigate(R.id.accountAddMoney, bundle);
+        Navigation.findNavController(root).navigate(R.id.AccountsAddMoney, bundle);
     }
 
 }

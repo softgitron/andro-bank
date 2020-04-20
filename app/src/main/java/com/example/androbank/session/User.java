@@ -96,7 +96,7 @@ public class User {
         updateUser.phoneNumber = phoneNumber;
 
         MutableLiveData<User> statusUser = new MutableLiveData<User>();
-        Response response = sendRequest(Transfer.MethodType.POST, "/users/updateUserDetails", updateUser, UserContainer.class, false);
+        Response response = sendRequest(Transfer.MethodType.PATCH, "/users/updateUserDetails", updateUser, UserContainer.class, true);
         response.addObserver(new Observer() {
             @Override
             public void update(Observable o, Object arg) {

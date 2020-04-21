@@ -18,7 +18,6 @@ import java.util.Observer;
 
 public class Cards {
 
-    private ArrayList<Card> cardList = new ArrayList<Card>();
 
     public MutableLiveData<Card> createCard(Integer accountId, Integer withdrawLimit, Integer spendingLimit, String area) {
         MutableLiveData<Card> finalResult = new MutableLiveData<Card>();
@@ -48,6 +47,7 @@ public class Cards {
     //TODO rivillä 55 responsen hhtpcode on 0, jolloin ei päästä eteenpäin
     public MutableLiveData<ArrayList<Card>> getCardsList(Integer accountId) {
         System.out.println("Lets get some cards");
+        ArrayList<Card> cardList = new ArrayList<Card>();
         MutableLiveData<ArrayList<Card>> finalResult = new MutableLiveData<ArrayList<Card>>();
         AccountContainer requestContainer = new AccountContainer();
         requestContainer.accountId = accountId;

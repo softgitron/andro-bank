@@ -64,6 +64,7 @@ public class AccountsNewCard extends Fragment {
                 session.cards.createCard(selectedAccountId, wLimit, sLimit, areaLimit).observe(getViewLifecycleOwner(), new Observer<Card>() {
                     @Override
                     public void onChanged(Card card) {
+
                         Snackbar.make(getView(), "New card created.", Snackbar.LENGTH_LONG).show();
                         binding.createCardButton.setEnabled(false);
                     }

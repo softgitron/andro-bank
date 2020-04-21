@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.example.androbank.R;
 import com.example.androbank.RecyclerAdapter;
+import com.example.androbank.connection.Transfer;
 import com.example.androbank.databinding.FragmentAccountsBinding;
 import com.example.androbank.databinding.FragmentAccountsCardsBinding;
 import com.example.androbank.session.Account;
@@ -99,14 +100,16 @@ public class AccountsCards extends Fragment {
                 @Override
                 public void onChanged(ArrayList<Card> cards) {
                     //System.out.println("Setup cards");
+                    cardArrayList.clear();
                     cardArrayList.addAll(cards);
                     for (Card card : cards) {
 
                         String content = account.getIban() + " " + card.getCardNumber();
-                        System.out.println("Account ID: " + account.getAccountId() + " Adding card: " + content);
+                        System.out.println("Account ID: " + card.getAccountId() + " Adding card: " + content);
                         itemList.add(new RecyclerViewObject(R.drawable.ic_forward, content));
                     }
                     accountsIndex++;
+                    Transfer.clearCache();
                     getCards();
                 }
             });

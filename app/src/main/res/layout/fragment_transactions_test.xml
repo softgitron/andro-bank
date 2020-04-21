@@ -12,22 +12,27 @@
 
         <Spinner
             android:id="@+id/accountSelect"
-            android:layout_width="354dp"
-            android:layout_height="42dp"
-            android:layout_marginTop="24dp"
+            android:layout_width="378dp"
+            android:layout_height="37dp"
+            android:layout_marginTop="16dp"
+            android:spinnerMode="dropdown"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.491"
+            app:layout_constraintHorizontal_bias="0.484"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/transactionsDisplay"
-            android:layout_width="399dp"
-            android:layout_height="628dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="8dp"
+            android:layout_width="396dp"
+            android:layout_height="624dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:fadeScrollbars="false"
+            android:scrollbars="vertical"
             android:text="TextView"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/accountSelect" />

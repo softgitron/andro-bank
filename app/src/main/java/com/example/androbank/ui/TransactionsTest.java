@@ -1,6 +1,7 @@
 package com.example.androbank.ui;
 
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ public class TransactionsTest extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentTransactionsTestBinding.inflate(inflater, container, false);
         root = binding.getRoot();
+        binding.transactionsDisplay.setMovementMethod(new ScrollingMovementMethod());
 
         session.accounts.getAccountsList(true).observe(getViewLifecycleOwner(), new Observer<ArrayList<Account>>() {
             @Override
@@ -55,15 +57,15 @@ public class TransactionsTest extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String selectedItem = adapterView.getSelectedItem().toString();
-                String SelectedAccountIban = selectedItem.split(" -")[0];
-                System.out.println(SelectedAccountIban);
-                session.transactions.getTransactions(session.accounts.findAccountIdByIban(SelectedAccountIban)).observe(getViewLifecycleOwner(), new Observer<ArrayList<Transaction>>() {
+                String selectedAccountIban = selectedItem.split(" -")[0];
+                System.out.println(selectedAccountIban);
+                session.transactions.getTransactions(session.accounts.findAccountIdByIban(selectedAccountIban)).observe(getViewLifecycleOwner(), new Observer<ArrayList<Transaction>>() {
                     @Override
                     public void onChanged(ArrayList<Transaction> transactions) {
                         System.out.println("transactions retrieved");
                         String displayString = "";
                         for (Transaction t: transactions) {
-                            displayString = displayString + t.toString() + "\n";
+                            displayString = displayString + t.toString(selectedAccountIban) + "\n\n";
                         }
                         binding.transactionsDisplay.setText(displayString);
                     }

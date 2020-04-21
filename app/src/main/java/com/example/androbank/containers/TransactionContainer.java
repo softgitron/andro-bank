@@ -21,6 +21,6 @@ public class TransactionContainer {
   public Integer cardId;
   public String cardNumber;
   public Integer amount;
-  public Date time;
+  public String time;
   public TransactionType type;
 }

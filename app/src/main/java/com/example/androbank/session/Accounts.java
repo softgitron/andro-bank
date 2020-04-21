@@ -17,6 +17,8 @@ import static com.example.androbank.session.SessionUtils.genericErrorHandling;
 public class Accounts {
     private ArrayList<Account> accountList = new ArrayList<Account>();
 
+    public ArrayList<Account> getSessionAccounts () {return accountList;}
+
     public MutableLiveData<Account> createAccount() {
         MutableLiveData<Account> finalResults = new MutableLiveData<Account>();
         Response response = sendRequest(Transfer.MethodType.POST, "/accounts/createAccount", null, AccountContainer.class, true);

@@ -10,7 +10,7 @@ public class SessionUtils {
             return false;
         } else {
             Session session = Session.getSession();
-            session.setLastErrorCode(1);
+            session.setLastErrorCode(httpCode);
             session.setLastErrorMessage(response.getError());
             return true;
         }

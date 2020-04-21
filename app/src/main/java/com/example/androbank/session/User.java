@@ -65,7 +65,13 @@ public class User {
             @Override
             public void update(Observable o, Object arg) {
                 Response response = (Response) o;
-                if (genericErrorHandling(response)) {return;};
+                System.out.println("Error message HTTP: " + response.getHttpCode());
+                if (response.getHttpCode() == 401) {
+                    session.setLastErrorMessage("Password was not found.");
+                return;
+                } else if (genericErrorHandling(response)){
+                    return;
+                }
                 UserContainer userDetails = (UserContainer) response.getResponse();
                 unpackUserContainer(userDetails);
                 session.banks.setCurrentBank(userDetails.bankId);
@@ -86,7 +92,7 @@ public class User {
      * @return User status for callback.
      */
     public MutableLiveData<User> updateUser(String username, String firstName, String lastName, String email, String phoneNumber) {
-        // Todo Api dock documentation is lacking!!!!! Section: User - Update details of the user
+
         Session session = Session.getSession();
         UserContainer updateUser = new UserContainer();
         updateUser.username = username;

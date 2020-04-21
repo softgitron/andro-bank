@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
 
-import com.example.androbank.R;
 import com.example.androbank.connection.Transfer;
 import com.example.androbank.databinding.FragmentAccountsAddMoneyBinding;
 import com.example.androbank.session.Account;
@@ -67,6 +66,7 @@ public class AccountsAddMoney extends Fragment {
                             //binding.addMoneyButton.setEnabled(false);
                             Transfer.clearCache();
                             closeKeyboard();
+                            // Basically goes one back in navigation without saving it to navigation history.
                             Navigation.findNavController(root).popBackStack();
                         }
                     });

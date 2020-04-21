@@ -66,6 +66,7 @@ public class LogInPage extends Fragment {
                 String email = binding.email.getText().toString();
                 String password = binding.password.getText().toString();
                 int bankId = binding.bankspinner.getSelectedItemPosition();
+
                 session.user.login(bankId, email, password).observe(getViewLifecycleOwner(), new Observer<User>() {
                     @Override
                     public void onChanged(User user) {

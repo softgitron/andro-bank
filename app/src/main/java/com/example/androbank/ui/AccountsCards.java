@@ -19,6 +19,7 @@ import com.example.androbank.databinding.FragmentAccountsCardsBinding;
 import com.example.androbank.session.Account;
 import com.example.androbank.session.Card;
 import com.example.androbank.session.Session;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
@@ -30,14 +31,23 @@ public class AccountsCards extends Fragment {
     private FragmentAccountsCardsBinding binding;
     private View root;
     private Session session = Session.getSession();
+    private ArrayList<Account> accounts;
+    private int accountsIndex = 0;
     private ArrayList<Card> cardArrayList = new ArrayList<Card>();
+    private ArrayList<RecyclerViewObject> itemList;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentAccountsCardsBinding.inflate(inflater, container, false);
         root = binding.getRoot();
-        populateCardList();
+        accounts = session.accounts.getSessionAccounts();
+        itemList = new ArrayList<>();
+        Snackbar.make(root, "Loading cards, please wait.", Snackbar.LENGTH_LONG).show();
+        getCards();
+
+
 
         /*recyclerView = binding.cardsListView;
         mLayoutManager = new LinearLayoutManager(getActivity());
@@ -64,37 +74,47 @@ public class AccountsCards extends Fragment {
 
     //TODO Jostain syystä getCardsList palauttaa httpCode 0 responseen, jolloin ei saada yhtään kortteja
     private void populateCardList() {
-        session.accounts.getAccountsList().observe(getViewLifecycleOwner(), new Observer<ArrayList<Account>>() {
-            @Override
-            public void onChanged(ArrayList<Account> accounts) {
-                ArrayList<RecyclerViewObject> itemList = new ArrayList<>();
-                for (Account account : accounts) {
-                    System.out.println("Move to next account.");
-                    session.cards.getCardsList(account.getAccountId()).observe(getViewLifecycleOwner(), new Observer<ArrayList<Card>>() {
-                        @Override
-                        public void onChanged(ArrayList<Card> cards) {
-                            System.out.println("Setup cards");
-                            cardArrayList.addAll(cards);
-                            for (Card card : cards) {
-                                String a = account.getIban() + " " + card.getCardNumber();
-                                itemList.add(new RecyclerViewObject(R.drawable.ic_forward, a));
-                            }
-                        }
-                    });
-                }
-                recyclerView = binding.cardsListView;
-                mLayoutManager = new LinearLayoutManager(getActivity());
-                recyclerView.setHasFixedSize(true);
-                recyclerView.setLayoutManager(mLayoutManager);
-                itemList.add(new RecyclerViewObject(R.drawable.ic_forward, "Card 3 - 3230 0392 0001"));
-                mAdapter = new RecyclerAdapter(itemList, AccountsCards.this);
-                recyclerView.setAdapter(mAdapter);
-            }
-        });
+        Snackbar.make(root, "Cards loaded.", Snackbar.LENGTH_LONG).show();
+        recyclerView = binding.cardsListView;
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(mLayoutManager);
+        itemList.add(new RecyclerViewObject(R.drawable.ic_forward, "Card 3 - 3230 0392 0001"));
+        mAdapter = new RecyclerAdapter(itemList, AccountsCards.this);
+        recyclerView.setAdapter(mAdapter);
+
     }
+
 
     // TODO Finish implementation.
     public void selectCard(String cardData) {
         System.out.println("CARD + '" + cardData + "' WAS SELECTED!");
+    }
+
+    public void getCards () {
+        if (accountsIndex < accounts.size() ) {
+            Account account = accounts.get(accountsIndex);
+            //System.out.println("Account: " + account.getAccountId());
+            session.cards.getCardsList(account.getAccountId() ).observe(getViewLifecycleOwner(), new Observer<ArrayList<Card>>() {
+                @Override
+                public void onChanged(ArrayList<Card> cards) {
+                    //System.out.println("Setup cards");
+                    cardArrayList.addAll(cards);
+                    for (Card card : cards) {
+
+                        String content = account.getIban() + " " + card.getCardNumber();
+                        System.out.println("Account ID: " + account.getAccountId() + " Adding card: " + content);
+                        itemList.add(new RecyclerViewObject(R.drawable.ic_forward, content));
+                    }
+                    accountsIndex++;
+                    getCards();
+                }
+            });
+        } else {
+            System.out.println("GOING TO POPULATE CARDS!!!!!!!!!!!!!!");
+            populateCardList();
+            return;
+
+        }
     }
 }

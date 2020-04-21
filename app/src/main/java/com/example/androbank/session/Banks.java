@@ -56,6 +56,8 @@ public class Banks {
         }
     }
 
+    public void setCurrentBank(Bank bank) {this.currentBank = bank;}
+
     public Bank getCurrentBank() {
         return currentBank;
     }

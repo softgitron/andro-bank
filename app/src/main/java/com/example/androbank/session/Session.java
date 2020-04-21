@@ -77,6 +77,7 @@ public class Session {
         ArrayList<String> sessionDump = new ArrayList<>();
         sessionDump.add(Transfer.getToken());
         sessionDump.add(user.dump());
+        sessionDump.add(banks.getCurrentBank().dump());
         Gson gson = new Gson();
         String dump = gson.toJson(sessionDump);
         saveToFile(context, dump);
@@ -93,6 +94,8 @@ public class Session {
         ArrayList<String> sessionLoad = gson.fromJson(data, type);
         Transfer.setToken(sessionLoad.get(0));
         user.load(sessionLoad.get(1));
+        banks.setCurrentBank(new Bank().load(sessionLoad.get(2) ) );
+
         return true;
     }
 

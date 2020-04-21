@@ -56,7 +56,7 @@ public class AccountsNewPayment extends Fragment {
         });
 
         // Accounts spinner
-        session.accounts.getAccountsList().observe(getViewLifecycleOwner(), new Observer<ArrayList<Account>>() {
+        session.accounts.getAccountsList(false).observe(getViewLifecycleOwner(), new Observer<ArrayList<Account>>() {
             @Override
             public void onChanged(ArrayList<Account> accounts) {
                 ArrayList<String> accountStrings = new ArrayList<String>();

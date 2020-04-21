@@ -82,7 +82,7 @@ public class Accounts extends Fragment {
     }
 
     private void populateAccountList() {
-        session.accounts.getAccountsList().observe(getViewLifecycleOwner(), new Observer<ArrayList<Account>>() {
+        session.accounts.getAccountsList(false).observe(getViewLifecycleOwner(), new Observer<ArrayList<Account>>() {
             @Override
             public void onChanged(ArrayList<Account> accounts) {
                 System.out.println("Arraylist retrieved");

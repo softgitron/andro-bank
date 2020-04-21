@@ -15,7 +15,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class Transactions {
-    private ArrayList<Transaction> transactionsList = new ArrayList<Transaction>();
+
 
     public MutableLiveData<Account> makeTransaction(Integer fromAccountId, String toAccountIban, Integer amount) {
         MutableLiveData<Account> finalResult = new MutableLiveData<Account>();
@@ -43,6 +43,7 @@ public class Transactions {
      * @return
      */
     public MutableLiveData<ArrayList<Transaction>> getTransactions(Integer accountId) {
+        ArrayList<Transaction> transactionsList = new ArrayList<Transaction>();
         MutableLiveData<ArrayList<Transaction>> finalResult = new MutableLiveData<ArrayList<Transaction>>();
         AccountContainer requestContainer = new AccountContainer();
         requestContainer.accountId = accountId;

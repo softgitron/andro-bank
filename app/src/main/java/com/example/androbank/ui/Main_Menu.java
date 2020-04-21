@@ -41,6 +41,8 @@ public class Main_Menu extends Fragment {
             }
         });
 
+        binding.viewTransactionsTest.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.transactionsTest));
+
         return root;
     }
 }

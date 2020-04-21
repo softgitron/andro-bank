@@ -22,4 +22,8 @@ public class Transaction {
     public float getAmount() { return amount;}
 
     public Date getDate() {return date;}
+
+    public String toString() {
+        return "From: " + fromAccount + "\t" + date.toString() + "\nTo:   " + toAccount + "\t" + String.format("%2.f", amount);
+    }
 }

@@ -42,6 +42,7 @@ public class Transfer {
     }
 
     public static Response sendRequest(MethodType method, String address, Object data, Class resultType, boolean authentication, boolean useCache) {
+        System.out.println("Time to get response!");
         return doSendRequest(method, address, data, resultType, authentication, useCache);
     }
 
@@ -92,9 +93,13 @@ public class Transfer {
                     connection.setRequestProperty("X-Auth-Token", token);
                 }
                 sendRequest(connection, method, json);
+                System.out.println("sendRequest done");
                 String responseString = readResponse(connection);
+                System.out.println("readResponse done");
                 String newToken = checkToken(connection);
+                System.out.println("checkToken done");
                 handleResponse(responseString, connection.getResponseCode(), response, newToken, resultType);
+                System.out.println("handleResponse done");
                 // Set new entry to cache if no error
                 if (response.getHttpCode() < 299) {
                     Cache.newCacheEntry(method, address, json, response);
@@ -111,6 +116,7 @@ public class Transfer {
             }
         });
         requestThread.start();
+        System.out.println("Do send response over");
         return response;
     }
 

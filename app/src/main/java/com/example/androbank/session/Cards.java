@@ -51,7 +51,7 @@ public class Cards {
         MutableLiveData<ArrayList<Card>> finalResult = new MutableLiveData<ArrayList<Card>>();
         AccountContainer requestContainer = new AccountContainer();
         requestContainer.accountId = accountId;
-        Response response = sendRequest(Transfer.MethodType.POST, "/cards/getCards", requestContainer, CardContainer.class, true);
+        Response response = sendRequest(Transfer.MethodType.POST, "/cards/getCards", requestContainer, CardContainer.class, true, false);
         response.addObserver(new Observer() {
             @Override
             public void update(Observable o, Object arg) {

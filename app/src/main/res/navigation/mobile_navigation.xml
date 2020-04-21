@@ -69,6 +69,9 @@
         <action
             android:id="@+id/action_cards_to_accountsNewCard"
             app:destination="@id/AccountsNewCard" />
+        <action
+            android:id="@+id/action_AccountsCards_to_accountsEditCard"
+            app:destination="@id/AccountsEditCard" />
     </fragment>
     <fragment
         android:id="@+id/main_Menu"
@@ -185,6 +188,15 @@
         <action
             android:id="@+id/action_transactionsTest_to_main_Menu"
             app:destination="@id/main_Menu" />
+    </fragment>
+    <fragment
+        android:id="@+id/AccountsEditCard"
+        android:name="com.example.androbank.ui.AccountsEditCard"
+        android:label="Edit Card Details"
+        tools:layout="@layout/fragment_accounts_edit_card">
+        <action
+            android:id="@+id/action_accountsEditCard_to_AccountsCards"
+            app:destination="@id/AccountsCards" />
     </fragment>
 
 

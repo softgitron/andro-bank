@@ -11,13 +11,11 @@ import static com.example.androbank.connection.Transfer.sendRequest;
 import static com.example.androbank.session.SessionUtils.genericErrorHandling;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 public class Cards {
-
+    private ArrayList<Card> allCardsList = new ArrayList<Card>();
 
     public MutableLiveData<Card> createCard(Integer accountId, Integer withdrawLimit, Integer spendingLimit, String area) {
         MutableLiveData<Card> finalResult = new MutableLiveData<Card>();
@@ -68,8 +66,23 @@ public class Cards {
                     cardList.add(currentCard);
                 }
                 finalResult.postValue(cardList);
+                allCardsList.addAll(cardList);
             }
         });
         return finalResult;
+    }
+
+    public Card getCardByCardNumber(String cardNumber, String cardAccountIban) {
+        int accountId = Session.getSession().accounts.findAccountIdByIban(cardAccountIban);
+        for (Card card: allCardsList) {
+            if (card.getCardNumber().equals(cardNumber) && card.getAccountId() == accountId) {
+                return card;
+            }
+        }
+        return null;
+    }
+
+    public void clearAllCardsList () {
+        allCardsList.clear();
     }
 }

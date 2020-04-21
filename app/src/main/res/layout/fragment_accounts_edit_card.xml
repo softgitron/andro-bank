@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.AccountsEditCard">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:id="@+id/EditCardCardNumber"
+            android:layout_width="272dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="32dp"
+            android:text="This will contain card number"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/EditCardWithdrawLimitText"
+            android:layout_width="272dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Edit withdraw limit (€):"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/EditCardCardNumber" />
+
+        <EditText
+            android:id="@+id/EditCardInputWithdraw"
+            android:layout_width="272dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:hint="Withdraw limit"
+            android:inputType="numberDecimal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/EditCardWithdrawLimitText" />
+
+        <TextView
+            android:id="@+id/EditCardSpendText"
+            android:layout_width="272dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Edit spending limit (€):"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/EditCardInputWithdraw" />
+
+        <EditText
+            android:id="@+id/EditCardSpendingInput"
+            android:layout_width="272dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:hint="Speding limit"
+            android:inputType="numberDecimal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/EditCardSpendText" />
+
+        <TextView
+            android:id="@+id/EditCardSpinnerHeading"
+            android:layout_width="272dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Define Limited Area:"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.302"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/EditCardSpendingInput" />
+
+        <Spinner
+            android:id="@+id/EditCardAreaSpinner"
+            android:layout_width="326dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.494"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/EditCardSpinnerHeading" />
+
+        <Button
+            android:id="@+id/EditCardButton"
+            android:layout_width="272dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="77dp"
+            android:text="Edit Card Info"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/EditCardAreaSpinner" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

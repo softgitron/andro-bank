@@ -45,7 +45,6 @@ public class AccountsCards extends Fragment {
         accounts = session.accounts.getSessionAccounts();
         itemList = new ArrayList<>();
         Snackbar.make(root, "Loading cards, please wait.", Snackbar.LENGTH_LONG).show();
-        getCards();
 
 
 
@@ -86,10 +85,6 @@ public class AccountsCards extends Fragment {
     }
 
 
-    // TODO Finish implementation.
-    public void selectCard(String cardData) {
-        System.out.println("CARD + '" + cardData + "' WAS SELECTED!");
-    }
 
     public void getCards () {
         if (accountsIndex < accounts.size() ) {
@@ -103,7 +98,7 @@ public class AccountsCards extends Fragment {
                     cardArrayList.addAll(cards);
                     for (Card card : cards) {
 
-                        String content = account.getIban() + " " + card.getCardNumber();
+                        String content = account.getIban() + " - " + card.getCardNumber();
                         System.out.println("Account ID: " + card.getAccountId() + " Adding card: " + content);
                         itemList.add(new RecyclerViewObject(R.drawable.ic_forward, content));
                     }
@@ -118,5 +113,18 @@ public class AccountsCards extends Fragment {
             return;
 
         }
+    }
+
+    public void selectCard(String cardData) {
+        Bundle bundle = new Bundle();
+        bundle.putString("cardData", cardData);
+        Navigation.findNavController(root).navigate(R.id.AccountsEditCard, bundle);
+    }
+
+    public void onResume() {
+        super.onResume();
+        accountsIndex = 0;
+        session.cards.clearAllCardsList();
+        getCards();
     }
 }

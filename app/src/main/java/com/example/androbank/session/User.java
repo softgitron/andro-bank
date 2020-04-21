@@ -119,6 +119,28 @@ public class User {
         return statusUser;
     }
 
+    public MutableLiveData<User> changePassword(String newPassword) {
+        Session session = Session.getSession();
+        UserContainer updateUser = new UserContainer();
+        updateUser.password = newPassword;
+
+        MutableLiveData<User> statusUser = new MutableLiveData<User>();
+        Response response = sendRequest(Transfer.MethodType.PATCH, "/users/updateUserDetails", updateUser, UserContainer.class, true);
+        response.addObserver(new Observer() {
+            @Override
+            public void update(Observable o, Object arg) {
+                Response response = (Response) o;
+
+                if (genericErrorHandling(response)) {return;};
+                UserContainer userDetails = (UserContainer) response.getResponse();
+                unpackUserContainer(userDetails);
+                //session.banks.setCurrentBank(userDetails.bankId);
+                statusUser.postValue(instance);
+            }
+        });
+        return statusUser;
+    }
+
     private void unpackUserContainer(UserContainer userDetails) {
         username = userDetails.username;
         firstName = userDetails.firstName;

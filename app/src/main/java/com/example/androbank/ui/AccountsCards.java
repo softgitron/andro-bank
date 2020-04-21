@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import com.example.androbank.R;
 import com.example.androbank.RecyclerAdapter;
 import com.example.androbank.connection.Transfer;
-import com.example.androbank.databinding.FragmentAccountsBinding;
 import com.example.androbank.databinding.FragmentAccountsCardsBinding;
 import com.example.androbank.session.Account;
 import com.example.androbank.session.Card;

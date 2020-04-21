@@ -59,7 +59,7 @@ public class Cards {
                 if (genericErrorHandling(response)) {System.out.println(response.getError()); return;};
                 ArrayList<CardContainer> cardContainers = (ArrayList<CardContainer>) response.getResponse();
                 for (CardContainer cardContainer : cardContainers) {
-                    System.out.println(cardContainer.cardNumber);
+                    //System.out.println(cardContainer.cardNumber);
                     /*List<String> areaList = null;
                     if (!cardContainer.area.equals("")) {
                         areaList = new ArrayList<String>(Arrays.asList(cardContainer.area.split(" ")));

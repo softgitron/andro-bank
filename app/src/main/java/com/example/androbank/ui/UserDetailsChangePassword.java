@@ -31,11 +31,11 @@ public class UserDetailsChangePassword extends Fragment {
         binding = FragmentUserDetailsChangePasswordBinding.inflate(inflater, container, false);
         root = binding.getRoot();
         initializeErrorHandling();
+        binding.changePassword.setEnabled(passwordsMatch);
 
         binding.changePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println(session.banks.getCurrentBank().toString());
                 String email = session.user.getEmail();
                 String password = binding.oldPassword.getEditText().getText().toString();
                 int bankId = session.banks.getCurrentBank().getBankId();
@@ -47,6 +47,7 @@ public class UserDetailsChangePassword extends Fragment {
                     @Override
                     public void onChanged(User user) {
                         System.out.println("CHANGE PASSWORD: RIGHT OLD PASSWORD!");
+                        updatePassword();
                         //Navigation.findNavController(root).navigate(R.id.action_nav_home_to_main_Menu);
                     }
                 });
@@ -68,11 +69,11 @@ public class UserDetailsChangePassword extends Fragment {
             public void afterTextChanged(Editable s) {
                 String confirmPassword = s.toString();
                 String newPassword = binding.newPassword.getEditText().getText().toString();
-                System.out.println("New: " + confirmPassword + "New 2: " + newPassword);
                 if (confirmPassword.equals(newPassword)) {
                     System.out.println("PASSWORDS MATCH");
                     binding.confirmPassword.setErrorEnabled(false);
                     passwordsMatch = true;
+                    binding.changePassword.setEnabled(passwordsMatch);
                 } else {
                     binding.confirmPassword.setError("Passwords do not match");
                     binding.confirmPassword.setErrorEnabled(true);
@@ -80,6 +81,7 @@ public class UserDetailsChangePassword extends Fragment {
                 }
             }
         });
+
 
         return root;
     }
@@ -91,6 +93,20 @@ public class UserDetailsChangePassword extends Fragment {
                 Snackbar.make(getView(), s, Snackbar.LENGTH_LONG).show();
             }
         });
+    }
+
+    public void updatePassword() {
+        if(passwordsMatch) {
+            String newPassword = binding.newPassword.getEditText().getText().toString();
+            session.user.changePassword(newPassword).observe(getViewLifecycleOwner(), new Observer<User>() {
+                @Override
+                public void onChanged(User user) {
+                    Snackbar.make(getView(), "User details were updated!", Snackbar.LENGTH_LONG).show();
+                    binding.changePassword.setEnabled(false);
+                    System.out.println(user.getUsername() + " ; " + user.getFirstName() + " ; " + user.getLastName() + " ; " + user.getEmail() + " ; " + user.getPhoneNumber());
+                }
+            });
+        }
     }
 
 }

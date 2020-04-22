@@ -10,7 +10,11 @@ import com.example.androbank.containers.TransactionContainer;
 import static com.example.androbank.connection.Transfer.sendRequest;
 import static com.example.androbank.session.SessionUtils.genericErrorHandling;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -55,7 +59,16 @@ public class Transactions {
                 if (genericErrorHandling(response)) {return;};
                 ArrayList<TransactionContainer> transactionContainers = (ArrayList<TransactionContainer>) response.getResponse();
                 for (TransactionContainer transactionContainer : transactionContainers) {
-                    Transaction transaction = new Transaction(transactionContainer.fromAccountIban, transactionContainer.toAccountIban, transactionContainer.amount, transactionContainer.time);
+                    /*try {
+                        Date help = new Date();
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM d, yyyy, m:h:s aa", new Locale("en", "US"));
+                        String hello = simpleDateFormat.format(help);
+                        Date date = simpleDateFormat.parse(transactionContainer.time);
+                        System.out.println("Hello");
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }*/
+                    Transaction transaction = new Transaction(transactionContainer.fromAccountIban, transactionContainer.toAccountIban, transactionContainer.amount, transactionContainer.time.toString());
                     transactionsList.add(transaction);
                 }
                 finalResult.postValue(transactionsList);

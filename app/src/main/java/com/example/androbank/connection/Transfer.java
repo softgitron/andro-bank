@@ -7,6 +7,7 @@ import com.example.androbank.containers.FutureTransactionContainer;
 import com.example.androbank.containers.TransactionContainer;
 import com.example.androbank.containers.UserContainer;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
@@ -77,7 +78,7 @@ public class Transfer {
         // https://github.com/google/gson/blob/master/UserGuide.md
         String json = "{}";
         if (data != null) {
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy, m:h:s aa").create();
             json = gson.toJson(data);
         }
         // Check cache before doing request
@@ -171,7 +172,7 @@ public class Transfer {
     private static void handleResponse(String responseString, Integer statusCode, Response response, String token, Class resultType) {
         if (statusCode < 299) {
             Type resultTypeChecked = handleListTypes(responseString, resultType);
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy, m:h:s aa").create();
             Object results;
             if (resultTypeChecked == null) {
                 results = gson.fromJson(responseString, resultType);

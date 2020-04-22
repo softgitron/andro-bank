@@ -91,7 +91,6 @@ public class AccountsEditCard extends Fragment {
 
     private void setState(String cardAccountIban) {
         binding.EditCardCardNumber.setText("Account: " + cardAccountIban +"\nCard Number: " + cardNumber);
-        // TODO FOr some reason current card doesn't contain area limit info. Note to check what server return and what is saved to session.
         binding.EditCardAreaSpinner.setSelection(java.util.Arrays.asList(areaOptions).indexOf(currentCard.getAreaLimit()));
         binding.EditCardInputWithdraw.setText(String.format("%.2f", (float) (currentCard.getWithdrawLimit() / 100) ).replace(",", ".") );
         binding.EditCardSpendingInput.setText(String.format("%.2f", (float) (currentCard.getPaymentLimit() / 100) ).replace(",", ".") );

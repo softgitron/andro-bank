@@ -42,7 +42,7 @@ public class Transactions {
     }
 
     /**
-     * Gets all user's transactions.
+     * Gets all user's given account's transactions.
      * @param accountId
      * @return
      */
@@ -68,7 +68,7 @@ public class Transactions {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }*/
-                    Transaction transaction = new Transaction(transactionContainer.fromAccountIban, transactionContainer.toAccountIban, transactionContainer.amount, transactionContainer.time.toString());
+                    Transaction transaction = new Transaction(transactionContainer.transferId, transactionContainer.fromAccountIban, transactionContainer.toAccountIban, transactionContainer.amount, transactionContainer.time);
                     transactionsList.add(transaction);
                 }
                 finalResult.postValue(transactionsList);
@@ -104,4 +104,35 @@ public class Transactions {
         return finalResult;
     }
 
+    /**
+     * Gets all user's given account's future transactions.
+     * @param accountId
+     * @return List of future transactions for callback.
+     */
+    public MutableLiveData<ArrayList<Transaction>> getFutureTransactions(Integer accountId) {
+        ArrayList<Transaction> transactionsList = new ArrayList<Transaction>();
+        MutableLiveData<ArrayList<Transaction>> finalResult = new MutableLiveData<ArrayList<Transaction>>();
+        AccountContainer requestContainer = new AccountContainer();
+        requestContainer.accountId = accountId;
+        Response response = sendRequest(Transfer.MethodType.POST, "/transactions/getFutureTransactions", requestContainer, TransactionContainer.class, true);
+        response.addObserver(new Observer() {
+            @Override
+            public void update(Observable o, Object arg) {
+                Response response = (Response) o;
+                if (genericErrorHandling(response)) {return;};
+                ArrayList<TransactionContainer> transactionContainers = (ArrayList<TransactionContainer>) response.getResponse();
+                for (TransactionContainer transactionContainer : transactionContainers) {
+                    Transaction transaction = new Transaction(transactionContainer.transferId, transactionContainer.fromAccountIban, transactionContainer.toAccountIban, transactionContainer.amount, transactionContainer.time);
+                    transactionsList.add(transaction);
+                }
+                finalResult.postValue(transactionsList);
+            }
+        });
+        return finalResult;
+    }
+
+    // Todo Finish implementation.
+    public void deleteFutureTransaction(Integer transactionId, String fromAccount) {
+        System.out.println("NOT IMPLEMENTED YET!");
+    }
 }

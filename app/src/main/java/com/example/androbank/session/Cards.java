@@ -23,6 +23,7 @@ public class Cards {
         requestContainer.accountId = accountId;
         requestContainer.withdrawLimit = withdrawLimit;
         requestContainer.spendingLimit = spendingLimit;
+        requestContainer.area = area;
         Response response = sendRequest(Transfer.MethodType.POST, "/cards/createCard", requestContainer, CardContainer.class, true);
         response.addObserver(new Observer() {
             @Override
@@ -35,7 +36,7 @@ public class Cards {
                 if (!newCard.area.equals("")) {
                     areaList = new ArrayList<String>(Arrays.asList(newCard.area.split(" ")));
                 }*/
-                Card card = new Card(newCard.cardNumber, newCard.accountId, newCard.area, newCard.spendingLimit, newCard.withdrawLimit);
+                Card card = new Card(newCard.cardNumber, newCard.cardId, newCard.accountId, newCard.area, newCard.spendingLimit, newCard.withdrawLimit);
                 finalResult.postValue(card);
             }
         });
@@ -62,7 +63,8 @@ public class Cards {
                     if (!cardContainer.area.equals("")) {
                         areaList = new ArrayList<String>(Arrays.asList(cardContainer.area.split(" ")));
                     }*/
-                    Card currentCard = new Card(cardContainer.cardNumber, cardContainer.accountId, cardContainer.area, cardContainer.spendingLimit, cardContainer.withdrawLimit);
+
+                    Card currentCard = new Card(cardContainer.cardNumber, cardContainer.cardId, cardContainer.accountId, cardContainer.area, cardContainer.spendingLimit, cardContainer.withdrawLimit);
                     cardList.add(currentCard);
                 }
                 finalResult.postValue(cardList);
@@ -72,16 +74,59 @@ public class Cards {
         return finalResult;
     }
 
-    public Card getCardByCardNumber(String cardNumber, String cardAccountIban) {
-        int accountId = Session.getSession().accounts.findAccountIdByIban(cardAccountIban);
+    /**
+     *  Used for changing the card details. Sends the request to server and return mutableLiveData for callback.
+     * @param cardID CardId belonging to the card which is to be updated.
+     * @param withdrawLimit New withdraw limit for the card.
+     * @param spendingLimit New spending limit for the card.
+     * @param area New area limit for the card.
+     * @param currentCard Is used to delete old card data from the AllCardsList.
+     * @return MutableLiveData card for callback.
+     */
+    public MutableLiveData<Card> uodateCard(Integer cardID, Integer withdrawLimit, Integer spendingLimit, String area, Card currentCard) {
+        MutableLiveData<Card> finalResult = new MutableLiveData<Card>();
+        CardContainer requestContainer = new CardContainer();
+        requestContainer.cardId = cardID;
+        requestContainer.withdrawLimit = withdrawLimit;
+        requestContainer.spendingLimit = spendingLimit;
+        requestContainer.area = area;
+        Response response = sendRequest(Transfer.MethodType.PATCH, "/cards/updateCard", requestContainer, CardContainer.class, true);
+        response.addObserver(new Observer() {
+            @Override
+            public void update(Observable o, Object arg) {
+                Response response = (Response) o;
+                if (genericErrorHandling(response)) {System.out.println(response.getError()); return;};
+                CardContainer updatedCardContainer = (CardContainer) response.getResponse();
+
+                currentCard.setAreaLimit( updatedCardContainer.area);
+                currentCard.setPaymentLimit(updatedCardContainer.spendingLimit);
+                currentCard.setWithdrawLimit(updatedCardContainer.withdrawLimit);
+                finalResult.postValue(currentCard);
+            }
+        });
+        return finalResult;
+    }
+
+
+    /**
+     * Simple function used for getting a matching card object for given parameters.
+     * @param cardNumber Number of the card, not database ID
+     * @param cardAccountId AccountId of the account which has the card.
+     * @return Returns the matching card object or null if it was not founded.
+     */
+    public Card getCardByCardNumber(String cardNumber, int cardAccountId) {
+
         for (Card card: allCardsList) {
-            if (card.getCardNumber().equals(cardNumber) && card.getAccountId() == accountId) {
+            if (card.getCardNumber().equals(cardNumber) && card.getAccountId() == cardAccountId) {
                 return card;
             }
         }
         return null;
     }
 
+    /**
+     * Clears the Cards AllCardsList.
+     */
     public void clearAllCardsList () {
         allCardsList.clear();
     }

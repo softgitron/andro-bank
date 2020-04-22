@@ -10,9 +10,13 @@ import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.navigation.Navigation;
+
 import com.example.androbank.databinding.FragmentAccountsEditCardBinding;
 import com.example.androbank.session.Card;
 import com.example.androbank.session.Session;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +30,7 @@ public class AccountsEditCard extends Fragment {
     private String areaLimit;
     private String cardNumber;
     private Card currentCard;
+    private int cardAccountId;
     private final String[] areaOptions = {"-- none --", "Europe", "Nordics & Estonia", "Finland"};
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,6 +38,8 @@ public class AccountsEditCard extends Fragment {
         root = binding.getRoot();
         session = Session.getSession();
         initAreSpinner();
+        initEditButton();
+
         return root;
     }
 
@@ -71,7 +78,8 @@ public class AccountsEditCard extends Fragment {
         cardNumber = cardDetailsSplitted[1];
         String cardAccountIban = cardDetailsSplitted[0];
         System.out.println("Card Number: " + cardNumber + "accountIban" + cardAccountIban);
-        currentCard = session.cards.getCardByCardNumber(cardNumber, cardAccountIban);
+        cardAccountId = session.accounts.findAccountIdByIban(cardAccountIban);
+        currentCard = session.cards.getCardByCardNumber(cardNumber, cardAccountId);
         if (currentCard == null) {
             System.err.println("This should never happen, Card was not found from the list. System will exit!");
             System.exit(1);
@@ -85,7 +93,28 @@ public class AccountsEditCard extends Fragment {
         binding.EditCardCardNumber.setText("Account: " + cardAccountIban +"\nCard Number: " + cardNumber);
         // TODO FOr some reason current card doesn't contain area limit info. Note to check what server return and what is saved to session.
         binding.EditCardAreaSpinner.setSelection(java.util.Arrays.asList(areaOptions).indexOf(currentCard.getAreaLimit()));
-        binding.EditCardInputWithdraw.setText(String.format("%.2f", currentCard.getWithdrawLimit() ) );
-        binding.EditCardSpendingInput.setText(String.format("%.2f", currentCard.getPaymentLimit() ) );
+        binding.EditCardInputWithdraw.setText(String.format("%.2f", (float) (currentCard.getWithdrawLimit() / 100) ).replace(",", ".") );
+        binding.EditCardSpendingInput.setText(String.format("%.2f", (float) (currentCard.getPaymentLimit() / 100) ).replace(",", ".") );
+    }
+
+    private void initEditButton() {
+        binding.EditCardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String areaLimit = binding.EditCardAreaSpinner.getSelectedItem().toString();
+                float withdrawLimit = Float.parseFloat(binding.EditCardInputWithdraw.getText().toString() );
+                float spendingLimit = Float.parseFloat(binding.EditCardSpendingInput.getText().toString() );
+                Integer wLimit = Math.round(withdrawLimit * 100);
+                Integer sLimit = Math.round(spendingLimit * 100);
+                session.cards.uodateCard(currentCard.getCardId(), wLimit, sLimit, areaLimit, currentCard).observe(getViewLifecycleOwner(), new Observer<Card>() {
+                    @Override
+                    public void onChanged(Card card) {
+
+                        Snackbar.make(getView(), "Card updated.", Snackbar.LENGTH_LONG).show();
+                        Navigation.findNavController(root).popBackStack();
+                    }
+                });
+            }
+        });
     }
 }

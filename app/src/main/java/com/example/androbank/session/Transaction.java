@@ -44,11 +44,11 @@ public class Transaction {
         }
         //Apr 19, 2020, 11:57:35 AM
     }
-
+    //TODO rivi 51 crashaa futrure transactionit (poistettu this.date.toString(), jotta toimii. Lisäksi getFutureTransactions() responseConatiner.time on null
     public String toString() {
         // This is currently only used in TransactionsViewFuture by the spinner.
         String amount = String.format("%.2f", (float) (this.amount / 100) );
-        return "From: Deposit   " + this.date.toString() + "\nTo:   " + toAccount + "  sum: +" + amount + "€";
+        return "From: Deposit   "+ "\nTo:   " + toAccount + "  sum: +" + amount + "€";
 
 
 

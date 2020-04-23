@@ -5,13 +5,17 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.androbank.connection.Response;
 import com.example.androbank.connection.Transfer;
 import com.example.androbank.containers.AccountContainer;
+import com.example.androbank.containers.FutureTransactionContainer;
 import com.example.androbank.containers.TransactionContainer;
 
 import static com.example.androbank.connection.Transfer.sendRequest;
 import static com.example.androbank.session.SessionUtils.genericErrorHandling;
 
+import java.net.Inet4Address;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
@@ -36,6 +40,39 @@ public class Transactions {
                 AccountContainer newAccount = (AccountContainer) response.getResponse();
                 Account account = new Account(newAccount.accountId, newAccount.iban, newAccount.balance, newAccount.type);
                 finalResult.postValue(account);
+            }
+        });
+        return finalResult;
+    }
+
+    public MutableLiveData<String> makeFutureTransaction(Integer fromAccountId, String toAccountIban, Integer amount, LocalDate paymentDate, Integer atInterval, Integer times) {
+        MutableLiveData<String> finalResult = new MutableLiveData<String>();
+        FutureTransactionContainer requestContainer = new FutureTransactionContainer();
+        requestContainer.fromAccountId = fromAccountId;
+        requestContainer.toAccountIban = toAccountIban;
+        requestContainer.amount = amount;
+        System.out.println("Lets future");
+        requestContainer.atTime = java.util.Date.from(paymentDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+        System.out.println(requestContainer.atTime);
+        if (atInterval != 0) {
+            requestContainer.atInterval = atInterval;
+            requestContainer.times = times;
+        } else {
+            requestContainer.atInterval = null;
+            requestContainer.times = null;
+        }
+        Response response = sendRequest(Transfer.MethodType.POST, "/accounts/futureTransfer", requestContainer, String.class, true, false);
+        response.addObserver(new Observer() {
+            @Override
+            public void update(Observable o, Object arg) {
+                Response response = (Response) o;
+                //System.out.println(response.getResponse().toString());
+
+                if (genericErrorHandling(response)) {
+                    System.out.println(response.getError());
+                    return;
+                };
+                finalResult.postValue(response.getResponse().toString());
             }
         });
         return finalResult;
@@ -122,6 +159,7 @@ public class Transactions {
                 if (genericErrorHandling(response)) {return;};
                 ArrayList<TransactionContainer> transactionContainers = (ArrayList<TransactionContainer>) response.getResponse();
                 for (TransactionContainer transactionContainer : transactionContainers) {
+                    System.out.println("Time is "+transactionContainer.time);
                     Transaction transaction = new Transaction(transactionContainer.transferId, transactionContainer.fromAccountIban, transactionContainer.toAccountIban, transactionContainer.amount, transactionContainer.time);
                     transactionsList.add(transaction);
                 }

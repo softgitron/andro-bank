@@ -61,7 +61,7 @@
             android:layout_width="230dp"
             android:layout_height="39dp"
             android:layout_marginTop="16dp"
-            android:text="Declare Payment Date"
+            android:text="Future Transaction"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.22"
@@ -109,11 +109,11 @@
             android:id="@+id/textView12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Due date:"
+            android:layout_marginTop="24dp"
+            android:text="Payment Date"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.119"
+            app:layout_constraintHorizontal_bias="0.133"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dueDateSwitch" />
 
@@ -121,7 +121,7 @@
             android:id="@+id/recurringOptions"
             android:layout_width="317dp"
             android:layout_height="42dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.425"
             app:layout_constraintStart_toStartOf="parent"
@@ -131,11 +131,32 @@
             android:id="@+id/payButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="12dp"
             android:text="Pay"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toEndOf="@+id/timesText"
+            app:layout_constraintTop_toBottomOf="@+id/recurringOptions" />
+
+        <EditText
+            android:id="@+id/timesInput"
+            android:layout_width="140px"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:inputType="number"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recurringOptions" />
+
+        <TextView
+            android:id="@+id/timesText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="27dp"
+            android:text="times total."
+            android:textSize="18sp"
+            app:layout_constraintStart_toEndOf="@+id/timesInput"
             app:layout_constraintTop_toBottomOf="@+id/recurringOptions" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

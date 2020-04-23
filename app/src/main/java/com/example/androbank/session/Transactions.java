@@ -10,7 +10,11 @@ import com.example.androbank.containers.TransactionContainer;
 import static com.example.androbank.connection.Transfer.sendRequest;
 import static com.example.androbank.session.SessionUtils.genericErrorHandling;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -38,7 +42,7 @@ public class Transactions {
     }
 
     /**
-     * Gets all user's transactions.
+     * Gets all user's given account's transactions.
      * @param accountId
      * @return
      */
@@ -55,7 +59,16 @@ public class Transactions {
                 if (genericErrorHandling(response)) {return;};
                 ArrayList<TransactionContainer> transactionContainers = (ArrayList<TransactionContainer>) response.getResponse();
                 for (TransactionContainer transactionContainer : transactionContainers) {
-                    Transaction transaction = new Transaction(transactionContainer.fromAccountIban, transactionContainer.toAccountIban, transactionContainer.amount, transactionContainer.time);
+                    /*try {
+                        Date help = new Date();
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM d, yyyy, m:h:s aa", new Locale("en", "US"));
+                        String hello = simpleDateFormat.format(help);
+                        Date date = simpleDateFormat.parse(transactionContainer.time);
+                        System.out.println("Hello");
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }*/
+                    Transaction transaction = new Transaction(transactionContainer.transferId, transactionContainer.fromAccountIban, transactionContainer.toAccountIban, transactionContainer.amount, transactionContainer.time);
                     transactionsList.add(transaction);
                 }
                 finalResult.postValue(transactionsList);
@@ -91,4 +104,35 @@ public class Transactions {
         return finalResult;
     }
 
+    /**
+     * Gets all user's given account's future transactions.
+     * @param accountId
+     * @return List of future transactions for callback.
+     */
+    public MutableLiveData<ArrayList<Transaction>> getFutureTransactions(Integer accountId) {
+        ArrayList<Transaction> transactionsList = new ArrayList<Transaction>();
+        MutableLiveData<ArrayList<Transaction>> finalResult = new MutableLiveData<ArrayList<Transaction>>();
+        AccountContainer requestContainer = new AccountContainer();
+        requestContainer.accountId = accountId;
+        Response response = sendRequest(Transfer.MethodType.POST, "/transactions/getFutureTransactions", requestContainer, TransactionContainer.class, true);
+        response.addObserver(new Observer() {
+            @Override
+            public void update(Observable o, Object arg) {
+                Response response = (Response) o;
+                if (genericErrorHandling(response)) {return;};
+                ArrayList<TransactionContainer> transactionContainers = (ArrayList<TransactionContainer>) response.getResponse();
+                for (TransactionContainer transactionContainer : transactionContainers) {
+                    Transaction transaction = new Transaction(transactionContainer.transferId, transactionContainer.fromAccountIban, transactionContainer.toAccountIban, transactionContainer.amount, transactionContainer.time);
+                    transactionsList.add(transaction);
+                }
+                finalResult.postValue(transactionsList);
+            }
+        });
+        return finalResult;
+    }
+
+    // Todo Finish implementation.
+    public void deleteFutureTransaction(Integer transactionId, String fromAccount) {
+        System.out.println("NOT IMPLEMENTED YET!");
+    }
 }

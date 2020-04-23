@@ -40,6 +40,7 @@ class Cache {
         if (validMinutes == null) {
             return;
         }
+        cleanupOldEntry(method, address, data, response);
         CacheEntry entry = new CacheEntry(new Date(), validMinutes, method, address, data, response);
         cacheEntries.add(entry);
     }
@@ -62,6 +63,16 @@ class Cache {
                 return 1;
             default:
                 return null;
+        }
+    }
+
+    private static void cleanupOldEntry(Transfer.MethodType method, String address, String data, Response response) {
+        ListIterator cacheIterator = cacheEntries.listIterator();
+        while (cacheIterator.hasNext()) {
+            CacheEntry entry = (CacheEntry) cacheIterator.next();
+            if (entry.getMethod().equals(method) && entry.getAddress().equals(address) && entry.getData().equals(data) && entry.getResponse().equals(response)) {
+                cacheIterator.remove();
+            }
         }
     }
 }

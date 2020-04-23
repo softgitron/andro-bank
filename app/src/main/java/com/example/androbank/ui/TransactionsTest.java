@@ -31,6 +31,8 @@ public class TransactionsTest extends Fragment {
         root = binding.getRoot();
         binding.transactionsDisplay.setMovementMethod(new ScrollingMovementMethod());
 
+        binding.transactionsDisplay.setText("Loading transactions. Please wait.");
+
         session.accounts.getAccountsList(true).observe(getViewLifecycleOwner(), new Observer<ArrayList<Account>>() {
             @Override
             public void onChanged(ArrayList<Account> accounts) {

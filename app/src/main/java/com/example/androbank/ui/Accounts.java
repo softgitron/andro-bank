@@ -88,6 +88,7 @@ public class Accounts extends Fragment {
                 System.out.println("Arraylist retrieved");
                 ArrayList<RecyclerViewObject> itemList = new ArrayList<>();
                 for (int i = 0; i < accounts.size(); i++){
+                    System.out.println(accounts.get(i).getIban());
                     String balance = String.format("%.2f",  (float) accounts.get(i).getBalance() / (float) 100 );
                     String a = accounts.get(i).getIban() + " - " + balance + "€";
                     itemList.add(new RecyclerViewObject(R.drawable.ic_forward, a));

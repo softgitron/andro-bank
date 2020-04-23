@@ -9,18 +9,6 @@ public class Response extends Observable {
     private String error = null;
     private boolean cached = false;
 
-    public void setValue(Integer httpCode, Object response, String error, boolean cached)
-    {
-        this.httpCode = httpCode;
-        this.response = response;
-        this.error = error;
-        this.cached = cached;
-        this.token = null;
-
-        setChanged();
-        notifyObservers();
-    }
-
     public void setValue(Integer httpCode, Object response, String error, boolean cached, String token)
     {
         this.httpCode = httpCode;

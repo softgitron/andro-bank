@@ -95,6 +95,9 @@
         <action
             android:id="@+id/action_main_Menu_to_transactionsTest"
             app:destination="@id/transactionsTest" />
+        <action
+            android:id="@+id/action_main_Menu_to_transactionsViewFuture"
+            app:destination="@id/transactionsViewFuture" />
     </fragment>
     <fragment
         android:id="@+id/userDetails"
@@ -197,6 +200,15 @@
         <action
             android:id="@+id/action_accountsEditCard_to_AccountsCards"
             app:destination="@id/AccountsCards" />
+    </fragment>
+    <fragment
+        android:id="@+id/transactionsViewFuture"
+        android:name="com.example.androbank.ui.TransactionsViewFuture"
+        android:label="Future Transactions (test)"
+        tools:layout="@layout/fragment_transactions_view_future">
+        <action
+            android:id="@+id/action_transactionsViewFuture_to_main_Menu"
+            app:destination="@id/main_Menu" />
     </fragment>
 
 

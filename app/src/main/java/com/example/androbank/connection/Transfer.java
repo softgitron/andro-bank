@@ -7,6 +7,7 @@ import com.example.androbank.containers.FutureTransactionContainer;
 import com.example.androbank.containers.TransactionContainer;
 import com.example.androbank.containers.UserContainer;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
@@ -20,6 +21,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -28,7 +32,7 @@ public class Transfer {
     static final Integer CONNECTION_TIMEOUT = 5000;
     static final Integer READ_TIMEOUT = 5000;
     protected static String token;
-    private static Boolean isFetching = false;
+    private static Lock isFetching = new ReentrantLock();
 
     public enum MethodType {
         POST,
@@ -42,82 +46,83 @@ public class Transfer {
     }
 
     public static Response sendRequest(MethodType method, String address, Object data, Class resultType, boolean authentication, boolean useCache) {
-        System.out.println("Time to get response!");
         return doSendRequest(method, address, data, resultType, authentication, useCache);
     }
 
     private static Response doSendRequest(MethodType method, String address, Object data, Class resultType, boolean authentication, boolean useCache) {
         Response response = new Response();
-
-        if (isFetching) {
-            Thread errorThread = new Thread(() -> {
-                // This is very hacky should be changed in the future to avoid sleep usage.
-                try { Thread.sleep(200); } catch (Exception e) {}
-                response.setValue(999, null, "Fetching was already ongoing.", false);
-            });
-            return response;
-        }
-        isFetching = true;
         Thread requestThread = new Thread(() -> {
-            // https://github.com/google/gson/blob/master/UserGuide.md
-            String json = "{}";
-            if (data != null) {
-                Gson gson = new Gson();
-                json = gson.toJson(data);
-            }
-            // Check cache before doing request
-            if (useCache) {
-                // Use cached response if there is one available
-                Response cachedResponse = Cache.getCacheEntry(method, address, json);
-                if (cachedResponse != null) {
-                    response.setValue(cachedResponse.getHttpCode(),
-                            cachedResponse.getResponse(), cachedResponse.getError(), true);
-                    isFetching = false;
-                    return;
-                }
-            }
-            // https://www.baeldung.com/java-http-request
-            // https://www.baeldung.com/httpurlconnection-post
-            URL url = null;
+
             try {
-                url = new URL(API_ADDRESS + address);
-                HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-                connection.setConnectTimeout(CONNECTION_TIMEOUT);
-                connection.setReadTimeout(READ_TIMEOUT);
-                // Set token if requested
-                if (authentication) {
-                    if (token == null) {
-                        System.out.println("Application malfunction! No token available.");
-                        System.exit(10);
+                if (isFetching.tryLock(10, TimeUnit.SECONDS)) {
+                    try {
+                        executeRequest(method, address, data, resultType, authentication, useCache, response);
                     }
-                    connection.setRequestProperty("X-Auth-Token", token);
+                    finally {
+                        isFetching.unlock();
+                    }
+                } else {
+                    setResponse(response, 999, null, "Responses are too slow to happen", false, null);
                 }
-                sendRequest(connection, method, json);
-                System.out.println("sendRequest done");
-                String responseString = readResponse(connection);
-                System.out.println("readResponse done");
-                String newToken = checkToken(connection);
-                System.out.println("checkToken done");
-                handleResponse(responseString, connection.getResponseCode(), response, newToken, resultType);
-                System.out.println("handleResponse done");
-                // Set new entry to cache if no error
-                if (response.getHttpCode() < 299) {
-                    Cache.newCacheEntry(method, address, json, response);
-                }
-            } catch (MalformedURLException e) {
-                System.out.println("Malformed url exception should not occur ever.");
-                System.exit(11);
-            } catch (ProtocolException e) {
-                response.setValue(400, null, "Unknown protocol error", false);
-            } catch (IOException e) {
-                response.setValue(444, null, "Connection error", false);
-            } finally {
-                isFetching = false;
+            }
+            catch (InterruptedException e) {
+                e.printStackTrace();
+                isFetching.unlock();
             }
         });
         requestThread.start();
-        System.out.println("Do send response over");
         return response;
+    }
+
+    private static void executeRequest(MethodType method, String address, Object data, Class resultType, boolean authentication, boolean useCache, Response response) {
+        // https://github.com/google/gson/blob/master/UserGuide.md
+        String json = "{}";
+        if (data != null) {
+            Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy, m:h:s aa").create();
+            json = gson.toJson(data);
+        }
+        // Check cache before doing request
+        if (useCache) {
+            // Use cached response if there is one available
+            Response cachedResponse = Cache.getCacheEntry(method, address, json);
+            if (cachedResponse != null) {
+                setResponse(response, cachedResponse.getHttpCode(),
+                        cachedResponse.getResponse(), cachedResponse.getError(), true, null);
+                return;
+            }
+        }
+        // https://www.baeldung.com/java-http-request
+        // https://www.baeldung.com/httpurlconnection-post
+        URL url = null;
+        try {
+            url = new URL(API_ADDRESS + address);
+            HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+            connection.setConnectTimeout(CONNECTION_TIMEOUT);
+            connection.setReadTimeout(READ_TIMEOUT);
+            // Set token if requested
+            if (authentication) {
+                if (token == null) {
+                    System.out.println("Application malfunction! No token available.");
+                    System.exit(10);
+                }
+                connection.setRequestProperty("X-Auth-Token", token);
+            }
+            sendRequest(connection, method, json);
+            String responseString = readResponse(connection);
+            String newToken = checkToken(connection);
+            handleResponse(responseString, connection.getResponseCode(), response, newToken, resultType);
+            // Set new entry to cache if no error
+            if (response.getHttpCode() < 299) {
+                Cache.newCacheEntry(method, address, json, response);
+            }
+        } catch (MalformedURLException e) {
+            System.out.println("Malformed url exception should not occur ever.");
+            System.exit(11);
+        } catch (ProtocolException e) {
+            setResponse(response, 400, null, "Unknown protocol error", false, null);
+        } catch (IOException e) {
+            setResponse(response,444, null, "Connection error", false, null);
+        }
     }
 
     private static void sendRequest(HttpsURLConnection connection, MethodType method, String json) throws IOException {
@@ -167,16 +172,16 @@ public class Transfer {
     private static void handleResponse(String responseString, Integer statusCode, Response response, String token, Class resultType) {
         if (statusCode < 299) {
             Type resultTypeChecked = handleListTypes(responseString, resultType);
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy, m:h:s aa").create();
             Object results;
             if (resultTypeChecked == null) {
                 results = gson.fromJson(responseString, resultType);
             } else {
                 results = gson.fromJson(responseString, resultTypeChecked);
             }
-            response.setValue(statusCode, results, null, false, token);
+            setResponse(response, statusCode, results, null, false, token);
         } else {
-            response.setValue(statusCode, null, responseString, false);
+            setResponse(response, statusCode, null, responseString, false, null);
         }
     }
 
@@ -209,6 +214,23 @@ public class Transfer {
         return null;
     }
 
+    private static void setResponse(Response resp, Integer httpCode, Object response, String error, boolean cached, String token) {
+        int count = 0;
+        while (resp.countObservers() == 0) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (count > 100) {
+                System.out.println("Observer is too slow to attach. Check your code.");
+                System.exit(1050);
+            }
+            count++;
+        }
+        resp.setValue(httpCode, response, error, cached, token);
+    }
+
     public static void setToken(String newToken) {
         token = newToken;
     }
@@ -219,8 +241,6 @@ public class Transfer {
             return "";
         }
     }
-    public static Boolean getIsFetching() { return isFetching; }
-    public static void setIsFetching(Boolean value) { isFetching = value; }
 
     public static void clearCache() {
         Cache.emptyCache();

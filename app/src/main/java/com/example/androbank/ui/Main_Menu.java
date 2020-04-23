@@ -29,6 +29,8 @@ public class Main_Menu extends Fragment {
 
         binding.viewAccounts.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_main_Menu_to_accounts));
 
+        binding.viewFutureTransactionsTest.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.transactionsViewFuture));
+
         binding.viewTransactions.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_main_Menu_to_transactions));
 
         binding.viewUser.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_main_Menu_to_userDetails));

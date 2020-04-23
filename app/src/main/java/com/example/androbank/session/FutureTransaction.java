@@ -23,6 +23,7 @@ public class FutureTransaction extends Transaction{
     }
 
     //TODO rivi crashaa futrure transactionit (poistettu this.date.toString(), jotta toimii. Lisäksi getFutureTransactions() responseConatiner.time on null
+    // Todo does the previous still hold true?
     public String toString() {
         // This is currently only used in TransactionsViewFuture by the spinner.
         String amount = String.format("%.2f", (float) (this.amount / 100) );

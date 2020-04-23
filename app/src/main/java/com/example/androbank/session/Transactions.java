@@ -146,21 +146,21 @@ public class Transactions {
      * @param accountId
      * @return List of future transactions for callback.
      */
-    public MutableLiveData<ArrayList<Transaction>> getFutureTransactions(Integer accountId) {
-        ArrayList<Transaction> transactionsList = new ArrayList<Transaction>();
-        MutableLiveData<ArrayList<Transaction>> finalResult = new MutableLiveData<ArrayList<Transaction>>();
+    public MutableLiveData<ArrayList<FutureTransaction>> getFutureTransactions(Integer accountId) {
+        ArrayList<FutureTransaction> transactionsList = new ArrayList<FutureTransaction>();
+        MutableLiveData<ArrayList<FutureTransaction>> finalResult = new MutableLiveData<ArrayList<FutureTransaction>>();
         AccountContainer requestContainer = new AccountContainer();
         requestContainer.accountId = accountId;
-        Response response = sendRequest(Transfer.MethodType.POST, "/transactions/getFutureTransactions", requestContainer, TransactionContainer.class, true);
+        Response response = sendRequest(Transfer.MethodType.POST, "/transactions/getFutureTransactions", requestContainer, FutureTransactionContainer.class, true);
         response.addObserver(new Observer() {
             @Override
             public void update(Observable o, Object arg) {
                 Response response = (Response) o;
                 if (genericErrorHandling(response)) {return;};
-                ArrayList<TransactionContainer> transactionContainers = (ArrayList<TransactionContainer>) response.getResponse();
-                for (TransactionContainer transactionContainer : transactionContainers) {
+                ArrayList<FutureTransactionContainer> transactionContainers = (ArrayList<FutureTransactionContainer>) response.getResponse();
+                for (FutureTransactionContainer transactionContainer : transactionContainers) {
                     System.out.println("Time is "+transactionContainer.time);
-                    Transaction transaction = new Transaction(transactionContainer.transferId, transactionContainer.fromAccountIban, transactionContainer.toAccountIban, transactionContainer.amount, transactionContainer.time);
+                    FutureTransaction transaction = new FutureTransaction(transactionContainer.futureTransferId, transactionContainer.fromAccountIban, transactionContainer.toAccountIban, transactionContainer.amount, transactionContainer.atTime, transactionContainer.times);
                     transactionsList.add(transaction);
                 }
                 finalResult.postValue(transactionsList);

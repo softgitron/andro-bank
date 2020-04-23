@@ -12,8 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
+import com.example.androbank.R;
 import com.example.androbank.databinding.FragmentTransactionsViewFutureBinding;
 import com.example.androbank.session.Account;
+import com.example.androbank.session.FutureTransaction;
 import com.example.androbank.session.Session;
 import com.example.androbank.session.Transaction;
 
@@ -27,7 +29,7 @@ public class TransactionsViewFuture extends Fragment {
 
     private int accountsIndex = 0;
     private ArrayList<Account> accounts;
-    private ArrayList<Transaction> futureTransactions = new ArrayList<Transaction>();
+    private ArrayList<FutureTransaction> futureTransactions = new ArrayList<FutureTransaction>();
     private Transaction selectedItem;
 
 
@@ -64,14 +66,14 @@ public class TransactionsViewFuture extends Fragment {
     }
 
     /**
-     * Recursively gets all the future transactions on all the users accounts.
+     * Recursively gets all the future transactions on all of the users accounts.
      */
     private void getTransactions () {
         if (accountsIndex < accounts.size() ) {
             Account account = accounts.get(accountsIndex);
-            session.transactions.getFutureTransactions(account.getAccountId() ).observe(getViewLifecycleOwner(), new Observer<ArrayList<Transaction>>() {
+            session.transactions.getFutureTransactions(account.getAccountId() ).observe(getViewLifecycleOwner(), new Observer<ArrayList<FutureTransaction>>() {
                 @Override
-                public void onChanged(ArrayList<Transaction> transactions) {
+                public void onChanged(ArrayList<FutureTransaction> transactions) {
                     futureTransactions.addAll(transactions);
                     accountsIndex++;
                     getTransactions();
@@ -93,7 +95,19 @@ public class TransactionsViewFuture extends Fragment {
         accountsIndex = 0;
         futureTransactions.clear();
         accounts = session.accounts.getSessionAccounts();
-        getTransactions();
+        if (accounts.isEmpty()) {
+            session.accounts.getAccountsList(false).observe(getViewLifecycleOwner(), new Observer<ArrayList<Account>>() {
+                @Override
+                public void onChanged(ArrayList<Account> accounts) {
+                    TransactionsViewFuture.this.accounts = accounts;
+                    getTransactions();
+                }
+            });
+
+        } else {
+            getTransactions();
+        }
+
     }
 
 
@@ -101,7 +115,7 @@ public class TransactionsViewFuture extends Fragment {
      * Populates the spinner with the contents of the futureTransactions list.
      */
     private void renderFutureTransactions() {
-            ArrayAdapter<Transaction> futureTransactionsAdapter = new ArrayAdapter<Transaction>(getActivity(), android.R.layout.simple_spinner_item, futureTransactions);
+            ArrayAdapter<FutureTransaction> futureTransactionsAdapter = new ArrayAdapter<FutureTransaction>(getActivity(), android.R.layout.simple_spinner_item, futureTransactions);
             futureTransactionsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             binding.transactionSelectSpinner.setAdapter(futureTransactionsAdapter);
     }

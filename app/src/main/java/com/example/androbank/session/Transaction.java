@@ -5,11 +5,11 @@ import java.util.Date;
 import java.util.Locale;
 
 public class Transaction {
-    private String fromAccount = null;
-    private String toAccount = null;
-    private Integer amount = 0;
-    private Date date = null;
-    private Integer transferId;
+    protected String fromAccount = null;
+    protected String toAccount = null;
+    protected Integer amount = 0;
+    protected Date date = null;
+    protected Integer transferId;
 
     public Transaction(Integer transferId, String fromAccount, String toAccount, Integer amount, Date date) {
         this.fromAccount = fromAccount;
@@ -17,6 +17,9 @@ public class Transaction {
         this.amount = amount;
         this.date = date;
         this.transferId = transferId;
+    }
+
+    public Transaction() {
     }
 
     public Integer getTransferId() {return transferId;}
@@ -44,13 +47,5 @@ public class Transaction {
         }
         //Apr 19, 2020, 11:57:35 AM
     }
-    //TODO rivi 51 crashaa futrure transactionit (poistettu this.date.toString(), jotta toimii. Lisäksi getFutureTransactions() responseConatiner.time on null
-    public String toString() {
-        // This is currently only used in TransactionsViewFuture by the spinner.
-        String amount = String.format("%.2f", (float) (this.amount / 100) );
-        return "From: Deposit   "+ "\nTo:   " + toAccount + "  sum: +" + amount + "€";
 
-
-
-    }
 }

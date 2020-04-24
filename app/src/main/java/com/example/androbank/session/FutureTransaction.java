@@ -27,7 +27,7 @@ public class FutureTransaction extends Transaction{
     public String toString() {
         // This is currently only used in TransactionsViewFuture by the spinner.
         String amount = String.format("%.2f", (float) (this.amount / 100) );
-        return "From: " +  fromAccount + "\nTo: " + toAccount + "  sum: +" + amount + "€";
+        return "From: " +  fromAccount + "\nTo: " + toAccount + "  sum: +" + amount + "€" + "\n" + atTime.toString();
 
     }
 }

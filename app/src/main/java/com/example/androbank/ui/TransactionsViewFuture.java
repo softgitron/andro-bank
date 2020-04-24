@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
 import com.example.androbank.R;
+import com.example.androbank.SpinnerAdapterFutureT;
 import com.example.androbank.databinding.FragmentTransactionsViewFutureBinding;
 import com.example.androbank.session.Account;
 import com.example.androbank.session.FutureTransaction;
@@ -115,8 +116,8 @@ public class TransactionsViewFuture extends Fragment {
      * Populates the spinner with the contents of the futureTransactions list.
      */
     private void renderFutureTransactions() {
-            ArrayAdapter<FutureTransaction> futureTransactionsAdapter = new ArrayAdapter<FutureTransaction>(getActivity(), android.R.layout.simple_spinner_item, futureTransactions);
-            futureTransactionsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            ArrayAdapter<FutureTransaction> futureTransactionsAdapter = new SpinnerAdapterFutureT(getActivity(), R.layout.spinner_custom_future_transactions, futureTransactions);
+            futureTransactionsAdapter.setDropDownViewResource(R.layout.spinner_custom_future_transactions);
             binding.transactionSelectSpinner.setAdapter(futureTransactionsAdapter);
     }
 

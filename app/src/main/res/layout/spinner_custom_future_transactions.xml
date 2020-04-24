@@ -3,12 +3,14 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
         <TextView
+            android:background="@drawable/rounded_corner"
             android:id="@+id/future_transaction_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="left"
             android:layout_alignParentLeft="true"
             android:textSize="12sp"
             android:layout_marginTop="3dp"/>

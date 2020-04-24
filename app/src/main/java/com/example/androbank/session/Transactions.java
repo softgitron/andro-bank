@@ -115,10 +115,10 @@ public class Transactions {
     }
 
     /**
-     * Sends request to server to add money.
+     * Sends request to the server to add money to the account.
      * @param accountId Id of the account money is to be added.
      * @param moneyToAdd Amount of money to be added.
-     * @return Return the current account on which the money was added.
+     * @return Return the current account on which the money was added for callback.
      */
     public MutableLiveData<Account> depositMoney(Integer accountId, float moneyToAdd) {
         MutableLiveData<Account> finalResult = new MutableLiveData<Account>();
@@ -142,7 +142,7 @@ public class Transactions {
     }
 
     /**
-     * Gets all user's given account's future transactions.
+     * Gets all of the given user's account's future transactions.
      * @param accountId
      * @return List of future transactions for callback.
      */
@@ -159,7 +159,7 @@ public class Transactions {
                 if (genericErrorHandling(response)) {return;};
                 ArrayList<FutureTransactionContainer> transactionContainers = (ArrayList<FutureTransactionContainer>) response.getResponse();
                 for (FutureTransactionContainer transactionContainer : transactionContainers) {
-                    System.out.println("Time is "+transactionContainer.time);
+                    //System.out.println("Time is "+transactionContainer.time);
                     FutureTransaction transaction = new FutureTransaction(transactionContainer.futureTransferId, transactionContainer.fromAccountIban, transactionContainer.toAccountIban, transactionContainer.amount, transactionContainer.atTime, transactionContainer.times);
                     transactionsList.add(transaction);
                 }

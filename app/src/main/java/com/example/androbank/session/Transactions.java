@@ -45,14 +45,14 @@ public class Transactions {
         return finalResult;
     }
 
-    public MutableLiveData<String> makeFutureTransaction(Integer fromAccountId, String toAccountIban, Integer amount, LocalDate paymentDate, Integer atInterval, Integer times) {
+    public MutableLiveData<String> makeFutureTransaction(Integer fromAccountId, String toAccountIban, Integer amount, Date paymentDate, Integer atInterval, Integer times) {
         MutableLiveData<String> finalResult = new MutableLiveData<String>();
         FutureTransactionContainer requestContainer = new FutureTransactionContainer();
         requestContainer.fromAccountId = fromAccountId;
         requestContainer.toAccountIban = toAccountIban;
         requestContainer.amount = amount;
         System.out.println("Lets future");
-        requestContainer.atTime = java.util.Date.from(paymentDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+        requestContainer.atTime = paymentDate;
         System.out.println(requestContainer.atTime);
         if (atInterval != 0) {
             requestContainer.atInterval = atInterval;

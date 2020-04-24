@@ -1,7 +1,10 @@
 package com.example.androbank.ui;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
+import android.icu.text.SimpleDateFormat;
+import android.icu.util.TimeZone;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -16,17 +19,25 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.TimePicker;
 
 import com.example.androbank.databinding.FragmentAccountsNewPaymentBinding;
 import com.example.androbank.session.Account;
 import com.example.androbank.session.Session;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 
 public class AccountsNewPayment extends Fragment {
@@ -37,11 +48,13 @@ public class AccountsNewPayment extends Fragment {
     private String fromAccountIban;
     private float amount;
     private String toAccountIban;
-    private LocalDate dueDate;
+    private Date dueDate;
     private int atInterval;
     private int paymentTimes;
     private Session session = Session.getSession();
     private ArrayList<Account> myAccounts;
+    private String dateString;
+    private String timeString = "00:00:01";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,10 +62,10 @@ public class AccountsNewPayment extends Fragment {
         root = binding.getRoot();
         context = getContext();
 
-        binding.dueDateInput.setText(LocalDate.now().toString());
+        dateString = LocalDate.now().toString();
+        binding.dueDateInput.setText(dateString);
         binding.timesInput.setText("1");
         binding.timesInput.setEnabled(false);
-        dueDate = LocalDate.now();
         paymentTimes = 1;
 
         // Pay Button
@@ -194,13 +207,7 @@ public class AccountsNewPayment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                try {
-                    LocalDate newDate = LocalDate.parse(editable.toString());
-                    dueDate = newDate;
-                    System.out.println("New date changed. " + editable);
-                } catch (DateTimeParseException ex) {
-
-                }
+                dateString = editable.toString();
 
             }
         });
@@ -213,7 +220,7 @@ public class AccountsNewPayment extends Fragment {
                 binding.datePickerButton.setEnabled(b);
                 if (b == false) {
                     binding.dueDateInput.setText(LocalDate.now().toString());
-                    dueDate = LocalDate.now();
+                    //dueDate = LocalDate.now();
                     System.out.println("Reset duedate");
                 }
             }
@@ -234,18 +241,32 @@ public class AccountsNewPayment extends Fragment {
 
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                String dateString = year + "-" + String.format("%02d", monthOfYear + 1) + "-" + dayOfMonth;
-                                try {
-                                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                                    LocalDate newDate = LocalDate.parse(dateString, formatter);
-                                    dueDate = newDate;
-                                    binding.dueDateInput.setText(newDate.toString());
-                                } catch (DateTimeParseException ex) {
-                                    System.out.println(ex);
-                                }
+                                dateString = year + "-" + String.format("%02d", monthOfYear + 1) + "-" + dayOfMonth;
                             }
                         }, mYear, mMonth, mDay);
                 datePickerDialog.show();
+            }
+        });
+
+        binding.timePickerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int mHour, mMinute;
+                // Get Current Time
+                final Calendar c = Calendar.getInstance();
+                mHour = c.get(Calendar.HOUR_OF_DAY);
+                mMinute = c.get(Calendar.MINUTE);
+
+                // Launch Time Picker Dialog
+                TimePickerDialog timePickerDialog = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
+
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                System.out.println(hourOfDay + ":" + minute);
+                                timeString = String.format("%02d:%02d:%02d", hourOfDay, minute, 1 );
+                            }
+                        }, mHour, mMinute, true);
+                timePickerDialog.show();
             }
         });
 
@@ -270,7 +291,29 @@ public class AccountsNewPayment extends Fragment {
                     }
                 });
             } else {
-                System.out.println(atInterval +" "+paymentTimes +" "+dueDate+" "+fromAccountId);
+                LocalDateTime dateTime = null;
+                Date date = null;
+                String dateAndTimeString = dateString + " " + timeString;
+                System.out.println("date and time strings combined: " + dateAndTimeString);
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd kk:mm:ss");
+                dateTime = LocalDateTime.parse(dateAndTimeString, formatter);
+
+                ZoneId zoneId = ZoneId.of(TimeZone.getDefault().getID());
+                ZonedDateTime zoneDate = ZonedDateTime.of(dateTime, zoneId);
+                System.out.println("ZoneDT: " + zoneDate + "LocalDT: " + dateTime);
+                ZonedDateTime utcDate = zoneDate.withZoneSameInstant(ZoneOffset.UTC);
+                System.out.println("Current date and time in UTC : " + utcDate  +"  or in other format: "+ utcDate.format(formatter));
+
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
+                try {
+                    dueDate = simpleDateFormat.parse(utcDate.format(formatter));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println("Current DueDate Object: date (Should be in UTC now...): " + dueDate );
+                System.out.println("Interval, times, duedate: " + atInterval +", "+paymentTimes +", "+dueDate+", "+ fromAccountId);
                 session.transactions.makeFutureTransaction(fromAccountId, toAccountIban, Math.round(amount * 100), dueDate, atInterval, paymentTimes).observe(getViewLifecycleOwner(), new Observer<String>() {
                     @Override
                     public void onChanged(String s) {

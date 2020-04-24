@@ -169,8 +169,21 @@
             android:enabled="false"
             android:text="Date"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.166"
+            app:layout_constraintHorizontal_bias="0.833"
             app:layout_constraintStart_toEndOf="@+id/dueDateInput"
             app:layout_constraintTop_toBottomOf="@+id/dueDateSwitch" />
+
+        <Button
+            android:id="@+id/timePickerButton"
+            android:layout_width="52dp"
+            android:layout_height="47dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="307dp"
+            android:layout_marginEnd="2dp"
+            android:text="Time debug"
+            android:textSize="8sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/datePickerButton"
+            app:layout_constraintTop_toBottomOf="@+id/accountSpinner" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

@@ -94,8 +94,8 @@
 
         <EditText
             android:id="@+id/dueDateInput"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="198dp"
+            android:layout_height="46dp"
             android:layout_marginTop="12dp"
             android:ems="10"
             android:enabled="false"
@@ -158,5 +158,19 @@
             android:textSize="18sp"
             app:layout_constraintStart_toEndOf="@+id/timesInput"
             app:layout_constraintTop_toBottomOf="@+id/recurringOptions" />
+
+        <Button
+            android:id="@+id/datePickerButton"
+            android:layout_width="94dp"
+            android:layout_height="46dp"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginEnd="65dp"
+            android:enabled="false"
+            android:text="Date"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.166"
+            app:layout_constraintStart_toEndOf="@+id/dueDateInput"
+            app:layout_constraintTop_toBottomOf="@+id/dueDateSwitch" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

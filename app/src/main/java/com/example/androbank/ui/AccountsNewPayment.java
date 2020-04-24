@@ -1,5 +1,7 @@
 package com.example.androbank.ui;
 
+import android.app.DatePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 
 import com.example.androbank.databinding.FragmentAccountsNewPaymentBinding;
 import com.example.androbank.session.Account;
@@ -20,14 +23,17 @@ import com.example.androbank.session.Session;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class AccountsNewPayment extends Fragment {
 
     private FragmentAccountsNewPaymentBinding binding;
     private View root;
+    private Context context;
     private String fromAccountIban;
     private float amount;
     private String toAccountIban;
@@ -38,10 +44,10 @@ public class AccountsNewPayment extends Fragment {
     private ArrayList<Account> myAccounts;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentAccountsNewPaymentBinding.inflate(inflater, container, false);
         root = binding.getRoot();
+        context = getContext();
 
         binding.dueDateInput.setText(LocalDate.now().toString());
         binding.timesInput.setText("1");
@@ -191,7 +197,7 @@ public class AccountsNewPayment extends Fragment {
                 try {
                     LocalDate newDate = LocalDate.parse(editable.toString());
                     dueDate = newDate;
-                    System.out.println("New date changed");
+                    System.out.println("New date changed. " + editable);
                 } catch (DateTimeParseException ex) {
 
                 }
@@ -204,11 +210,42 @@ public class AccountsNewPayment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 binding.dueDateInput.setEnabled(b);
+                binding.datePickerButton.setEnabled(b);
                 if (b == false) {
                     binding.dueDateInput.setText(LocalDate.now().toString());
                     dueDate = LocalDate.now();
                     System.out.println("Reset duedate");
                 }
+            }
+        });
+
+        binding.datePickerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int mYear, mMonth, mDay;
+
+                // Get Current Date
+                final Calendar c = Calendar.getInstance();
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                String dateString = year + "-" + String.format("%02d", monthOfYear + 1) + "-" + dayOfMonth;
+                                try {
+                                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                                    LocalDate newDate = LocalDate.parse(dateString, formatter);
+                                    dueDate = newDate;
+                                    binding.dueDateInput.setText(newDate.toString());
+                                } catch (DateTimeParseException ex) {
+                                    System.out.println(ex);
+                                }
+                            }
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.show();
             }
         });
 

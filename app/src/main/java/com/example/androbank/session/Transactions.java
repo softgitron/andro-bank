@@ -51,7 +51,7 @@ public class Transactions {
         requestContainer.fromAccountId = fromAccountId;
         requestContainer.toAccountIban = toAccountIban;
         requestContainer.amount = amount;
-        System.out.println("Lets future");
+        System.out.println("Lets future with amount: " + amount);
         requestContainer.atTime = paymentDate;
         System.out.println(requestContainer.atTime);
         if (atInterval != 0) {
@@ -105,7 +105,7 @@ public class Transactions {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }*/
-                    Transaction transaction = new Transaction(transactionContainer.transferId, transactionContainer.fromAccountIban, transactionContainer.toAccountIban, transactionContainer.amount, transactionContainer.time);
+                    Transaction transaction = new Transaction(transactionContainer.transferId, transactionContainer.fromAccountIban,transactionContainer.fromAccountId, transactionContainer.toAccountIban, transactionContainer.amount, transactionContainer.time);
                     transactionsList.add(transaction);
                 }
                 finalResult.postValue(transactionsList);
@@ -160,7 +160,7 @@ public class Transactions {
                 ArrayList<FutureTransactionContainer> transactionContainers = (ArrayList<FutureTransactionContainer>) response.getResponse();
                 for (FutureTransactionContainer transactionContainer : transactionContainers) {
                     //System.out.println("Time is "+transactionContainer.time);
-                    FutureTransaction transaction = new FutureTransaction(transactionContainer.futureTransferId, transactionContainer.fromAccountIban, transactionContainer.toAccountIban, transactionContainer.amount, transactionContainer.atTime, transactionContainer.times);
+                    FutureTransaction transaction = new FutureTransaction(transactionContainer.futureTransferId, transactionContainer.fromAccountIban, transactionContainer.fromAccountId, transactionContainer.toAccountIban, transactionContainer.amount, transactionContainer.atTime, transactionContainer.times);
                     transactionsList.add(transaction);
                 }
                 finalResult.postValue(transactionsList);
@@ -169,8 +169,23 @@ public class Transactions {
         return finalResult;
     }
 
-    // Todo Finish implementation.
-    public void deleteFutureTransaction(Integer transactionId, String fromAccount) {
-        System.out.println("NOT IMPLEMENTED YET!");
+
+    public MutableLiveData<Integer> deleteFutureTransaction(Integer futureTransactionId, Integer fromAccountId) {
+        MutableLiveData<Integer> finalResult = new MutableLiveData<Integer>();
+        FutureTransactionContainer requestContainer = new FutureTransactionContainer();
+
+        requestContainer.futureTransferId = futureTransactionId;
+        requestContainer.fromAccountId = fromAccountId;
+        System.out.println("Sending delete Future Transaction request!");
+        Response response = sendRequest(Transfer.MethodType.DELETE, "/transactions/deleteFutureTransaction", requestContainer, String.class, true);
+        response.addObserver(new Observer() {
+            @Override
+            public void update(Observable o, Object arg) {
+                Response response = (Response) o;
+                if (genericErrorHandling(response)) {return;};
+                finalResult.postValue(200);
+            }
+        });
+        return finalResult;
     }
 }

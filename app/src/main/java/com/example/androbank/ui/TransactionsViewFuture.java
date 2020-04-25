@@ -19,6 +19,7 @@ import com.example.androbank.session.Account;
 import com.example.androbank.session.FutureTransaction;
 import com.example.androbank.session.Session;
 import com.example.androbank.session.Transaction;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
@@ -55,11 +56,19 @@ public class TransactionsViewFuture extends Fragment {
             }
         });
 
-        binding.button.setOnClickListener(new View.OnClickListener() {
+        binding.deleteFutureTransactionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Todo finish implementation.
-                session.transactions.deleteFutureTransaction(selectedItem.getTransferId(), selectedItem.getFromAccount());
+                FutureTransaction futureTransaction = (FutureTransaction) selectedItem;
+                session.transactions.deleteFutureTransaction(futureTransaction.getFutureTransferId(), futureTransaction.getFromAccountId() ).observe(getViewLifecycleOwner(), new Observer<Integer>() {
+                    @Override
+                    public void onChanged(Integer returnCode) {
+                        // If we get this far, generic error handling has handled any exceptions and we can tell the user that the transaction was deleted.
+                        Snackbar.make(getView(), "Future transaction was deleted.", Snackbar.LENGTH_LONG).show();
+                        // Resetting the state since transaction was deleted.
+                        onResume();
+                    }
+                });
             }
         });
 
@@ -96,6 +105,7 @@ public class TransactionsViewFuture extends Fragment {
         accountsIndex = 0;
         futureTransactions.clear();
         accounts = session.accounts.getSessionAccounts();
+        // If accounts list is empty, it must be fetched from the server to get all the transactions on each account.
         if (accounts.isEmpty()) {
             session.accounts.getAccountsList(false).observe(getViewLifecycleOwner(), new Observer<ArrayList<Account>>() {
                 @Override

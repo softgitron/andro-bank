@@ -48,7 +48,7 @@ public class LogInPage extends Fragment {
         //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         initializeErrorHandling();
 
-        binding.startRoniTest.setOnClickListener(new View.OnClickListener() {
+        /*binding.startRoniTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // https://developer.android.com/guide/components/fragments#Transactions
@@ -56,10 +56,10 @@ public class LogInPage extends Fragment {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.nav_host_fragment, new RoniTestFragment());
                 fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();*/
+                fragmentTransaction.commit();
                 Navigation.findNavController(root).navigate(R.id.action_nav_home_to_roni_test);
             }
-        });
+        });*/
         binding.login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.example.androbank.R;
 import com.example.androbank.databinding.FragmentUserDetailsBinding;
+import com.example.androbank.session.Session;
 
 public class UserDetails extends Fragment {
 
@@ -33,7 +34,7 @@ public class UserDetails extends Fragment {
         binding.logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO Logout logic
+                Session.getSession().sessionDestroy(getContext());
                 Navigation.findNavController(root).navigate(R.id.action_userDetails_to_nav_home);
             }
         });

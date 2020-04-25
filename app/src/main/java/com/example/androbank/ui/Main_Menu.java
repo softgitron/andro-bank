@@ -35,14 +35,6 @@ public class Main_Menu extends Fragment {
 
         binding.viewUser.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_main_Menu_to_userDetails));
 
-        binding.logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Session.getSession().sessionDestroy(getContext());
-                Navigation.findNavController(root).navigate(R.id.action_main_Menu_to_nav_home);
-            }
-        });
-
         binding.viewTransactionsTest.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.transactionsTest));
 
         return root;

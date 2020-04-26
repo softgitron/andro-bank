@@ -6,6 +6,7 @@ import com.example.androbank.connection.Response;
 import com.example.androbank.connection.Transfer;
 import com.example.androbank.containers.AccountContainer;
 import com.example.androbank.containers.CardContainer;
+import com.example.androbank.containers.TransactionContainer;
 
 import static com.example.androbank.connection.Transfer.sendRequest;
 import static com.example.androbank.session.SessionUtils.genericErrorHandling;
@@ -42,6 +43,29 @@ public class Cards {
                 }*/
                 Card card = new Card(newCard.cardNumber, newCard.cardId, newCard.accountId, newCard.area, newCard.spendingLimit, newCard.withdrawLimit);
                 finalResult.postValue(card);
+            }
+        });
+        return finalResult;
+    }
+
+    public MutableLiveData<Integer> cardPaymentOrWithdraw(Integer cardId, Integer amount, boolean isPayment) {
+        MutableLiveData<Integer> finalResult = new MutableLiveData<Integer>();
+        TransactionContainer requestContainer = new TransactionContainer();
+        requestContainer.cardId = cardId;
+        requestContainer.amount = amount;
+        Response response;
+        if (isPayment) response = sendRequest(Transfer.MethodType.POST, "/cards/payment", requestContainer, AccountContainer.class, true, false);
+        else response = sendRequest(Transfer.MethodType.POST, "/cards/withdraw", requestContainer, AccountContainer.class, true, false);
+        response.addObserver(new Observer() {
+            @Override
+            public void update(Observable observable, Object o) {
+                Response response = (Response) observable;
+                if (genericErrorHandling(response)) {
+                    System.out.println(response.getHttpCode() + ": "+response.getError());
+                    finalResult.postValue(1);
+                } else {
+                    finalResult.postValue(0);
+                }
             }
         });
         return finalResult;

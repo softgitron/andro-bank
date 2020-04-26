@@ -52,12 +52,12 @@ public class Accounts extends Fragment {
             }
         });
 
-        binding.AccountsNewCardPayment.setOnClickListener(new View.OnClickListener() {
+        /*binding.AccountsNewCardPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(root).navigate(R.id.action_accounts_to_newCardPayment2);
             }
-        });
+        });*/
 
         binding.newTransaction.setOnClickListener(new View.OnClickListener() {
             @Override

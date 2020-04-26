@@ -42,6 +42,7 @@ public class AccountsCards extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentAccountsCardsBinding.inflate(inflater, container, false);
         root = binding.getRoot();
+        binding.cardPaymentButton.setEnabled(false);
         accounts = session.accounts.getSessionAccounts();
         itemList = new ArrayList<>();
         Snackbar.make(root, "Loading cards, please wait.", Snackbar.LENGTH_LONG).show();
@@ -61,6 +62,13 @@ public class AccountsCards extends Fragment {
         recyclerView.setAdapter(mAdapter);
         */
 
+        binding.cardPaymentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(root).navigate(R.id.AccountsNewCardPayment);
+            }
+        });
+
         binding.newCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,6 +82,7 @@ public class AccountsCards extends Fragment {
     //TODO Jostain syystä getCardsList palauttaa httpCode 0 responseen, jolloin ei saada yhtään kortteja
     private void populateCardList() {
         Snackbar.make(root, "Cards loaded.", Snackbar.LENGTH_LONG).show();
+        binding.cardPaymentButton.setEnabled(true);
         recyclerView = binding.cardsListView;
         mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setHasFixedSize(true);

@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -18,6 +20,7 @@ import androidx.navigation.Navigation;
 import com.example.androbank.connection.Transfer;
 import com.example.androbank.databinding.FragmentAccountsAddMoneyBinding;
 import com.example.androbank.session.Account;
+import com.example.androbank.session.Accounts;
 import com.example.androbank.session.Session;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -29,6 +32,8 @@ public class AccountsAddMoney extends Fragment {
     private Session session;
     private String ibanWithBalance;
     private Context context;
+    private Account.AccountType accountType;
+    private Account.AccountType newType;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentAccountsAddMoneyBinding.inflate(inflater, container, false);
@@ -77,9 +82,32 @@ public class AccountsAddMoney extends Fragment {
                     } else {
                         Snackbar.make(getView(), "Its over 9000! Maximum deposit is 9000.", Snackbar.LENGTH_LONG).show();
                     }
-
                 }
+            }
+        });
 
+        binding.changeTypeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String iban = ibanWithBalance.split(" - ")[0];
+                Integer accountdId = Session.getSession().accounts.findAccountIdByIban(iban);
+                if (accountdId == null) {
+                    System.err.println("Account was not found from the list");
+                    System.exit(1);
+                } else {
+                    session.accounts.updateAccountType(accountdId, newType).observe(getViewLifecycleOwner(), new Observer<Integer>() {
+                        @Override
+                        public void onChanged(Integer integer) {
+                            if (integer == 0) {
+                                Snackbar.make(getView(), "Account type was changed.", Snackbar.LENGTH_LONG).show();
+                                closeKeyboard();
+                                Navigation.findNavController(root).popBackStack();
+                            } else {
+                                Snackbar.make(getView(), "Your account has cards attached to it. Can't update to savings type.", Snackbar.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                }
             }
         });
 
@@ -93,12 +121,45 @@ public class AccountsAddMoney extends Fragment {
     public void onStart() {
         super.onStart();
         ibanWithBalance = getArguments().getString("accountData");
+        accountType = Session.getSession().accounts.findAccountTypeByIban(ibanWithBalance.split(" - ")[0]);
         binding.addMoneyAccountString.setText(ibanWithBalance);
+        populateTypesSpinner();
     }
 
     private void closeKeyboard() {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(root.getWindowToken(), 0);
+    }
+
+    private void populateTypesSpinner() {
+        binding.currentTypeText.setText("Current type is "+accountType.toString());
+        String[] types = {"Normal", "Credit", "Savings"};
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(getActivity(), android.R.layout.simple_spinner_item, types);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.typesSpinner.setAdapter(adapter);
+        binding.typesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                switch (i) {
+                    case 0:
+                        newType = Account.AccountType.Normal;
+                        break;
+                    case 1:
+                        newType = Account.AccountType.Credit;
+                        break;
+                    case 2:
+                        newType = Account.AccountType.Savings;
+                        break;
+                }
+                if (accountType == newType) binding.changeTypeButton.setEnabled(false);
+                else binding.changeTypeButton.setEnabled(true);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 }
 

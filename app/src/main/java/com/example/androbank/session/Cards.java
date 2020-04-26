@@ -17,6 +17,10 @@ import java.util.Observer;
 public class Cards {
     private ArrayList<Card> allCardsList = new ArrayList<Card>();
 
+    public ArrayList<Card> getAllCardsList() {
+        return allCardsList;
+    }
+
     public MutableLiveData<Card> createCard(Integer accountId, Integer withdrawLimit, Integer spendingLimit, String area) {
         MutableLiveData<Card> finalResult = new MutableLiveData<Card>();
         CardContainer requestContainer = new CardContainer();
@@ -107,6 +111,7 @@ public class Cards {
         return finalResult;
     }
 
+    //public MutableLiveData<Card> makeCardPayment()
 
     /**
      * Simple function used for getting a matching card object for given parameters.

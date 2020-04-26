@@ -47,11 +47,11 @@ public class Transaction {
         String date = formatDate();
 
         if (fromAccount == null) {
-            return String.format("From: Own Deposit                        %s\nTo:      %s    %s €", date, toAccount, amount);
+            return String.format("From: Own Deposit                        %s\nTo:      %s    +%s €", date, toAccount, amount);
         } else if (fromAccount.equals(selectedAccount)){
-            return String.format("From: %s    %s\nTo:      %s     %s €", fromAccount, date, toAccount, amount);
+            return String.format("From: %s    %s\nTo:      %s     -%s €", fromAccount, date, toAccount, amount);
         } else {
-            return String.format("From: %s    %s\nTo:      %s     %s €", fromAccount, date, toAccount, amount);
+            return String.format("From: %s    %s\nTo:      %s     +%s €", fromAccount, date, toAccount, amount);
         }
         //Apr 19, 2020, 11:57:35 AM
     }

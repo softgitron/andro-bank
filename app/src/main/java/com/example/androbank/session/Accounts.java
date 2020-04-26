@@ -21,6 +21,28 @@ public class Accounts {
         return accountList;
     }
 
+    public MutableLiveData<Integer> updateAccountType(Integer accountId, Account.AccountType newType) {
+        System.out.println("Let's update type");
+        MutableLiveData<Integer> finalResults = new MutableLiveData<Integer>();
+        AccountContainer requestContainer = new AccountContainer();
+        requestContainer.accountId = accountId;
+        requestContainer.type = newType;
+        Response response = sendRequest(Transfer.MethodType.PATCH, "/accounts/updateType", requestContainer, AccountContainer.class, true, false);
+        response.addObserver(new Observer() {
+            @Override
+            public void update(Observable observable, Object o) {
+                Response response = (Response) observable;
+                if (genericErrorHandling(response)) {
+                    System.out.println(response.getHttpCode()+" "+ response.getError());
+                    finalResults.postValue(1);
+                } else {
+                    finalResults.postValue(0);
+                }
+            }
+        });
+        return finalResults;
+    }
+
     public MutableLiveData<Account> createAccount() {
         MutableLiveData<Account> finalResults = new MutableLiveData<Account>();
         Response response = sendRequest(Transfer.MethodType.POST, "/accounts/createAccount", null, AccountContainer.class, true);
@@ -70,7 +92,16 @@ public class Accounts {
     public Integer findAccountIdByIban(String iban) {
         for (Account account: this.accountList) {
             if(account.getIban().equals(iban) ) {
-                return  account.getAccountId();
+                return account.getAccountId();
+            }
+        }
+        return null;
+    }
+
+    public Account.AccountType findAccountTypeByIban(String iban) {
+        for (Account account: this.accountList) {
+            if(account.getIban().equals(iban) ) {
+                return account.getAccountType();
             }
         }
         return null;

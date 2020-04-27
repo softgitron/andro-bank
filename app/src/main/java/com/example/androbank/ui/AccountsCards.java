@@ -66,7 +66,6 @@ public class AccountsCards extends Fragment {
 
     private void populateCardList() {
         Snackbar.make(root, "Cards loaded.", Snackbar.LENGTH_LONG).show();
-        if (cardArrayList.size() > 0) binding.cardPaymentButton.setEnabled(true);
         recyclerView = binding.cardsListView;
         mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setHasFixedSize(true);
@@ -93,6 +92,7 @@ public class AccountsCards extends Fragment {
                         System.out.println("Account ID: " + card.getAccountId() + " Adding card: " + content);
                         itemList.add(new RecyclerViewObject(R.drawable.ic_forward, content));
                     }
+                    if (cardArrayList.size() > 0) binding.cardPaymentButton.setEnabled(true);
                     accountsIndex++;
                     Transfer.clearCache();
                     getCards();

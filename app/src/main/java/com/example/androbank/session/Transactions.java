@@ -59,7 +59,7 @@ public class Transactions {
             requestContainer.times = times;
         } else {
             requestContainer.atInterval = null;
-            requestContainer.times = null;
+            requestContainer.times = 1;
         }
         Response response = sendRequest(Transfer.MethodType.POST, "/accounts/futureTransfer", requestContainer, String.class, true, false);
         response.addObserver(new Observer() {

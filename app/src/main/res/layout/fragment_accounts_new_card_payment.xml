@@ -109,5 +109,23 @@
             app:layout_constraintBottom_toBottomOf="@+id/amountInput"
             app:layout_constraintStart_toEndOf="@+id/amountInput" />
 
+        <Spinner
+            android:id="@+id/debugAreaSpinner"
+            android:layout_width="250dp"
+            android:layout_height="37dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/debugAreaText" />
+
+        <TextView
+            android:id="@+id/debugAreaText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Select your current area (debug):"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/payNow" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

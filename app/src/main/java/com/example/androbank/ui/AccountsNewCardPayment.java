@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
 
+import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -27,6 +28,8 @@ import com.example.androbank.session.Session;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class AccountsNewCardPayment extends Fragment {
@@ -39,6 +42,7 @@ public class AccountsNewCardPayment extends Fragment {
     private ArrayList<Account> accountList;
     private Integer balance;
     private Card selected;
+    private Integer areaRow;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentAccountsNewCardPaymentBinding.inflate(inflater, container, false);
@@ -47,11 +51,13 @@ public class AccountsNewCardPayment extends Fragment {
         binding.radioGroup.check(R.id.radioPayment);
         isPayment = true;
 
-
+        //PaymentButton
         binding.payNow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Math.round(amount * 100) > balance) {
+                if (!checkAreaLimit()) {
+                    Snackbar.make(getView(), "You are outside of your card's payment area.", Snackbar.LENGTH_LONG).show();
+                } else if (Math.round(amount * 100) > balance) {
                     Snackbar.make(getView(), "Amount can't be larger than balance", Snackbar.LENGTH_LONG).show();
                 } else if (isPayment) {
                     System.out.println(selected.getPaymentLimit() / 100f);
@@ -91,9 +97,23 @@ public class AccountsNewCardPayment extends Fragment {
                         });
                     }
                 }
+            }
+        });
 
-                //TODO: Payment processing
-                //Navigation.findNavController(root).navigate(R.id.action_newCardPayment2_to_accounts);
+        String[] areaOptions = {"Finland", "Nordics (not Finland)", "Europe (not Nordics/Estonia)", "Outside Europe"};
+        List<String> areaList = new ArrayList<String>(Arrays.asList(areaOptions));
+        ArrayAdapter<String> areaSpinnerAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, areaList);
+        areaSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.debugAreaSpinner.setAdapter(areaSpinnerAdapter);
+        binding.debugAreaSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                areaRow = i;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
 
@@ -159,6 +179,16 @@ public class AccountsNewCardPayment extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) { }
         });
+    }
+
+    private boolean checkAreaLimit() {
+        boolean canMakePayment;
+        if (selected.getAreaLimit().equals("-- none --")) canMakePayment = true;
+        else if (selected.getAreaLimit().equals("Europe") && areaRow < 3) canMakePayment = true;
+        else if (selected.getAreaLimit().equals("Nordics & Estonia") && areaRow < 2) canMakePayment = true;
+        else if (selected.getAreaLimit().equals("Finland") && areaRow < 1) canMakePayment = true;
+        else canMakePayment = false;
+        return canMakePayment;
     }
 
     private void closeKeyboard() {

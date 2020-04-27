@@ -41,11 +41,13 @@ public class Transaction {
 
     public Date getDate() {return date;}
 
+    // Todo Add bank BIC codes to the object. (BIC codes are stored in Containers.)
     public String toString(String selectedAccount) {
         String amount = String.format("%.2f",  ( ( (float) this.amount) / 100) );
         // Formatting the string
         String date = formatDate();
 
+        // Todo Show bank BIC codes in transactions!
         if (fromAccount == null) {
             return String.format("From: Own Deposit                        %s\nTo:      %s    +%s €", date, toAccount, amount);
         } else if (fromAccount.equals(selectedAccount)){

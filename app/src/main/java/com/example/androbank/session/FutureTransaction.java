@@ -25,6 +25,7 @@ public class FutureTransaction extends Transaction{
 
     }
 
+    // Todo Add bank BIC codes to the object. (BIC codes are stored in Containers.)
     public FutureTransaction(Integer futureTransferId, String fromAccount,Integer fromAccountId, String toAccount, Integer amount, Date atTime, Integer times ) {
         this.futureTransferId = futureTransferId;
         this.fromAccount = fromAccount;
@@ -39,6 +40,7 @@ public class FutureTransaction extends Transaction{
 
 
     public String toString() {
+        // Todo Show bank BIC codes in transactions!
         // This is currently only used in TransactionsViewFuture by the spinner.
         String amount = String.format("%.2f",  ( ( (float) this.amount) / 100) );
         return "From: " +  fromAccount + "\nTo: " + toAccount + "  sum: +" + amount + "€" + "\n" +formatTime() +"   times: " + times;

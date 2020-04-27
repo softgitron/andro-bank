@@ -21,29 +21,34 @@ public class FutureTransaction extends Transaction{
     private Date atTime;
 
 
+
     public FutureTransaction() {
 
     }
 
     // Todo Add bank BIC codes to the object. (BIC codes are stored in Containers.)
-    public FutureTransaction(Integer futureTransferId, String fromAccount,Integer fromAccountId, String toAccount, Integer amount, Date atTime, Integer times ) {
+    public FutureTransaction(Integer futureTransferId, String fromAccount,Integer fromAccountId, String toAccount, Integer amount, Date atTime, Integer times, String fromAccountBic, String toAccountBic ) {
         this.futureTransferId = futureTransferId;
         this.fromAccount = fromAccount;
         this.fromAccountId = fromAccountId;
         this.toAccount = toAccount;
         this.amount = amount;
         this.atTime = atTime;
-        this.times = times;
+        if (times == null) { this.times = 1; } else {this.times = times;}
+        this.fromAccountBic = fromAccountBic;
+        this.toAccountBic = toAccountBic;
     }
 
-    public Integer getFutureTransferId() {return futureTransferId;};
+    public Integer getFutureTransferId() {return futureTransferId;}
 
 
     public String toString() {
         // Todo Show bank BIC codes in transactions!
         // This is currently only used in TransactionsViewFuture by the spinner.
         String amount = String.format("%.2f",  ( ( (float) this.amount) / 100) );
-        return "From: " +  fromAccount + "\nTo: " + toAccount + "  sum: +" + amount + "€" + "\n" +formatTime() +"   times: " + times;
+        return "From: " +  fromAccount + "  " + fromAccountBic +
+                "\nTo:      " + toAccount + "  " + toAccountBic +
+                "\nSum: +" + amount + "€  Date: " +formatTime() +"  Times: " + times;
 
     }
 
@@ -51,11 +56,7 @@ public class FutureTransaction extends Transaction{
         String pattern = "yyyy-MM-dd HH:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String dateAndTimeString = simpleDateFormat.format(this.atTime);
-
         LocalDateTime dateTime = null;
-        Date date = null;
-
-        //System.out.println("FutureTransaction dateAndTimeString:  " + dateAndTimeString);
 
         // Source: https://stackoverflow.com/questions/39690944/convert-utc-date-to-current-timezone/39692411#39692411
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd kk:mm:ss");
@@ -64,16 +65,10 @@ public class FutureTransaction extends Transaction{
         OffsetDateTime odt = dateTime.atOffset( ZoneOffset.UTC );
         ZoneId currentZoneId = ZoneId.systemDefault(); // Or, for example: ZoneId.of( "America/Montreal" )
         ZonedDateTime zdt = odt.atZoneSameInstant( currentZoneId);
-        String output = zdt.format(formatterOutput);
 
 
-        // Todo do we want the outptut string to match users locale? Or force our own format?
-        //Locale locale = Locale.getDefault();  // Or, for example: Locale.CANADA_FRENCH
-        //DateTimeFormatter f = DateTimeFormatter.ofLocalizedDateTime( FormatStyle.MEDIUM ).withLocale( locale );
-        //String output = zdt.format( f );
-
-        System.out.println("FutureTransaction output date string: " + output);
-        return output;
+        //System.out.println("FutureTransaction output date string: " + output);
+        return zdt.format(formatterOutput);
     }
 
 

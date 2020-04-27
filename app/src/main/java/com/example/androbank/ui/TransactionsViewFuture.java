@@ -20,6 +20,7 @@ import com.example.androbank.session.FutureTransaction;
 import com.example.androbank.session.Session;
 import com.example.androbank.session.Transaction;
 import com.google.android.material.snackbar.Snackbar;
+import androidx.appcompat.widget.Toolbar;
 
 import java.util.ArrayList;
 
@@ -40,6 +41,7 @@ public class TransactionsViewFuture extends Fragment {
         binding = FragmentTransactionsViewFutureBinding.inflate(inflater, container, false);
         root = binding.getRoot();
         session = Session.getSession();
+
 
         binding.transactionsDetails.setText("This will be populated with the information about currently selected upcoming transaction.");
 

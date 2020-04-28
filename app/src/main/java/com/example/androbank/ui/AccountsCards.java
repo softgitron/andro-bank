@@ -79,7 +79,6 @@ public class AccountsCards extends Fragment {
         return root;
     }
 
-    //TODO Jostain syystä getCardsList palauttaa httpCode 0 responseen, jolloin ei saada yhtään kortteja
     private void populateCardList() {
         Snackbar.make(root, "Cards loaded.", Snackbar.LENGTH_LONG).show();
         binding.cardPaymentButton.setEnabled(true);

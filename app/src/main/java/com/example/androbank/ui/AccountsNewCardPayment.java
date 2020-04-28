@@ -92,8 +92,6 @@ public class AccountsNewCardPayment extends Fragment {
                     }
                 }
 
-                //TODO: Payment processing
-                //Navigation.findNavController(root).navigate(R.id.action_newCardPayment2_to_accounts);
             }
         });
 

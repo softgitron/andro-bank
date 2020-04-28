@@ -65,7 +65,6 @@ public class FutureTransaction extends Transaction{
         String output = zdt.format(formatterOutput);
 
 
-        // Todo do we want the outptut string to match users locale? Or force our own format?
         //Locale locale = Locale.getDefault();  // Or, for example: Locale.CANADA_FRENCH
         //DateTimeFormatter f = DateTimeFormatter.ofLocalizedDateTime( FormatStyle.MEDIUM ).withLocale( locale );
         //String output = zdt.format( f );

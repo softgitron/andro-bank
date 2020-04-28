@@ -71,7 +71,6 @@ public class Cards {
         return finalResult;
     }
 
-    //TODO rivillä 55 responsen hhtpcode on 0, jolloin ei päästä eteenpäin
     public MutableLiveData<ArrayList<Card>> getCardsList(Integer accountId) {
         System.out.println("Lets get some cards");
         ArrayList<Card> cardList = new ArrayList<Card>();

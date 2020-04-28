@@ -74,8 +74,6 @@ public class AccountsNewPayment extends Fragment {
             public void onClick(View v) {
                 System.out.println(fromAccountIban + " " + amount + " " + toAccountIban + " " + dueDate + " " + atInterval);
                 makePayment();
-                //TODO: Payment processing
-                //Navigation.findNavController(root).navigate(R.id.action_newPayment_to_accounts);
             }
         });
 

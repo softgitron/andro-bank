@@ -62,7 +62,6 @@ public class Accounts {
     }
 
     public MutableLiveData<ArrayList<Account>> getAccountsList(boolean useCache) {
-        //TODO periodically update lists of accounts using API
         accountList.clear();
         MutableLiveData<ArrayList<Account>> statusAccounts = new MutableLiveData<ArrayList<Account>>();
         Response response = sendRequest(Transfer.MethodType.GET, "/accounts/getAccounts", "", AccountContainer.class, true, useCache);

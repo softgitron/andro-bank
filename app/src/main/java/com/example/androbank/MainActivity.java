@@ -2,22 +2,19 @@ package com.example.androbank;
 
 import android.os.Bundle;
 import android.view.View;
-import android.view.Menu;
 
 import com.example.androbank.session.Session;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.navigation.NavigationView;
 
 import androidx.navigation.NavController;
+
 import androidx.navigation.NavGraph;
 import androidx.navigation.NavInflater;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.navigation.ui.NavigationUI;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,11 +26,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavInflater navInflater = navController.getNavInflater();
         NavGraph graph = navInflater.inflate(R.navigation.mobile_navigation);
+
 
         // Load the previous session if possible.
         Session.getSession().sessionLoad(getBaseContext());
@@ -43,6 +40,26 @@ public class MainActivity extends AppCompatActivity {
         } else {
             graph.setStartDestination(R.id.nav_home);
         }
+        navController.setGraph(graph);
+
+        toolbar.setNavigationOnClickListener(v -> {
+            //System.out.println(v.getId() );
+            navController.navigateUp();
+            // navController.popBackStack();
+        });
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        // SOURCE: https://stackoverflow.com/a/53756341
+        // setting title according to fragment
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            toolbar.setTitle(navController.getCurrentDestination().getLabel() );
+            // Change virtual back arrow status based on the layout
+            if (destination.getId() == R.id.main_Menu || destination.getId() == R.id.nav_home) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            } else {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            }
+        });
     }
 
     @Override
@@ -51,10 +68,5 @@ public class MainActivity extends AppCompatActivity {
         Session.getSession().sessionDump(getBaseContext());
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
+
 }

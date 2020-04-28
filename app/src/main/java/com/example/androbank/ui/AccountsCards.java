@@ -45,22 +45,7 @@ public class AccountsCards extends Fragment {
         binding.cardPaymentButton.setEnabled(false);
         accounts = session.accounts.getSessionAccounts();
         itemList = new ArrayList<>();
-        Snackbar.make(root, "Loading cards, please wait.", Snackbar.LENGTH_LONG).show();
-
-
-
-        /*recyclerView = binding.cardsListView;
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setHasFixedSize(true); //lista ei kasva kesken suorituksen (tehostaa suoritusta?)
-        recyclerView.setLayoutManager(mLayoutManager);
-
-        itemList.add(new RecyclerViewObject(R.drawable.ic_forward, "Card 1 - 4309 3494 2398"));
-        itemList.add(new RecyclerViewObject(R.drawable.ic_forward, "Card 2 - 9812 1999 6666"));
-        itemList.add(new RecyclerViewObject(R.drawable.ic_forward, "Card 3 - 3230 0392 0001"));
-
-        mAdapter = new RecyclerAdapter(itemList, AccountsCards.this);
-        recyclerView.setAdapter(mAdapter);
-        */
+        //Snackbar.make(root, "Loading cards, please wait.", Snackbar.LENGTH_LONG).show();
 
         binding.cardPaymentButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,18 +66,15 @@ public class AccountsCards extends Fragment {
 
     private void populateCardList() {
         Snackbar.make(root, "Cards loaded.", Snackbar.LENGTH_LONG).show();
-        binding.cardPaymentButton.setEnabled(true);
         recyclerView = binding.cardsListView;
         mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(mLayoutManager);
-        itemList.add(new RecyclerViewObject(R.drawable.ic_forward, "Card 3 - 3230 0392 0001"));
+        //itemList.add(new RecyclerViewObject(R.drawable.ic_forward, "Card 3 - 3230 0392 0001"));
         mAdapter = new RecyclerAdapter(itemList, AccountsCards.this);
         recyclerView.setAdapter(mAdapter);
 
     }
-
-
 
     public void getCards () {
         if (accountsIndex < accounts.size() ) {
@@ -110,6 +92,7 @@ public class AccountsCards extends Fragment {
                         System.out.println("Account ID: " + card.getAccountId() + " Adding card: " + content);
                         itemList.add(new RecyclerViewObject(R.drawable.ic_forward, content));
                     }
+                    if (cardArrayList.size() > 0) binding.cardPaymentButton.setEnabled(true);
                     accountsIndex++;
                     Transfer.clearCache();
                     getCards();

@@ -18,14 +18,18 @@ public class Transaction {
     protected Integer amount = 0;
     protected Date date = null;
     protected Integer transferId;
+    protected String fromAccountBic;
+    protected String toAccountBic;
 
-    public Transaction(Integer transferId, String fromAccount, Integer fromAccountId,  String toAccount, Integer amount, Date date) {
+    public Transaction(Integer transferId, String fromAccount, Integer fromAccountId,  String toAccount, Integer amount, Date date, String fromAccountBic, String toAccountBic) {
         this.fromAccount = fromAccount;
         this.fromAccountId = fromAccountId;
         this.toAccount = toAccount;
         this.amount = amount;
         this.date = date;
         this.transferId = transferId;
+        this.fromAccountBic = fromAccountBic;
+        this.toAccountBic = toAccountBic;
     }
 
     public Transaction() {
@@ -47,23 +51,19 @@ public class Transaction {
         String date = formatDate();
 
         if (fromAccount == null) {
-            return String.format("From: Own Deposit                        %s\nTo:      %s    +%s €", date, toAccount, amount);
+            return String.format("From: Own Deposit                        \nTo:      %s    %s\nDate:  %s          Sum: +%s €", toAccount, toAccountBic, date, amount);
         } else if (fromAccount.equals(selectedAccount)){
-            return String.format("From: %s    %s\nTo:      %s     -%s €", fromAccount, date, toAccount, amount);
+            return String.format("From: %s    %s\nTo:      %s    %s\nDate:  %s          Sum: -%s €", fromAccount, fromAccountBic, toAccount, toAccountBic, date, amount);
         } else {
-            return String.format("From: %s    %s\nTo:      %s     +%s €", fromAccount, date, toAccount, amount);
+            return String.format("From: %s    %s\nTo:      %s    %s\nDate:  %s          Sum: +%s €", fromAccount, fromAccountBic, toAccount, toAccountBic, date, amount);
         }
-        //Apr 19, 2020, 11:57:35 AM
     }
 
-    protected String formatDate() {
+    private String formatDate() {
         String pattern = "yyyy-MM-dd HH:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String dateAndTimeString = simpleDateFormat.format(this.date);
-
-        LocalDateTime dateTime = null;
-
-        System.out.println("FutureTransaction dateAndTimeString:  " + dateAndTimeString);
+        LocalDateTime dateTime;
 
         // Source: https://stackoverflow.com/questions/39690944/convert-utc-date-to-current-timezone/39692411#39692411
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd kk:mm:ss");
@@ -72,15 +72,9 @@ public class Transaction {
         OffsetDateTime odt = dateTime.atOffset( ZoneOffset.UTC );
         ZoneId currentZoneId = ZoneId.systemDefault(); // Or, for example: ZoneId.of( "America/Montreal" )
         ZonedDateTime zdt = odt.atZoneSameInstant( currentZoneId);
-        String output = zdt.format(formatterOutput);
 
-
-        //Locale locale = Locale.getDefault();  // Or, for example: Locale.CANADA_FRENCH
-        //DateTimeFormatter f = DateTimeFormatter.ofLocalizedDateTime( FormatStyle.MEDIUM ).withLocale( locale );
-        //String output = zdt.format( f );
-
-        System.out.println("FutureTransaction output date string: " + output);
-        return output;
+        //System.out.println("FutureTransaction output date string: " + output);
+        return zdt.format(formatterOutput);
     }
 
 }

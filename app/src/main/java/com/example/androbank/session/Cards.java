@@ -34,7 +34,7 @@ public class Cards {
             @Override
             public void update(Observable o, Object arg) {
                 Response response = (Response) o;
-                if (genericErrorHandling(response)) {System.out.println(response.getError()); return;};
+                if (genericErrorHandling(response)) {System.out.println(response.getError()); return;}
                 CardContainer newCard = (CardContainer) response.getResponse();
 
                 /*List<String> areaList = null;
@@ -82,7 +82,7 @@ public class Cards {
             @Override
             public void update(Observable o, Object arg) {
                 Response response = (Response) o;
-                if (genericErrorHandling(response)) {System.out.println(response.getError()); return;};
+                if (genericErrorHandling(response)) {System.out.println(response.getError()); return;}
                 ArrayList<CardContainer> cardContainers = (ArrayList<CardContainer>) response.getResponse();
                 for (CardContainer cardContainer : cardContainers) {
                     //System.out.println(cardContainer.cardNumber);
@@ -122,7 +122,7 @@ public class Cards {
             @Override
             public void update(Observable o, Object arg) {
                 Response response = (Response) o;
-                if (genericErrorHandling(response)) {System.out.println(response.getError()); return;};
+                if (genericErrorHandling(response)) {System.out.println(response.getError()); return;}
                 CardContainer updatedCardContainer = (CardContainer) response.getResponse();
 
                 currentCard.setAreaLimit( updatedCardContainer.area);

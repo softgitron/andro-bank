@@ -40,8 +40,6 @@ public class AccountsAddMoney extends Fragment {
         root = binding.getRoot();
         context = getActivity();
         session = Session.getSession();
-        //binding.addMoneyButton.setEnabled(true);
-
 
         binding.amountInput.addTextChangedListener(new TextWatcher() {
             @Override

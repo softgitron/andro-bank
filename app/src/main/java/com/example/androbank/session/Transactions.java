@@ -59,7 +59,7 @@ public class Transactions {
             requestContainer.times = times;
         } else {
             requestContainer.atInterval = null;
-            requestContainer.times = null;
+            requestContainer.times = 1;
         }
         Response response = sendRequest(Transfer.MethodType.POST, "/accounts/futureTransfer", requestContainer, String.class, true, false);
         response.addObserver(new Observer() {
@@ -105,7 +105,8 @@ public class Transactions {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }*/
-                    Transaction transaction = new Transaction(transactionContainer.transferId, transactionContainer.fromAccountIban,transactionContainer.fromAccountId, transactionContainer.toAccountIban, transactionContainer.amount, transactionContainer.time);
+                    Transaction transaction = new Transaction(transactionContainer.transferId, transactionContainer.fromAccountIban,transactionContainer.fromAccountId,
+                            transactionContainer.toAccountIban, transactionContainer.amount, transactionContainer.time, transactionContainer.fromAccountBic, transactionContainer.toAccountBic);
                     transactionsList.add(transaction);
                 }
                 finalResult.postValue(transactionsList);
@@ -160,7 +161,8 @@ public class Transactions {
                 ArrayList<FutureTransactionContainer> transactionContainers = (ArrayList<FutureTransactionContainer>) response.getResponse();
                 for (FutureTransactionContainer transactionContainer : transactionContainers) {
                     //System.out.println("Time is "+transactionContainer.time);
-                    FutureTransaction transaction = new FutureTransaction(transactionContainer.futureTransferId, transactionContainer.fromAccountIban, transactionContainer.fromAccountId, transactionContainer.toAccountIban, transactionContainer.amount, transactionContainer.atTime, transactionContainer.times);
+                    FutureTransaction transaction = new FutureTransaction(transactionContainer.futureTransferId, transactionContainer.fromAccountIban, transactionContainer.fromAccountId,
+                            transactionContainer.toAccountIban, transactionContainer.amount, transactionContainer.atTime, transactionContainer.times, transactionContainer.fromAccountBic, transactionContainer.toAccountBic);
                     transactionsList.add(transaction);
                 }
                 finalResult.postValue(transactionsList);

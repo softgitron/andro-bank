@@ -37,6 +37,8 @@ public class Accounts extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentAccountsBinding.inflate(inflater, container, false);
         root = binding.getRoot();
+        binding.viewCards.setEnabled(false);
+        binding.newTransaction.setEnabled(false);
 
         //find recycler view, set up layout manager
         recyclerView = binding.accountsListView;
@@ -92,6 +94,10 @@ public class Accounts extends Fragment {
                     String balance = String.format("%.2f",  (float) accounts.get(i).getBalance() / (float) 100 );
                     String a = accounts.get(i).getIban() + " - " + balance + "€";
                     itemList.add(new RecyclerViewObject(R.drawable.ic_forward, a));
+                }
+                if (accounts.size() > 0) {
+                    binding.viewCards.setEnabled(true);
+                    binding.newTransaction.setEnabled(true);
                 }
                 mAdapter = new RecyclerAdapter(itemList, Accounts.this);
                 recyclerView.setLayoutManager(mLayoutManager);

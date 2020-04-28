@@ -12,11 +12,6 @@
         tools:layout="@layout/fragment_log_in_page">
 
         <action
-            android:id="@+id/action_nav_home_to_roni_test"
-            app:destination="@id/roni_test"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_fade_exit" />
-        <action
             android:id="@+id/action_nav_home_to_main_Menu"
             app:destination="@id/main_Menu"
             app:popUpTo="@id/mobile_navigation"
@@ -26,20 +21,6 @@
             app:destination="@id/createUser" />
     </fragment>
 
-    <fragment
-        android:id="@+id/roni_test"
-        android:name="com.example.androbank.ui.roniTest.RoniTestFragment"
-        android:label="Roni Test Fragment"
-        tools:layout="@layout/fragment_roni_test">
-        <action
-            android:id="@+id/action_roni_test_to_fragment_roni_test_success"
-            app:destination="@id/fragment_roni_test_success" />
-    </fragment>
-    <fragment
-        android:id="@+id/fragment_roni_test_success"
-        android:name="com.example.androbank.ui.roniTest.RoniTestFragmentSuccess"
-        android:label="Roni test success"
-        tools:layout="@layout/fragment_roni_test_success" />
     <fragment
         android:id="@+id/Accounts"
         android:name="com.example.androbank.ui.Accounts"

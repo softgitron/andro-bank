@@ -27,16 +27,9 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-
-
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavInflater navInflater = navController.getNavInflater();
         NavGraph graph = navInflater.inflate(R.navigation.mobile_navigation);
-
-
 
 
         // Load the previous session if possible.
@@ -49,16 +42,23 @@ public class MainActivity extends AppCompatActivity {
         }
         navController.setGraph(graph);
 
-        // Todo back button is back, but is bugged!
         toolbar.setNavigationOnClickListener(v -> {
             //System.out.println(v.getId() );
-            navController.popBackStack();
+            navController.navigateUp();
+            // navController.popBackStack();
         });
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         // SOURCE: https://stackoverflow.com/a/53756341
         // setting title according to fragment
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             toolbar.setTitle(navController.getCurrentDestination().getLabel() );
+            // Change virtual back arrow status based on the layout
+            if (destination.getId() == R.id.main_Menu || destination.getId() == R.id.nav_home) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            } else {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            }
         });
     }
 

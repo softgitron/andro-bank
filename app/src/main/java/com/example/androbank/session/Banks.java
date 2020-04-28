@@ -17,6 +17,9 @@ public class Banks {
     private ArrayList<Bank> bankList = new ArrayList<Bank>();
     private Bank currentBank;
 
+    /** Gets all the banks from the backend by sending a get request to the api with the Connection package.
+     * @return Bank list for callback.
+     */
     public MutableLiveData<ArrayList<Bank>>getBanksList() {
         bankList = new ArrayList<>();
         currentBank = null;
@@ -38,6 +41,7 @@ public class Banks {
         });
         return statusBanks;
     }
+
 
     public Integer getBankIdByName(String name) {
         for (Bank bank : bankList) {

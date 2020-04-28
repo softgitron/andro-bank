@@ -25,6 +25,12 @@ import java.util.Observer;
 public class Transactions {
 
 
+    /**Used for making a basic transfer between two accounts. Sends a post request to the backend with the connection package.
+     * @param fromAccountId Account from which the transfer is to be made.
+     * @param toAccountIban Account to which the money is going to be deposited.
+     * @param amount Amount of money being exchanged in the transaction.
+     * @return Account received from the server for callback.
+     */
     public MutableLiveData<Account> makeTransaction(Integer fromAccountId, String toAccountIban, Integer amount) {
         MutableLiveData<Account> finalResult = new MutableLiveData<Account>();
         TransactionContainer requestContainer = new TransactionContainer();
@@ -45,6 +51,15 @@ public class Transactions {
         return finalResult;
     }
 
+    /** Makes a new transaction which is going to happend some time in the future. Sends a post request to the backend with the relevant by using the connection package.
+     * @param fromAccountId Account from which the transfer is to be made.
+     * @param toAccountIban Account to which the money is going to be deposited.
+     * @param amount Amount of money being exchanged in the transaction.
+     * @param paymentDate When the transaction is going to be executed.
+     * @param atInterval (optional) How often in minutes transaction should occur. Default value: null, Size range: 1..
+     * @param times (optional) How many times transfer should occur. Default value: null, Size range: 1..
+     * @return Backend response string for callback.
+     */
     public MutableLiveData<String> makeFutureTransaction(Integer fromAccountId, String toAccountIban, Integer amount, Date paymentDate, Integer atInterval, Integer times) {
         MutableLiveData<String> finalResult = new MutableLiveData<String>();
         FutureTransactionContainer requestContainer = new FutureTransactionContainer();
@@ -78,10 +93,9 @@ public class Transactions {
         return finalResult;
     }
 
-    /**
-     * Gets all user's given account's transactions.
-     * @param accountId
-     * @return
+    /**Gets all the transaction on one of the users accounts. Sends a post request to the server with the accountID using the connection package.
+     * @param accountId An accounts which transactions are to be fetched.
+     * @return Transactions list gotten from the backend for callback.
      */
     public MutableLiveData<ArrayList<Transaction>> getTransactions(Integer accountId) {
         ArrayList<Transaction> transactionsList = new ArrayList<Transaction>();
@@ -115,8 +129,7 @@ public class Transactions {
         return finalResult;
     }
 
-    /**
-     * Sends request to the server to add money to the account.
+    /**Sends a post request to the backend to add money to the given account. Uses the connection package.
      * @param accountId Id of the account money is to be added.
      * @param moneyToAdd Amount of money to be added.
      * @return Return the current account on which the money was added for callback.
@@ -142,9 +155,8 @@ public class Transactions {
         return finalResult;
     }
 
-    /**
-     * Gets all of the given user's account's future transactions.
-     * @param accountId
+    /**Gets all future transactions on one of the users bacnk accounts. Uses connection package to send post request to the backend with the relevant data.
+     * @param accountId An accounts which upcoming transactions are to be fetched.
      * @return List of future transactions for callback.
      */
     public MutableLiveData<ArrayList<FutureTransaction>> getFutureTransactions(Integer accountId) {
@@ -171,7 +183,11 @@ public class Transactions {
         return finalResult;
     }
 
-
+    /** Sends a delte request to backend with the connection package to delete one of the upcoming transactions.
+     * @param futureTransactionId ID on the future transaction
+     * @param fromAccountId Account from which the transfer would be made.
+     * @return  1 or 200 depending on if the request was successful for callback.
+     */
     public MutableLiveData<Integer> deleteFutureTransaction(Integer futureTransactionId, Integer fromAccountId) {
         MutableLiveData<Integer> finalResult = new MutableLiveData<Integer>();
         FutureTransactionContainer requestContainer = new FutureTransactionContainer();
@@ -184,7 +200,7 @@ public class Transactions {
             @Override
             public void update(Observable o, Object arg) {
                 Response response = (Response) o;
-                if (genericErrorHandling(response)) {return;};
+                if (genericErrorHandling(response)) {finalResult.postValue(1); return;};
                 finalResult.postValue(200);
             }
         });

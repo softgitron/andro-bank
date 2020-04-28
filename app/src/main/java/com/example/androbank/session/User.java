@@ -24,6 +24,17 @@ public class User {
 
     public User() {instance = this;}
 
+
+    /** Creates a new user for the application by using the details provided by the user. Sends a post request to the backend with the connection package.
+     * @param bankName Name of the bank the user is to be created.
+     * @param username Username for the user.
+     * @param firstName First name for the user.
+     * @param lastName Last name for the user
+     * @param email Email for the user.
+     * @param phoneNumber Phone number for the user.
+     * @param password Password for the user.
+     * @return User instance for callback.
+     */
     public MutableLiveData<User> createUser(String bankName, String username, String firstName, String lastName, String email, String phoneNumber, String password) {
         Session session = Session.getSession();
         UserContainer createUser = new UserContainer();
@@ -52,6 +63,12 @@ public class User {
         return statusUser;
     }
 
+    /**Used for logging into the app. Sends a post request to the server with the login details provided by the user. Uses the connection package.
+     * @param loginBankId Bank ID of the users bank of choice.
+     * @param loginEmail Email provided by the user.
+     * @param loginPassword Password given by the user.
+     * @return User instance for callback.
+     */
     public MutableLiveData<User> login(Integer loginBankId, String loginEmail, String loginPassword) {
         Session session = Session.getSession();
         UserContainer loginUser = new UserContainer();
@@ -83,7 +100,7 @@ public class User {
 
     /**
      * Sends the updated user info to the server and directly modifies current session
-     * user details with the values given back by the server.
+     * user details with the values given back by the server. Uses the connection package.
      * @param username New username for current user.
      * @param firstName New firstName for current user.
      * @param lastName New lastName for current user.
@@ -141,6 +158,7 @@ public class User {
         return statusUser;
     }
 
+    // Todo Add comment
     private void unpackUserContainer(UserContainer userDetails) {
         username = userDetails.username;
         firstName = userDetails.firstName;
@@ -149,6 +167,7 @@ public class User {
         phoneNumber = userDetails.phoneNumber;
     }
 
+    // Todo Add comment
     private UserContainer packUserContainer() {
         UserContainer container = new UserContainer();
         container.username = username;
@@ -159,6 +178,7 @@ public class User {
         return container;
     }
 
+    // Todo Add comment
     public String getUsername() {
         return username;
     }
@@ -175,12 +195,13 @@ public class User {
         return phoneNumber;
     }
 
-
+    // Todo Add comment
     String dump() {
         Gson gson = new Gson();
         return gson.toJson(packUserContainer());
     }
 
+    // Todo Add comment
     void load(String data) {
         Gson gson = new Gson();
         unpackUserContainer(gson.fromJson(data, UserContainer.class));

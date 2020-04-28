@@ -3,7 +3,8 @@ package com.example.androbank.session;
 import com.example.androbank.connection.Response;
 
 public class SessionUtils {
-    // True means errors were handled
+
+    // True means errors were handled // Todo Add comment
     public static Boolean genericErrorHandling(Response response) {
         Integer httpCode = response.getHttpCode();
         if (httpCode < 299) {

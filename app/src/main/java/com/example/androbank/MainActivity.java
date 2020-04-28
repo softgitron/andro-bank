@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             graph.setStartDestination(R.id.nav_home);
         }
+        navController.setGraph(graph);
 
         // Todo back button is back, but is bugged!
         toolbar.setNavigationOnClickListener(v -> {

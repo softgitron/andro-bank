@@ -20,7 +20,6 @@ import com.example.androbank.session.FutureTransaction;
 import com.example.androbank.session.Session;
 import com.example.androbank.session.Transaction;
 import com.google.android.material.snackbar.Snackbar;
-import androidx.appcompat.widget.Toolbar;
 
 import java.util.ArrayList;
 

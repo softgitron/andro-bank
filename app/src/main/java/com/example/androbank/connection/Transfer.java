@@ -18,6 +18,7 @@ import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -41,15 +42,41 @@ public class Transfer {
         DELETE
     }
 
+    /** Send new https request to the backend server.
+     * @param method What kind of http verb should be send
+     * @param address Address where request should be send like /accounts/getBanks
+     * @param data Object that should be serialized and send. Container type object should be used
+     * @param resultType What kind of object we are expecting back. For example BankContainer.class
+     * @param authentication Should we send authentication token to the server
+     * @return Response response that came from the server
+     */
     public static Response sendRequest(MethodType method, String address, Object data, Class resultType, boolean authentication) {
-        return doSendRequest(method, address, data, resultType, authentication, true);
+        return threadSendRequest(method, address, data, resultType, authentication, true);
     }
 
+    /** Send new https request to the backend server.
+     * @param method What kind of http verb should be send
+     * @param address Address where request should be send like /accounts/getBanks
+     * @param data Object that should be serialized and send. Container type object should be used
+     * @param resultType What kind of object we are expecting back. For example BankContainer.class
+     * @param authentication Should we send authentication token to the server
+     * @param useCache Should the http cache be used
+     * @return Response response that came from the server
+     */
     public static Response sendRequest(MethodType method, String address, Object data, Class resultType, boolean authentication, boolean useCache) {
-        return doSendRequest(method, address, data, resultType, authentication, useCache);
+        return threadSendRequest(method, address, data, resultType, authentication, useCache);
     }
 
-    private static Response doSendRequest(MethodType method, String address, Object data, Class resultType, boolean authentication, boolean useCache) {
+    /** Makes a new thread for asyncronous data communication and checks that there is no other thread running
+     * @param method What kind of http verb should be send
+     * @param address Address where request should be send like /accounts/getBanks
+     * @param data Object that should be serialized and send. Container type object should be used
+     * @param resultType What kind of object we are expecting back. For example BankContainer.class
+     * @param authentication Should we send authentication token to the server
+     * @param useCache Should the http cache be used
+     * @return Response response that came from the server
+     */
+    private static Response threadSendRequest(MethodType method, String address, Object data, Class resultType, boolean authentication, boolean useCache) {
         Response response = new Response();
         Thread requestThread = new Thread(() -> {
 
@@ -74,6 +101,16 @@ public class Transfer {
         return response;
     }
 
+    /** Main function for request execution. Checks cache, serializes, sends request, listens and handles request using private functions.
+     * @param method What kind of http verb should be send
+     * @param address Address where request should be send like /accounts/getBanks
+     * @param data Object that should be serialized and send. Container type object should be used
+     * @param resultType What kind of object we are expecting back. For example BankContainer.class
+     * @param authentication Should we send authentication token to the server
+     * @param useCache Should the http cache be used
+     * @param response Response object where results should be posted
+     * @return void
+     */
     private static void executeRequest(MethodType method, String address, Object data, Class resultType, boolean authentication, boolean useCache, Response response) {
         // https://github.com/google/gson/blob/master/UserGuide.md
         String json = "{}";
@@ -107,7 +144,7 @@ public class Transfer {
                 }
                 connection.setRequestProperty("X-Auth-Token", token);
             }
-            sendRequest(connection, method, json);
+            sendRequestOverHttps(connection, method, json);
             String responseString = readResponse(connection);
             String newToken = checkToken(connection);
             handleResponse(responseString, connection.getResponseCode(), response, newToken, resultType);
@@ -125,20 +162,30 @@ public class Transfer {
         }
     }
 
-    private static void sendRequest(HttpsURLConnection connection, MethodType method, String json) throws IOException {
+    /** Sends new request over https.
+     * @param connection Connection to the server that should be used
+     * @param method What kind of http verb should be send
+     * @param json Serialized data that should be send
+     * @return void
+     */
+    private static void sendRequestOverHttps(HttpsURLConnection connection, MethodType method, String json) throws IOException {
         connection.setRequestProperty("Content-Type", "application/json; utf-8");
         connection.setRequestProperty("Accept", "application/json");
         connection.setRequestMethod(method.name());
         if (method != MethodType.GET) {
             connection.setDoOutput(true);
             OutputStream os = connection.getOutputStream();
-            byte[] input = json.getBytes("utf-8");
+            byte[] input = json.getBytes(StandardCharsets.UTF_8);
             os.write(input, 0, input.length);
             os.flush();
             os.close();
         }
     }
 
+    /** Checks whether there was new token inside server response. Saves the token to the class.
+     * @param connection Connection to the server that should be used
+     * @return String new token
+     */
     private static String checkToken(HttpsURLConnection connection) {
         Map<String, List<String>> headers = connection.getHeaderFields();
         List<String> tokens = headers.get("X-Auth-Token");
@@ -150,13 +197,17 @@ public class Transfer {
         return newToken;
     }
 
+    /** Read server response from the raw byte stream to string
+     * @param connection Connection to the server that should be used
+     * @return String Response data
+     */
     private static String readResponse(HttpsURLConnection connection) throws IOException {
         int status = connection.getResponseCode();
         InputStreamReader streamReader = null;
         if (status > 299) {
-            streamReader = new InputStreamReader(connection.getErrorStream(), "utf-8");
+            streamReader = new InputStreamReader(connection.getErrorStream(), StandardCharsets.UTF_8);
         } else {
-            streamReader = new InputStreamReader(connection.getInputStream(), "utf-8");
+            streamReader = new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8);
         }
 
         StringBuilder responseString = new StringBuilder();
@@ -169,6 +220,14 @@ public class Transfer {
         return responseString.toString();
     }
 
+    /** Parses the response of the server and posts it to the response object
+     * @param responseString Content of the server response as string
+     * @param statusCode Https status code
+     * @param response Response object where results should be posted
+     * @param token Token that was returned in the response header
+     * @param resultType Class that is used for conversion
+     * @return void
+     */
     private static void handleResponse(String responseString, Integer statusCode, Response response, String token, Class resultType) {
         if (statusCode < 299) {
             Type resultTypeChecked = handleListTypes(responseString, resultType);
@@ -185,6 +244,11 @@ public class Transfer {
         }
     }
 
+    /** Checks whether server responded with JSON list and create appropriate GSON list handler
+     * @param responseString Content of the server response as string
+     * @param resultType Class that is used for conversion
+     * @return Type basically GSON deserialization instructions
+     */
     // Handles case when return json is a list.
     // This is again quite hacky but makes calling of the API:s a lot easier
     // Java does not support proper way to do this actually cleanly
@@ -214,6 +278,15 @@ public class Transfer {
         return null;
     }
 
+    /** Posts new data to response object
+     * @param resp Response object that should be updated
+     * @param httpCode Https status code
+     * @param response Response object that was received from the server
+     * @param error Error string that was received from the server
+     * @param cached Was the information received from cache
+     * @param token New token received from the server
+     * @return void
+     */
     private static void setResponse(Response resp, Integer httpCode, Object response, String error, boolean cached, String token) {
         int count = 0;
         while (resp.countObservers() == 0) {
@@ -231,9 +304,17 @@ public class Transfer {
         resp.setValue(httpCode, response, error, cached, token);
     }
 
+    /** Set new token manually. Normaly received from the file.
+     * @param newToken New JWT token
+     * @return void
+     */
     public static void setToken(String newToken) {
         token = newToken;
     }
+
+    /** Returns current token that is normally saved to file.
+     * @return String current token
+     */
     public static String getToken() {
         if (token != null) {
             return token;
@@ -242,87 +323,8 @@ public class Transfer {
         }
     }
 
+    /* Removes all cache entries */
     public static void clearCache() {
         Cache.emptyCache();
     }
-
-    /*public static class userTransfer {
-        public userTransfer() {
-
-        }
-        public void createUser(String userName, String email, String phoneNumber, String password) {
-
-        }
-
-        public void login(String userName, String password) {
-
-        }
-
-        public void updateDetails(String userName, String email, String phoneNumber) {
-
-        }
-
-        public void updatePassword(String oldPassword, String newPassword) {
-
-        }
-
-    }
-
-    public static class basicTransfer{
-        public basicTransfer() {
-
-        }
-
-        public void newTransaction(String fromAccount, String toAccount, float amount) {
-
-        }
-
-        public void newDeposit(String account, float amount) {
-
-        }
-
-        public void newPayment(String account, float amount) {
-
-        }
-
-        public void getTransactions(String account) {
-
-        }
-    }
-
-    public static class advacedTransfer{
-        public advacedTransfer() {
-
-        }
-
-        public void newFutureTransaction(String fromAccount, String toAccount, float amount, Date date, String requiring) {
-
-        }
-
-        public void removeFuruteTransaction(int transactionId) {
-
-        }
-        public void getFutureTransactions (String account) {
-
-        }
-    }
-
-    public static class cardTransfer{
-        public cardTransfer(){
-
-        }
-
-        public void createCard(String account, String cardNumber) {
-
-        }
-
-        public void removeCard(String cardNumber) {
-
-        }
-
-
-        public void setLimits(String cardNumber, float withdrawLimit, float paymentLimit, Array allowedCountries) {
-
-        }
-    }*/
 }

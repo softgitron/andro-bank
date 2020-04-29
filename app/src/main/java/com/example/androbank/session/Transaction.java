@@ -9,7 +9,6 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.Locale;
 
 public class Transaction {
     protected String fromAccount = null;
@@ -45,6 +44,10 @@ public class Transaction {
 
     public Date getDate() {return date;}
 
+    /**Used for making the correct text of the transaction depending on the transaction attributes.
+     * @param selectedAccount Used for setting the amount sign to negative or positive.
+     * @return String describing the transaction.
+     */
     public String toString(String selectedAccount) {
         String amount = String.format("%.2f",  ( ( (float) this.amount) / 100) );
         // Formatting the string
@@ -59,6 +62,9 @@ public class Transaction {
         }
     }
 
+    /**Used to format received date from the server to the users time zone and then formatted to our own format.
+     * @return The formatted string.
+     */
     private String formatDate() {
         String pattern = "yyyy-MM-dd HH:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);

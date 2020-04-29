@@ -1,6 +1,5 @@
 package com.example.androbank.ui;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,8 +56,7 @@ public class AccountsEditCard extends Fragment {
         binding.EditCardAreaSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String selectedItem = adapterView.getSelectedItem().toString();
-                areaLimit = selectedItem;
+                areaLimit = adapterView.getSelectedItem().toString();
             }
 
             @Override

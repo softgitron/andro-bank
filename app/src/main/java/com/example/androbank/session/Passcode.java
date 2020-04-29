@@ -11,7 +11,8 @@ import android.view.ViewGroup;
 
 import com.example.androbank.R;
 import com.example.androbank.databinding.FragmentPasscodeBinding;
-import java.util.concurrent.ThreadLocalRandom;
+//import java.util.concurrent.ThreadLocalRandom;
+import java.util.Random;
 
 
 public class Passcode extends Fragment {
@@ -27,8 +28,8 @@ public class Passcode extends Fragment {
         binding = FragmentPasscodeBinding.inflate(inflater, container, false);
         root = binding.getRoot();
 
-
-        passcode = ThreadLocalRandom.current().nextInt(100000, 999999);
+        passcode = new Random().nextInt((999999 -  100000) + 1) + 100000;
+        //passcode = ThreadLocalRandom.current().nextInt(100000, 999999);
         code = String.valueOf(passcode);
         System.out.println(passcode);
         binding.passcode.setText(code);

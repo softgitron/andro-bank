@@ -194,8 +194,8 @@
     <fragment
         android:id="@+id/passcode"
         android:name="com.example.androbank.session.Passcode"
-        android:label="fragment_passcode"
-        tools:layout="@layout/fragment_passcode" >
+        android:label="Passcode"
+        tools:layout="@layout/fragment_passcode">
         <action
             android:id="@+id/action_passcode_to_main_Menu"
             app:destination="@id/main_Menu"

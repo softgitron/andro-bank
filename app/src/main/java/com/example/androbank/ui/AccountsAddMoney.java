@@ -20,7 +20,6 @@ import androidx.navigation.Navigation;
 import com.example.androbank.connection.Transfer;
 import com.example.androbank.databinding.FragmentAccountsAddMoneyBinding;
 import com.example.androbank.session.Account;
-import com.example.androbank.session.Accounts;
 import com.example.androbank.session.Session;
 import com.google.android.material.snackbar.Snackbar;
 

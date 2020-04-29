@@ -52,7 +52,7 @@ public class User {
             @Override
             public void update(Observable o, Object arg) {
                 Response response = (Response) o;
-                if (genericErrorHandling(response)) {return;};
+                if (genericErrorHandling(response)) {return;}
                 // Save user details to session
                 UserContainer userDetails = (UserContainer) response.getResponse();
                 unpackUserContainer(userDetails);
@@ -125,7 +125,7 @@ public class User {
             public void update(Observable o, Object arg) {
                 Response response = (Response) o;
 
-                if (genericErrorHandling(response)) {return;};
+                if (genericErrorHandling(response)) {return;}
                 UserContainer userDetails = (UserContainer) response.getResponse();
                 System.out.println(userDetails.email);
                 unpackUserContainer(userDetails);
@@ -148,7 +148,7 @@ public class User {
             public void update(Observable o, Object arg) {
                 Response response = (Response) o;
 
-                if (genericErrorHandling(response)) {return;};
+                if (genericErrorHandling(response)) {return;}
                 UserContainer userDetails = (UserContainer) response.getResponse();
                 unpackUserContainer(userDetails);
                 //session.banks.setCurrentBank(userDetails.bankId);

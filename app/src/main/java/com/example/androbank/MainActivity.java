@@ -1,7 +1,6 @@
 package com.example.androbank;
 
 import android.os.Bundle;
-import android.view.View;
 
 import com.example.androbank.session.Session;
 
@@ -14,7 +13,6 @@ import androidx.navigation.ui.AppBarConfiguration;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.navigation.ui.NavigationUI;
 
 public class MainActivity extends AppCompatActivity {
 

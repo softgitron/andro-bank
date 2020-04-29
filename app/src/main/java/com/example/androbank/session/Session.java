@@ -62,7 +62,10 @@ public class Session {
         return errorCode;
     }
 
-    // Todo Add comment
+    /** Remove all data from session and its sub objects. Reset token from the transfer.
+     * @param context Used for private file access in order to delete created private file.
+     * @return void
+     */
     public void sessionDestroy(Context context) {
         initializeSession();
         Transfer.setToken(null);
@@ -70,7 +73,10 @@ public class Session {
         file.delete();
     }
 
-    // Todo Add comment
+    /** Dumps important session information to the local file like user information and session token.
+     * @param context Used for private file access in order to access created private file.
+     * @return void
+     */
     public void sessionDump(Context context) {
         // If the user is clearly not logged in do not save anything.
         if (user.getUsername() == null) {
@@ -85,8 +91,10 @@ public class Session {
         saveToFile(context, dump);
     }
 
-    // Todo Add comment
-    // Was the session loaded successfully
+    /** Loads important session information from the local file like user information and session token.
+     * @param context Used for private file access in order to access created private file.
+     * @return void
+     */
     public Boolean sessionLoad(Context context) {
         String data = loadFile(context);
         if (data == null || data == "") {
@@ -102,7 +110,11 @@ public class Session {
         return true;
     }
 
-    // Todo Add comment
+    /** Save content of the string to the private file.
+     * @param context Used for private file access in order to access created private file.
+     * @param content String to be saved
+     * @return void
+     */
     private void saveToFile(Context context, String content) {
         // https://developer.android.com/training/data-storage/app-specific
         try (FileOutputStream fos = context.openFileOutput(DEFAULT_STORAGE_FILE, Context.MODE_PRIVATE)) {
@@ -114,7 +126,10 @@ public class Session {
         }
     }
 
-    // Todo Add comment
+    /** Load content of the string from the private file.
+     * @param context Used for private file access in order to access created private file.
+     * @return String contents of the file
+     */
     private String loadFile(Context context) {
         FileInputStream fis = null;
         try {

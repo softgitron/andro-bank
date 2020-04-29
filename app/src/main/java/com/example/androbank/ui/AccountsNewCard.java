@@ -9,12 +9,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
-import com.example.androbank.R;
 import com.example.androbank.databinding.FragmentAccountsNewCardBinding;
 import com.example.androbank.session.Account;
 import com.example.androbank.session.Card;
@@ -82,8 +79,7 @@ public class AccountsNewCard extends Fragment {
         binding.areaSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String selectedItem = adapterView.getSelectedItem().toString();
-                areaLimit = selectedItem;
+                areaLimit = adapterView.getSelectedItem().toString();
             }
 
             @Override

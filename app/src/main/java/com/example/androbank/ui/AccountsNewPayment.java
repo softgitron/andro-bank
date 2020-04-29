@@ -33,11 +33,9 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 
 public class AccountsNewPayment extends Fragment {
@@ -216,7 +214,7 @@ public class AccountsNewPayment extends Fragment {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 binding.dueDateInput.setEnabled(b);
                 binding.datePickerButton.setEnabled(b);
-                if (b == false) {
+                if (!b) {
                     binding.dueDateInput.setText(LocalDate.now().toString());
                     //dueDate = LocalDate.now();
                     System.out.println("Reset duedate");
@@ -282,7 +280,7 @@ public class AccountsNewPayment extends Fragment {
             }
         }
         if (fromAccountId != null) {
-            if (binding.dueDateSwitch.isChecked() == false && atInterval == 0) {
+            if (!binding.dueDateSwitch.isChecked() && atInterval == 0) {
                 session.transactions.makeTransaction(fromAccountId, toAccountIban, Math.round(amount * 100)).observe(getViewLifecycleOwner(), new Observer<Account>() {
                     @Override
                     public void onChanged(Account account) {

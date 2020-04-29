@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
@@ -13,7 +12,6 @@ import android.view.ViewGroup;
 
 import com.example.androbank.R;
 import com.example.androbank.databinding.FragmentMainMenuBinding;
-import com.example.androbank.session.Account;
 import com.example.androbank.session.Session;
 
 public class Main_Menu extends Fragment {

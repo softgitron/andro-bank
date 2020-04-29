@@ -1,6 +1,5 @@
 package com.example.androbank.session;
 
-import androidx.constraintlayout.solver.Cache;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.androbank.connection.Response;
@@ -60,7 +59,7 @@ public class Accounts {
             @Override
             public void update(Observable o, Object arg) {
                 Response response = (Response) o;
-                if (genericErrorHandling(response)) {return;};
+                if (genericErrorHandling(response)) {return;}
                 AccountContainer newAccount = (AccountContainer) response.getResponse();
                 Account account = new Account(newAccount.accountId, newAccount.iban, 0, newAccount.type);
                 accountList.add(account);

@@ -29,7 +29,7 @@ public class Banks {
             @Override
             public void update(Observable o, Object arg) {
                 Response response = (Response) o;
-                if (genericErrorHandling(response)) {return;};
+                if (genericErrorHandling(response)) {return;}
                 // Save user details to session
                 ArrayList<BankContainer> bankContainers = (ArrayList<BankContainer>) response.getResponse();
                 for (BankContainer bankContainer : bankContainers) {

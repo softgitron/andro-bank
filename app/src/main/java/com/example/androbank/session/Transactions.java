@@ -11,14 +11,8 @@ import com.example.androbank.containers.TransactionContainer;
 import static com.example.androbank.connection.Transfer.sendRequest;
 import static com.example.androbank.session.SessionUtils.genericErrorHandling;
 
-import java.net.Inet4Address;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -42,7 +36,7 @@ public class Transactions {
             @Override
             public void update(Observable o, Object arg) {
                 Response response = (Response) o;
-                if (genericErrorHandling(response)) {return;};
+                if (genericErrorHandling(response)) {return;}
                 AccountContainer newAccount = (AccountContainer) response.getResponse();
                 Account account = new Account(newAccount.accountId, newAccount.iban, newAccount.balance, newAccount.type);
                 finalResult.postValue(account);
@@ -86,7 +80,7 @@ public class Transactions {
                 if (genericErrorHandling(response)) {
                     System.out.println(response.getError());
                     return;
-                };
+                }
                 finalResult.postValue(response.getResponse().toString());
             }
         });
@@ -107,7 +101,7 @@ public class Transactions {
             @Override
             public void update(Observable o, Object arg) {
                 Response response = (Response) o;
-                if (genericErrorHandling(response)) {return;};
+                if (genericErrorHandling(response)) {return;}
                 ArrayList<TransactionContainer> transactionContainers = (ArrayList<TransactionContainer>) response.getResponse();
                 for (TransactionContainer transactionContainer : transactionContainers) {
                     /*try {
@@ -146,7 +140,7 @@ public class Transactions {
             @Override
             public void update(Observable o, Object arg) {
                 Response response = (Response) o;
-                if (genericErrorHandling(response)) {return;};
+                if (genericErrorHandling(response)) {return;}
                 AccountContainer newAccount = (AccountContainer) response.getResponse();
                 Account account = new Account(newAccount.accountId, newAccount.iban, newAccount.balance, newAccount.type);
                 finalResult.postValue(account);
@@ -169,7 +163,7 @@ public class Transactions {
             @Override
             public void update(Observable o, Object arg) {
                 Response response = (Response) o;
-                if (genericErrorHandling(response)) {return;};
+                if (genericErrorHandling(response)) {return;}
                 ArrayList<FutureTransactionContainer> transactionContainers = (ArrayList<FutureTransactionContainer>) response.getResponse();
                 for (FutureTransactionContainer transactionContainer : transactionContainers) {
                     //System.out.println("Time is "+transactionContainer.time);
@@ -200,7 +194,7 @@ public class Transactions {
             @Override
             public void update(Observable o, Object arg) {
                 Response response = (Response) o;
-                if (genericErrorHandling(response)) {finalResult.postValue(1); return;};
+                if (genericErrorHandling(response)) {finalResult.postValue(1); return;}
                 finalResult.postValue(200);
             }
         });

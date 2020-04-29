@@ -11,7 +11,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,7 +18,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
 
-import com.example.androbank.MainActivity;
 import com.example.androbank.R;
 import com.example.androbank.databinding.FragmentLogInPageBinding;
 import com.example.androbank.session.Bank;
@@ -28,8 +26,6 @@ import com.example.androbank.session.Session;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
-
-import static androidx.core.content.ContextCompat.getSystemService;
 
 public class LogInPage extends Fragment {
 

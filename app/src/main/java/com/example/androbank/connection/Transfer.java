@@ -18,6 +18,7 @@ import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -174,7 +175,7 @@ public class Transfer {
         if (method != MethodType.GET) {
             connection.setDoOutput(true);
             OutputStream os = connection.getOutputStream();
-            byte[] input = json.getBytes("utf-8");
+            byte[] input = json.getBytes(StandardCharsets.UTF_8);
             os.write(input, 0, input.length);
             os.flush();
             os.close();
@@ -204,9 +205,9 @@ public class Transfer {
         int status = connection.getResponseCode();
         InputStreamReader streamReader = null;
         if (status > 299) {
-            streamReader = new InputStreamReader(connection.getErrorStream(), "utf-8");
+            streamReader = new InputStreamReader(connection.getErrorStream(), StandardCharsets.UTF_8);
         } else {
-            streamReader = new InputStreamReader(connection.getInputStream(), "utf-8");
+            streamReader = new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8);
         }
 
         StringBuilder responseString = new StringBuilder();

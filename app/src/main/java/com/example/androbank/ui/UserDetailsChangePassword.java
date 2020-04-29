@@ -6,11 +6,9 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.R;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.navigation.Navigation;
 
 import com.example.androbank.databinding.FragmentUserDetailsChangePasswordBinding;
 import com.example.androbank.session.Session;

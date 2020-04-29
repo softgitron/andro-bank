@@ -38,11 +38,7 @@ class Cache {
         calendar.setTime(entry.getTimestamp());
         calendar.add(Calendar.MINUTE, entry.getValidMinutes());
         calendar.getTime();
-        if (calendar.getTime().before(new Date())) {
-            return false;
-        } else {
-            return true;
-        }
+        return !calendar.getTime().before(new Date());
     }
 
     /** Add new cache entry to the memory

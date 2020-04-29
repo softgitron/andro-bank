@@ -70,7 +70,7 @@ public class LogInPage extends Fragment {
                 session.user.login(bankId, email, password).observe(getViewLifecycleOwner(), new Observer<User>() {
                     @Override
                     public void onChanged(User user) {
-                        Navigation.findNavController(root).navigate(R.id.action_nav_home_to_main_Menu);
+                        Navigation.findNavController(root).navigate(R.id.action_nav_home_to_passcode);
                     }
                 });
         }

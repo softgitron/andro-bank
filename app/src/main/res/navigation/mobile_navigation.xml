@@ -12,13 +12,13 @@
         tools:layout="@layout/fragment_log_in_page">
 
         <action
-            android:id="@+id/action_nav_home_to_main_Menu"
-            app:destination="@id/main_Menu"
-            app:popUpTo="@id/mobile_navigation"
-            app:popUpToInclusive="true" />
-        <action
             android:id="@+id/action_nav_home_to_createUser"
             app:destination="@id/createUser" />
+        <action
+            android:id="@+id/action_nav_home_to_passcode"
+            app:destination="@id/passcode"
+            app:popUpTo="@id/mobile_navigation"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -190,6 +190,17 @@
         <action
             android:id="@+id/action_transactionsViewFuture_to_main_Menu"
             app:destination="@id/main_Menu" />
+    </fragment>
+    <fragment
+        android:id="@+id/passcode"
+        android:name="com.example.androbank.session.Passcode"
+        android:label="fragment_passcode"
+        tools:layout="@layout/fragment_passcode" >
+        <action
+            android:id="@+id/action_passcode_to_main_Menu"
+            app:destination="@id/main_Menu"
+            app:popUpTo="@id/mobile_navigation"
+            app:popUpToInclusive="true" />
     </fragment>
 
 

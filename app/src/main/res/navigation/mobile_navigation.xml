@@ -167,7 +167,7 @@
     <fragment
         android:id="@+id/transactionsTest"
         android:name="com.example.androbank.ui.TransactionsTest"
-        android:label="Transactions (test)"
+        android:label="Transactions "
         tools:layout="@layout/fragment_transactions_test">
         <action
             android:id="@+id/action_transactionsTest_to_main_Menu"
@@ -185,7 +185,7 @@
     <fragment
         android:id="@+id/transactionsViewFuture"
         android:name="com.example.androbank.ui.TransactionsViewFuture"
-        android:label="Future Transactions (test)"
+        android:label="Upcoming Transactions"
         tools:layout="@layout/fragment_transactions_view_future">
         <action
             android:id="@+id/action_transactionsViewFuture_to_main_Menu"

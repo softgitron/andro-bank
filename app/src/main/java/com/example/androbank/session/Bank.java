@@ -34,6 +34,10 @@ public class Bank {
         return "BankID: " + bankId + " Name: " + name + " BIC: " + bic;
     }
 
+    /** Used to unpack the data from the JSON which was loaded from the local device.
+     * @param bankDetails BankContainer created by the gson JSON reader.
+     * @return void.
+     */
     private void unpackBankContainer(BankContainer bankDetails) {
         bankId = bankDetails.bankId;
         name = bankDetails.name;
@@ -41,7 +45,9 @@ public class Bank {
 
     }
 
-    // Todo Add comment
+    /** Makes a new BankContainer object with the current Bank objects details for the gson JSON packer.
+     * @return void
+     */
     private BankContainer packBankContainer( ) {
         BankContainer bankDetails = new BankContainer();
         bankDetails.bankId = bankId;
@@ -50,13 +56,18 @@ public class Bank {
         return bankDetails;
     }
 
-    // Todo Add comment
+    /** Dumps important bank information to the local file on the device.
+     * @return void
+     */
     String dump() {
         Gson gson = new Gson();
         return gson.toJson(packBankContainer());
     }
 
-    // Todo Add comment
+    /** Load the content of the string (JSON) from the local file on the device.
+     * @param data The string JSON which is to be loaded.
+     * @return Bank object created with the data from teh data JSON string.
+     */
     Bank load(String data) {
         Gson gson = new Gson();
         unpackBankContainer(gson.fromJson(data, BankContainer.class));

@@ -45,7 +45,7 @@ public class Transactions {
         return finalResult;
     }
 
-    /** Makes a new transaction which is going to happend some time in the future. Sends a post request to the backend with the relevant by using the connection package.
+    /** Makes a new transaction which is going to happen some time in the future. Sends a post request to the backend with the relevant data by using the connection package.
      * @param fromAccountId Account from which the transfer is to be made.
      * @param toAccountIban Account to which the money is going to be deposited.
      * @param amount Amount of money being exchanged in the transaction.
@@ -104,15 +104,6 @@ public class Transactions {
                 if (genericErrorHandling(response)) {return;}
                 ArrayList<TransactionContainer> transactionContainers = (ArrayList<TransactionContainer>) response.getResponse();
                 for (TransactionContainer transactionContainer : transactionContainers) {
-                    /*try {
-                        Date help = new Date();
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM d, yyyy, m:h:s aa", new Locale("en", "US"));
-                        String hello = simpleDateFormat.format(help);
-                        Date date = simpleDateFormat.parse(transactionContainer.time);
-                        System.out.println("Hello");
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }*/
                     Transaction transaction = new Transaction(transactionContainer.transferId, transactionContainer.fromAccountIban,transactionContainer.fromAccountId,
                             transactionContainer.toAccountIban, transactionContainer.amount, transactionContainer.time, transactionContainer.fromAccountBic, transactionContainer.toAccountBic);
                     transactionsList.add(transaction);
@@ -149,7 +140,7 @@ public class Transactions {
         return finalResult;
     }
 
-    /**Gets all future transactions on one of the users bacnk accounts. Uses connection package to send post request to the backend with the relevant data.
+    /**Gets all future transactions on one of the users bank accounts. Uses connection package to send a post request to the backend with the relevant data.
      * @param accountId An accounts which upcoming transactions are to be fetched.
      * @return List of future transactions for callback.
      */
@@ -177,8 +168,8 @@ public class Transactions {
         return finalResult;
     }
 
-    /** Sends a delte request to backend with the connection package to delete one of the upcoming transactions.
-     * @param futureTransactionId ID on the future transaction
+    /** Sends a delete request to backend with the connection package to delete one of the upcoming transactions.
+     * @param futureTransactionId ID of the future transaction
      * @param fromAccountId Account from which the transfer would be made.
      * @return  1 or 200 depending on if the request was successful for callback.
      */

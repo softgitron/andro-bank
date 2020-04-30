@@ -98,9 +98,7 @@ public class User {
         return statusUser;
     }
 
-    /**
-     * Sends the updated user info to the server and directly modifies current session
-     * user details with the values given back by the server. Uses the connection package.
+    /**Sends the updated user info to the backend and directly modifies current session user details with the values given back by the server. Uses the connection package.
      * @param username New username for current user.
      * @param firstName New firstName for current user.
      * @param lastName New lastName for current user.
@@ -136,6 +134,10 @@ public class User {
         return statusUser;
     }
 
+    /**Sned a patch request to the backend with new password details. Old password has been checked already in the UserDetailsChangePassword fragment. Uses the connection package.
+     * @param newPassword New password for the user.
+     * @return User object for callback.
+     */
     public MutableLiveData<User> changePassword(String newPassword) {
         Session session = Session.getSession();
         UserContainer updateUser = new UserContainer();
@@ -158,7 +160,10 @@ public class User {
         return statusUser;
     }
 
-    // Todo Add comment
+    /** Used to unpack the data from the JSON which was loaded from the local device.
+     * @param userDetails UserContainer created by the gson JSON reader.
+     * @return void.
+     */
     private void unpackUserContainer(UserContainer userDetails) {
         username = userDetails.username;
         firstName = userDetails.firstName;
@@ -167,7 +172,9 @@ public class User {
         phoneNumber = userDetails.phoneNumber;
     }
 
-    // Todo Add comment
+    /** Makes a new UserContainer object with the current User objects details for the gson JSON packer.
+     * @return void
+     */
     private UserContainer packUserContainer() {
         UserContainer container = new UserContainer();
         container.username = username;
@@ -178,7 +185,6 @@ public class User {
         return container;
     }
 
-    // Todo Add comment
     public String getUsername() {
         return username;
     }
@@ -195,13 +201,18 @@ public class User {
         return phoneNumber;
     }
 
-    // Todo Add comment
+    /** Dumps important user information to the local file on the device as JSON.
+     * @return void
+     */
     String dump() {
         Gson gson = new Gson();
         return gson.toJson(packUserContainer());
     }
 
-    // Todo Add comment
+    /** Load the contents of the string (JSON) from the local file on the device.
+     * @param data The string JSON which is to be loaded.
+     * @return void. Modifies current user object directly in the unpackUserContainer method.
+     */
     void load(String data) {
         Gson gson = new Gson();
         unpackUserContainer(gson.fromJson(data, UserContainer.class));

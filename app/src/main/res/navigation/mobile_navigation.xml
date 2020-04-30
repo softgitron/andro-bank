@@ -66,19 +66,16 @@
             android:id="@+id/action_main_Menu_to_userDetails"
             app:destination="@id/userDetails" />
         <action
-            android:id="@+id/action_main_Menu_to_transactions"
-            app:destination="@id/transactions" />
-        <action
             android:id="@+id/action_main_Menu_to_nav_home"
             app:destination="@id/nav_home"
             app:popUpTo="@id/mobile_navigation"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_main_Menu_to_transactionsTest"
-            app:destination="@id/transactionsTest" />
+            app:destination="@id/Transactions" />
         <action
             android:id="@+id/action_main_Menu_to_transactionsViewFuture"
-            app:destination="@id/transactionsViewFuture" />
+            app:destination="@id/TransactionsFuture" />
     </fragment>
     <fragment
         android:id="@+id/userDetails"
@@ -94,15 +91,6 @@
         <action
             android:id="@+id/action_userDetails_to_userDetailsChangePassword"
             app:destination="@id/userDetailsChangePassword" />
-    </fragment>
-    <fragment
-        android:id="@+id/transactions"
-        android:name="com.example.androbank.ui.Transactions"
-        android:label="Transactions"
-        tools:layout="@layout/fragment_transactions">
-        <action
-            android:id="@+id/action_transactions_to_main_Menu"
-            app:destination="@id/main_Menu" />
     </fragment>
     <fragment
         android:id="@+id/AccountsNewPayment"
@@ -165,10 +153,10 @@
             app:destination="@id/userDetails" />
     </fragment>
     <fragment
-        android:id="@+id/transactionsTest"
-        android:name="com.example.androbank.ui.TransactionsTest"
+        android:id="@+id/Transactions"
+        android:name="com.example.androbank.ui.Transactions"
         android:label="Transactions "
-        tools:layout="@layout/fragment_transactions_test">
+        tools:layout="@layout/fragment_transactions">
         <action
             android:id="@+id/action_transactionsTest_to_main_Menu"
             app:destination="@id/main_Menu" />
@@ -183,10 +171,10 @@
             app:destination="@id/AccountsCards" />
     </fragment>
     <fragment
-        android:id="@+id/transactionsViewFuture"
-        android:name="com.example.androbank.ui.TransactionsViewFuture"
+        android:id="@+id/TransactionsFuture"
+        android:name="com.example.androbank.ui.TransactionsFuture"
         android:label="Upcoming Transactions"
-        tools:layout="@layout/fragment_transactions_view_future">
+        tools:layout="@layout/fragment_transactions_future">
         <action
             android:id="@+id/action_transactionsViewFuture_to_main_Menu"
             app:destination="@id/main_Menu" />

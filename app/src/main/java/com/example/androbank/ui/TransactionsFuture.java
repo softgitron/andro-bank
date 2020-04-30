@@ -14,7 +14,7 @@ import androidx.lifecycle.Observer;
 
 import com.example.androbank.R;
 import com.example.androbank.SpinnerAdapterFutureT;
-import com.example.androbank.databinding.FragmentTransactionsViewFutureBinding;
+import com.example.androbank.databinding.FragmentTransactionsFutureBinding;
 import com.example.androbank.session.Account;
 import com.example.androbank.session.FutureTransaction;
 import com.example.androbank.session.Session;
@@ -24,8 +24,8 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 
 
-public class TransactionsViewFuture extends Fragment {
-    private FragmentTransactionsViewFutureBinding binding;
+public class TransactionsFuture extends Fragment {
+    private FragmentTransactionsFutureBinding binding;
     private View root;
     private Session session;
 
@@ -37,7 +37,7 @@ public class TransactionsViewFuture extends Fragment {
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentTransactionsViewFutureBinding.inflate(inflater, container, false);
+        binding = FragmentTransactionsFutureBinding.inflate(inflater, container, false);
         root = binding.getRoot();
         session = Session.getSession();
 
@@ -111,7 +111,7 @@ public class TransactionsViewFuture extends Fragment {
             session.accounts.getAccountsList(false).observe(getViewLifecycleOwner(), new Observer<ArrayList<Account>>() {
                 @Override
                 public void onChanged(ArrayList<Account> accounts) {
-                    TransactionsViewFuture.this.accounts = accounts;
+                    TransactionsFuture.this.accounts = accounts;
                     getTransactions();
                 }
             });

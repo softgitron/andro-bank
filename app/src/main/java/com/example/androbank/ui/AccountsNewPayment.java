@@ -281,6 +281,7 @@ public class AccountsNewPayment extends Fragment {
         }
         if (fromAccountId != null) {
             if (!binding.dueDateSwitch.isChecked() && atInterval == 0) {
+
                 session.transactions.makeTransaction(fromAccountId, toAccountIban, Math.round(amount * 100)).observe(getViewLifecycleOwner(), new Observer<Account>() {
                     @Override
                     public void onChanged(Account account) {

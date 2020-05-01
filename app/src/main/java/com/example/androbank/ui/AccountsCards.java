@@ -64,6 +64,9 @@ public class AccountsCards extends Fragment {
         return root;
     }
 
+    /***
+     * Used by getCards. This populates the card recycle view.
+     */
     private void populateCardList() {
         Snackbar.make(root, "Cards loaded.", Snackbar.LENGTH_LONG).show();
         recyclerView = binding.cardsListView;
@@ -76,6 +79,9 @@ public class AccountsCards extends Fragment {
 
     }
 
+    /***
+     * retrieves all user's cards. Then populates them using the function above
+     */
     public void getCards () {
         if (accountsIndex < accounts.size() ) {
             Account account = accounts.get(accountsIndex);
@@ -106,6 +112,10 @@ public class AccountsCards extends Fragment {
         }
     }
 
+    /***
+     * Used when clicked on card. Retrieves information and takes you to the card settings poge.
+     * @param cardData is later used to get all information on the card.
+     */
     public void selectCard(String cardData) {
         Bundle bundle = new Bundle();
         bundle.putString("cardData", cardData);

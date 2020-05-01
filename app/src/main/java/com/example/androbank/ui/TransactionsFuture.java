@@ -61,15 +61,20 @@ public class TransactionsFuture extends Fragment {
             @Override
             public void onClick(View v) {
                 FutureTransaction futureTransaction = (FutureTransaction) selectedItem;
-                session.transactions.deleteFutureTransaction(futureTransaction.getFutureTransferId(), futureTransaction.getFromAccountId() ).observe(getViewLifecycleOwner(), new Observer<Integer>() {
-                    @Override
-                    public void onChanged(Integer returnCode) {
-                        // If we get this far, generic error handling has handled any exceptions and we can tell the user that the transaction was deleted.
-                        Snackbar.make(getView(), "Future transaction was deleted.", Snackbar.LENGTH_LONG).show();
-                        // Resetting the state since transaction was deleted.
-                        onResume();
-                    }
-                });
+                if (futureTransaction == null) {
+                    Snackbar.make(getView(), "You don't have any upcoming transactions. Goto Accounts New Transaction to make one.", Snackbar.LENGTH_LONG).show();
+                } else {
+                    session.transactions.deleteFutureTransaction(futureTransaction.getFutureTransferId(), futureTransaction.getFromAccountId() ).observe(getViewLifecycleOwner(), new Observer<Integer>() {
+                        @Override
+                        public void onChanged(Integer returnCode) {
+                            // If we get this far, generic error handling has handled any exceptions and we can tell the user that the transaction was deleted.
+                            Snackbar.make(getView(), "Future transaction was deleted.", Snackbar.LENGTH_LONG).show();
+                            // Resetting the state since transaction was deleted.
+                            onResume();
+                        }
+                    });
+                }
+
             }
         });
 

@@ -49,6 +49,7 @@ public class FutureTransaction extends Transaction{
     /**Used to format the received date from the backend to the users time zone and then formatted to our own format.
      * @return The formatted string.
      */
+    // Todo verify correct format after SoftGitron fix.
     private String formatTime() {
         String pattern = "yyyy-MM-dd HH:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);

@@ -60,7 +60,7 @@ public class AccountsNewCardPayment extends Fragment {
                     Snackbar.make(getView(), "Amount can't be larger than balance", Snackbar.LENGTH_LONG).show();
                 } else if (isPayment) {
                     System.out.println(selected.getPaymentLimit() / 100f);
-                    if (amount < 0.01 || amount > selected.getPaymentLimit() / 100f) {
+                    if (amount < 0.01 || (selected.getPaymentLimit() != 0 && amount > selected.getPaymentLimit() / 100f)) {
                         Snackbar.make(getView(), "Payment amount must be smaller than payment limit and at least 0.01€", Snackbar.LENGTH_LONG).show();
                     } else {
                         System.out.println("Lets pay");
@@ -78,7 +78,7 @@ public class AccountsNewCardPayment extends Fragment {
                         });
                     }
                 } else {
-                    if (amount < 0.01 || amount > selected.getWithdrawLimit() / 100f) {
+                    if (amount < 0.01 || (selected.getWithdrawLimit() != 0 && amount > selected.getWithdrawLimit() / 100f)) {
                         Snackbar.make(getView(), "Withdraw amount must be smaller than withdraw limit and at least 0.01€", Snackbar.LENGTH_LONG).show();
                     } else {
                         System.out.println("Lets withdraw");

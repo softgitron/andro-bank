@@ -270,6 +270,9 @@ public class AccountsNewPayment extends Fragment {
         return root;
     }
 
+    /***
+     * Used to make instant and upcoming payments
+     */
     public void makePayment() {
         Integer fromAccountId = null;
         for (Account ac : myAccounts) {
@@ -281,10 +284,11 @@ public class AccountsNewPayment extends Fragment {
         }
         if (fromAccountId != null) {
             if (!binding.dueDateSwitch.isChecked() && atInterval == 0) {
-                session.transactions.makeTransaction(fromAccountId, toAccountIban, Math.round(amount * 100)).observe(getViewLifecycleOwner(), new Observer<Account>() {
+                session.transactions.makeTransaction(fromAccountId, toAccountIban, Math.round(amount * 100)).observe(getViewLifecycleOwner(), new Observer<Integer>() {
                     @Override
-                    public void onChanged(Account account) {
-                        Snackbar.make(getView(), "Payment made", Snackbar.LENGTH_LONG).show();
+                    public void onChanged(Integer integer) {
+                        if (integer == 0) Snackbar.make(getView(), "Payment made", Snackbar.LENGTH_LONG).show();
+                        else Snackbar.make(getView(), "Payment failed", Snackbar.LENGTH_LONG).show();
                     }
                 });
             } else {
@@ -311,10 +315,11 @@ public class AccountsNewPayment extends Fragment {
 
                 System.out.println("Current DueDate Object: date (Should be in UTC now...): " + dueDate );
                 System.out.println("Interval, times, duedate: " + atInterval +", "+paymentTimes +", "+dueDate+", "+ fromAccountId);
-                session.transactions.makeFutureTransaction(fromAccountId, toAccountIban, Math.round(amount * 100), dueDate, atInterval, paymentTimes).observe(getViewLifecycleOwner(), new Observer<String>() {
+                session.transactions.makeFutureTransaction(fromAccountId, toAccountIban, Math.round(amount * 100), dueDate, atInterval, paymentTimes).observe(getViewLifecycleOwner(), new Observer<Integer>() {
                     @Override
-                    public void onChanged(String s) {
-                        Snackbar.make(getView(), "Future payment made", Snackbar.LENGTH_LONG).show();
+                    public void onChanged(Integer integer) {
+                        if (integer == 0) Snackbar.make(getView(), "Future payment made", Snackbar.LENGTH_LONG).show();
+                        else Snackbar.make(getView(), "Future payment failed", Snackbar.LENGTH_LONG).show();
                     }
                 });
             }

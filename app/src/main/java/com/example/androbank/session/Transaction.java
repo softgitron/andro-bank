@@ -23,12 +23,13 @@ public class Transaction {
     public Transaction(Integer transferId, String fromAccount, Integer fromAccountId,  String toAccount, Integer amount, Date date, String fromAccountBic, String toAccountBic) {
         this.fromAccount = fromAccount;
         this.fromAccountId = fromAccountId;
-        this.toAccount = toAccount;
+        if(toAccount == null) {this.toAccount = "";} else {this.toAccount = toAccount;}
         this.amount = amount;
         this.date = date;
         this.transferId = transferId;
         this.fromAccountBic = fromAccountBic;
-        this.toAccountBic = toAccountBic;
+        if(toAccountBic == null) {this.toAccountBic = "";} else {this.toAccountBic = toAccountBic;}
+        System.out.println(date.toString() );
     }
 
     public Transaction() {
@@ -65,6 +66,7 @@ public class Transaction {
     /**Used to format received date from the server to the users time zone and then formatted to our own format.
      * @return The formatted string.
      */
+    // Todo verify correct format after SoftGitron fix.
     private String formatDate() {
         String pattern = "yyyy-MM-dd HH:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);

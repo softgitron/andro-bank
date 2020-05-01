@@ -71,7 +71,7 @@ public class Accounts {
     }
 
     /** Gets all the accounts of the user on the bank by sending a get request to the server api with the Connection package.
-     * @param useCache TODO Is cache still operational?
+     * @param useCache is used to tell if cache is used to fetch accounts. This is not always wanted as it could lead to some problems
      * @return The accounts ArrayList which was fetched from the server for callback.
      */
     public MutableLiveData<ArrayList<Account>> getAccountsList(boolean useCache) {

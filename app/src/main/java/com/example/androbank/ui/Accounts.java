@@ -83,6 +83,9 @@ public class Accounts extends Fragment {
         return root;
     }
 
+    /***
+     * Used to populate the recycleview containing all user's accounts. This also populates the accountlist which is used elsewhere.
+     */
     private void populateAccountList() {
         session.accounts.getAccountsList(false).observe(getViewLifecycleOwner(), new Observer<ArrayList<Account>>() {
             @Override
@@ -106,6 +109,11 @@ public class Accounts extends Fragment {
             }
         });
     }
+
+    /***
+     * Used when clicking on an account. This retrieves account information and takes you to the addmoney page
+     * @param iban is the accounts iban to which you want to add money to.
+     */
     public void addMoney(String iban) {
         Bundle bundle = new Bundle();
         bundle.putString("accountData", iban);

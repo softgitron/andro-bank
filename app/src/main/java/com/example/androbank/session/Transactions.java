@@ -25,8 +25,8 @@ public class Transactions {
      * @param amount Amount of money being exchanged in the transaction.
      * @return Account received from the server for callback.
      */
-    public MutableLiveData<Account> makeTransaction(Integer fromAccountId, String toAccountIban, Integer amount) {
-        MutableLiveData<Account> finalResult = new MutableLiveData<Account>();
+    public MutableLiveData<Integer> makeTransaction(Integer fromAccountId, String toAccountIban, Integer amount) {
+        MutableLiveData<Integer> finalResult = new MutableLiveData<Integer>();
         TransactionContainer requestContainer = new TransactionContainer();
         requestContainer.fromAccountId = fromAccountId;
         requestContainer.toAccountIban = toAccountIban;
@@ -36,10 +36,10 @@ public class Transactions {
             @Override
             public void update(Observable o, Object arg) {
                 Response response = (Response) o;
-                if (genericErrorHandling(response)) {return;}
-                AccountContainer newAccount = (AccountContainer) response.getResponse();
-                Account account = new Account(newAccount.accountId, newAccount.iban, newAccount.balance, newAccount.type);
-                finalResult.postValue(account);
+                if (genericErrorHandling(response)) {finalResult.postValue(1);}
+                //AccountContainer newAccount = (AccountContainer) response.getResponse();
+                //Account account = new Account(newAccount.accountId, newAccount.iban, newAccount.balance, newAccount.type);
+                 else finalResult.postValue(0);
             }
         });
         return finalResult;
@@ -54,8 +54,8 @@ public class Transactions {
      * @param times (optional) How many times transfer should occur. Default value: null, Size range: 1..
      * @return Backend response string for callback.
      */
-    public MutableLiveData<String> makeFutureTransaction(Integer fromAccountId, String toAccountIban, Integer amount, Date paymentDate, Integer atInterval, Integer times) {
-        MutableLiveData<String> finalResult = new MutableLiveData<String>();
+    public MutableLiveData<Integer> makeFutureTransaction(Integer fromAccountId, String toAccountIban, Integer amount, Date paymentDate, Integer atInterval, Integer times) {
+        MutableLiveData<Integer> finalResult = new MutableLiveData<Integer>();
         FutureTransactionContainer requestContainer = new FutureTransactionContainer();
         requestContainer.fromAccountId = fromAccountId;
         requestContainer.toAccountIban = toAccountIban;
@@ -79,9 +79,9 @@ public class Transactions {
 
                 if (genericErrorHandling(response)) {
                     System.out.println(response.getError());
-                    return;
+                    finalResult.postValue(1);
                 }
-                finalResult.postValue(response.getResponse().toString());
+                else finalResult.postValue(0);
             }
         });
         return finalResult;

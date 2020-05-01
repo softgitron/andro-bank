@@ -237,7 +237,7 @@ public class AccountsNewPayment extends Fragment {
 
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                dateString = year + "-" + String.format("%02d", monthOfYear + 1) + "-" + dayOfMonth;
+                                dateString = String.format("%d-%02d-%02d", year, monthOfYear + 1, dayOfMonth);
                                 binding.dueDateInput.setText(dateString);
                             }
                         }, mYear, mMonth, mDay);

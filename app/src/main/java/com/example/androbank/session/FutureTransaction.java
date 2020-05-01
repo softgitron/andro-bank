@@ -49,26 +49,25 @@ public class FutureTransaction extends Transaction{
     /**Used to format the received date from the backend to the users time zone and then formatted to our own format.
      * @return The formatted string.
      */
-    // Todo verify correct format after SoftGitron fix.
     private String formatTime() {
         String pattern = "yyyy-MM-dd HH:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String dateAndTimeString = simpleDateFormat.format(this.atTime);
-        return dateAndTimeString;
-        /*
+        //return dateAndTimeString;
+
         LocalDateTime dateTime = null;
 
         // Source: https://stackoverflow.com/questions/39690944/convert-utc-date-to-current-timezone/39692411#39692411
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd kk:mm:ss");
-        DateTimeFormatter formatterOutput = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm:ss");
-        dateTime = LocalDateTime.parse(dateAndTimeString, formatter);
+        DateTimeFormatter inputFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd kk:mm:ss");
+        DateTimeFormatter outputFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm:ss");
+        dateTime = LocalDateTime.parse(dateAndTimeString, inputFormat);
         OffsetDateTime odt = dateTime.atOffset( ZoneOffset.UTC );
         ZoneId currentZoneId = ZoneId.systemDefault(); // Or, for example: ZoneId.of( "America/Montreal" )
         ZonedDateTime zdt = odt.atZoneSameInstant( currentZoneId);
 
 
         //System.out.println("FutureTransaction output date string: " + output);
-        return zdt.format(formatterOutput);*/
+        return zdt.format(outputFormat);
     }
 
 

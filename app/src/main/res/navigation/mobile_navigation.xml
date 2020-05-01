@@ -181,7 +181,7 @@
     </fragment>
     <fragment
         android:id="@+id/passcode"
-        android:name="com.example.androbank.session.Passcode"
+        android:name="com.example.androbank.ui.Passcode"
         android:label="Passcode"
         tools:layout="@layout/fragment_passcode">
         <action

@@ -27,13 +27,11 @@ public class Main_Menu extends Fragment {
 
         binding.viewAccounts.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_main_Menu_to_accounts));
 
-        binding.viewFutureTransactionsTest.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.transactionsViewFuture));
-
-        binding.viewTransactions.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_main_Menu_to_transactions));
+        binding.viewFutureTransactionsTest.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.TransactionsFuture));
 
         binding.viewUser.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.action_main_Menu_to_userDetails));
 
-        binding.viewTransactionsTest.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.transactionsTest));
+        binding.viewTransactionsTest.setOnClickListener(v -> Navigation.findNavController(root).navigate(R.id.Transactions));
 
         return root;
     }

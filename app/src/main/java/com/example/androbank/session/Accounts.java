@@ -70,8 +70,8 @@ public class Accounts {
         return finalResults;
     }
 
-    /** Gets all the accounts on the user of the bank by sending a get request to the server api with the Connection package.
-     * @param useCache TODO Is chache still operational?
+    /** Gets all the accounts of the user on the bank by sending a get request to the server api with the Connection package.
+     * @param useCache TODO Is cache still operational?
      * @return The accounts ArrayList which was fetched from the server for callback.
      */
     public MutableLiveData<ArrayList<Account>> getAccountsList(boolean useCache) {
@@ -110,7 +110,7 @@ public class Accounts {
     }
 
     /**Simple search function for the Accounts ArrayList used for getting the account type.
-     * @param iban String used for finding account type.
+     * @param iban String used for finding the account type.
      * @return Returns the account type belonging to the given IBAN or null if it does not exists.
      */
     public Account.AccountType findAccountTypeByIban(String iban) {

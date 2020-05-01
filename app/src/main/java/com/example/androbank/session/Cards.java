@@ -22,11 +22,11 @@ public class Cards {
         return allCardsList;
     }
 
-    /**Creates a new card for the selected bank account by sending a post request to the back end with the Connection package.
+    /**Creates a new card for the selected bank account by sending a post request to the backend with the Connection package.
      * @param accountId ID belonging to the selected bank account.
      * @param withdrawLimit Withdraw limit for the card.
      * @param spendingLimit Spending/Payment limit for the card.
-     * @param area Geographical area for the card. Used for enforcing area limits for the transactions on the card
+     * @param area Geographical area for the card. Used for enforcing area limits for the transactions on the card.
      * @return The created card for callback
      */
     public MutableLiveData<Card> createCard(Integer accountId, Integer withdrawLimit, Integer spendingLimit, String area) {
@@ -85,7 +85,7 @@ public class Cards {
     }
 
     /** Gets all the cards on one bank account by sending a Post request to the server api with the Connection package.
-     * @param accountId Used for posting the account ID to the backend so backend can send correct cards belonging to the account.
+     * @param accountId Used for posting the account ID to the backend so backend can send the correct cards belonging to the account.
      * @return The cards ArrayList which was fetched from the server for callback.
      */
     public MutableLiveData<ArrayList<Card>> getCardsList(Integer accountId) {
@@ -118,12 +118,12 @@ public class Cards {
         return finalResult;
     }
 
-    /**Used for changing the card details. Sends a  patch request to server with the Connection package.
+    /**Used for changing the card details. Sends a patch request to the backend with the Connection package.
      * @param cardID CardId belonging to the card which is to be updated.
      * @param withdrawLimit New withdraw limit for the card.
      * @param spendingLimit New spending limit for the card.
      * @param area New area limit for the card.
-     * @param currentCard Is used to delete old card data from the AllCardsList.
+     * @param currentCard Is used to delete old card data from this objects AllCardsList.
      * @return MutableLiveData card for callback.
      */
     public MutableLiveData<Card> uodateCard(Integer cardID, Integer withdrawLimit, Integer spendingLimit, String area, Card currentCard) {
@@ -169,7 +169,7 @@ public class Cards {
     }
 
     /**
-     * Clears the Cards AllCardsList.
+     * Clears the Cards on the AllCardsList.
      */
     public void clearAllCardsList () {
         allCardsList.clear();

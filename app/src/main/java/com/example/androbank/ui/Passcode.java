@@ -14,6 +14,7 @@ import com.example.androbank.databinding.FragmentPasscodeBinding;
 //import java.util.concurrent.ThreadLocalRandom;
 import java.util.Random;
 
+// TODO IMPORTANT! Should this be in the UI package?
 
 public class Passcode extends Fragment {
 

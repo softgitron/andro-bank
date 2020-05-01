@@ -82,7 +82,7 @@ public class Accounts {
             @Override
             public void update(Observable o, Object arg) {
                 Response response = (Response) o;
-                System.out.println("Session.Accounts prints: " + response.getResponse().toString());
+                //System.out.println("Session.Accounts prints: " + response.getResponse().toString());
                 if (genericErrorHandling(response)) {return;}
                 // Save user details to session
                 ArrayList<AccountContainer> accountContainers = (ArrayList<AccountContainer>) response.getResponse();

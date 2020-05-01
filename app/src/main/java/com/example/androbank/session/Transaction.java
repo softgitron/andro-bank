@@ -69,8 +69,10 @@ public class Transaction {
         String pattern = "yyyy-MM-dd HH:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String dateAndTimeString = simpleDateFormat.format(this.date);
-        LocalDateTime dateTime;
+        return dateAndTimeString;
 
+        /*
+        LocalDateTime dateTime;
         // Source: https://stackoverflow.com/questions/39690944/convert-utc-date-to-current-timezone/39692411#39692411
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd kk:mm:ss");
         DateTimeFormatter formatterOutput = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm:ss");
@@ -80,7 +82,7 @@ public class Transaction {
         ZonedDateTime zdt = odt.atZoneSameInstant( currentZoneId);
 
         //System.out.println("FutureTransaction output date string: " + output);
-        return zdt.format(formatterOutput);
+        return zdt.format(formatterOutput); */
     }
 
 }

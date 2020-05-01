@@ -21,6 +21,9 @@ public class UserDetailsChangePassword extends Fragment {
     private View root;
     private Session session = Session.getSession();
     private boolean passwordsMatch = false;
+    // https://www.javacodeexamples.com/java-regular-expression-password-validation-example/519
+    private final String PASSWORD_REGEX =
+            "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[^\\w\\s]).{12,60}$";
 
 
 
@@ -67,13 +70,13 @@ public class UserDetailsChangePassword extends Fragment {
             public void afterTextChanged(Editable s) {
                 String confirmPassword = s.toString();
                 String newPassword = binding.newPassword.getEditText().getText().toString();
-                if (confirmPassword.equals(newPassword)) {
+                if (confirmPassword.equals(newPassword) && newPassword.matches(PASSWORD_REGEX)) {
                     System.out.println("PASSWORDS MATCH");
                     binding.confirmPassword.setErrorEnabled(false);
                     passwordsMatch = true;
                     binding.changePassword.setEnabled(passwordsMatch);
                 } else {
-                    binding.confirmPassword.setError("Passwords do not match");
+                    binding.confirmPassword.setError("Passwords do not match or there is some another error.");
                     binding.confirmPassword.setErrorEnabled(true);
                     passwordsMatch = false;
                 }

@@ -53,6 +53,8 @@ public class FutureTransaction extends Transaction{
         String pattern = "yyyy-MM-dd HH:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String dateAndTimeString = simpleDateFormat.format(this.atTime);
+        return dateAndTimeString;
+        /*
         LocalDateTime dateTime = null;
 
         // Source: https://stackoverflow.com/questions/39690944/convert-utc-date-to-current-timezone/39692411#39692411
@@ -65,7 +67,7 @@ public class FutureTransaction extends Transaction{
 
 
         //System.out.println("FutureTransaction output date string: " + output);
-        return zdt.format(formatterOutput);
+        return zdt.format(formatterOutput);*/
     }
 
 

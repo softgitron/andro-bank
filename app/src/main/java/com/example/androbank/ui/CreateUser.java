@@ -29,6 +29,9 @@ public class CreateUser extends Fragment {
     private final String USERNAME_REGEX = "^[A-Za-z0-9\\._]{3,}$";
     private final String NAME_REGEX = "^[A-Za-z]{2,}$";
     private final String EMAIL_REGEX = "^[A-Za-z0-9_.]{2,}@[A-Za-z0-9_]{2,}\\.[A-Za-z]{2,3}$";
+    // https://www.javacodeexamples.com/java-regular-expression-password-validation-example/519
+    private final String PASSWORD_REGEX =
+            "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[^\\w\\s]).{12,60}$";
     // First error flags for username, first name, last name, email, phone number and password
     private boolean[] errors = {true, true, true, true, true, true};
 
@@ -155,7 +158,7 @@ public class CreateUser extends Fragment {
 
     private void passwordCheck() {
         String password = binding.passwordField.getText().toString();
-        if (password.equals(binding.passwodAgainField.getText().toString()) && password.length() >= 5) {
+        if (password.equals(binding.passwodAgainField.getText().toString()) && password.matches(PASSWORD_REGEX)) {
             binding.passwordMachView.setVisibility(View.INVISIBLE);
             errors[5] = false;
         } else {

@@ -191,7 +191,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Passwords don't mach\nor password is less than 5 letters."
+                android:text="Passwords don't mach\nor password does not\nfollow good password requirements."
                 android:textColor="#E57373"
                 android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"

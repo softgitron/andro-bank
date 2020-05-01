@@ -8,6 +8,13 @@ import com.example.androbank.containers.TransactionContainer;
 import com.example.androbank.containers.UserContainer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
@@ -20,6 +27,7 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -29,9 +37,10 @@ import java.util.concurrent.locks.ReentrantLock;
 import javax.net.ssl.HttpsURLConnection;
 
 public class Transfer {
+    // public static final String API_ADDRESS = "http://10.0.2.2:8080";
     public static final String API_ADDRESS = "https://qlist.ddns.net";
-    static final Integer CONNECTION_TIMEOUT = 5000;
-    static final Integer READ_TIMEOUT = 5000;
+    private static final Integer CONNECTION_TIMEOUT = 5000;
+    private static final Integer READ_TIMEOUT = 5000;
     protected static String token;
     private static Lock isFetching = new ReentrantLock();
 
@@ -41,6 +50,28 @@ public class Transfer {
         PATCH,
         DELETE
     }
+
+    // https://stackoverflow.com/questions/6873020/gson-date-format
+    private static JsonSerializer<Date> ser = new JsonSerializer<Date>() {
+        @Override
+        public JsonElement serialize(Date src, Type typeOfSrc, JsonSerializationContext
+                context) {
+            return src == null ? null : new JsonPrimitive(src.getTime());
+        }
+    };
+
+    private static JsonDeserializer<Date> deser = new JsonDeserializer<Date>() {
+        @Override
+        public Date deserialize(JsonElement json, Type typeOfT,
+                                JsonDeserializationContext context) throws JsonParseException {
+            if (json != null) {
+                Date date = new Date(json.getAsLong());
+                return date;
+            } else {
+                return null;
+            }
+        }
+    };
 
     /** Send new https request to the backend server.
      * @param method What kind of http verb should be send
@@ -115,7 +146,9 @@ public class Transfer {
         // https://github.com/google/gson/blob/master/UserGuide.md
         String json = "{}";
         if (data != null) {
-            Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy, m:h:s aa").create();
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Date.class, ser)
+                    .registerTypeAdapter(Date.class, deser).create();
             json = gson.toJson(data);
         }
         // Check cache before doing request
@@ -231,7 +264,9 @@ public class Transfer {
     private static void handleResponse(String responseString, Integer statusCode, Response response, String token, Class resultType) {
         if (statusCode < 299) {
             Type resultTypeChecked = handleListTypes(responseString, resultType);
-            Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy, m:h:s aa").create();
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Date.class, ser)
+                    .registerTypeAdapter(Date.class, deser).create();
             Object results;
             if (resultTypeChecked == null) {
                 results = gson.fromJson(responseString, resultType);

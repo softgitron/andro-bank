@@ -1,4 +1,4 @@
-package com.example.androbank.session;
+package com.example.androbank.ui;
 
 import android.os.Bundle;
 

@@ -149,7 +149,7 @@ public class Transactions {
         return finalResult;
     }
 
-    /**Gets all future transactions on one of the users bacnk accounts. Uses connection package to send post request to the backend with the relevant data.
+    /**Gets all future transactions on one of the users bank accounts. Uses connection package to send post request to the backend with the relevant data.
      * @param accountId An accounts which upcoming transactions are to be fetched.
      * @return List of future transactions for callback.
      */

@@ -11,10 +11,8 @@ import android.view.ViewGroup;
 
 import com.example.androbank.R;
 import com.example.androbank.databinding.FragmentPasscodeBinding;
-//import java.util.concurrent.ThreadLocalRandom;
 import java.util.Random;
 
-// TODO IMPORTANT! Should this be in the UI package?
 
 public class Passcode extends Fragment {
 
@@ -30,7 +28,6 @@ public class Passcode extends Fragment {
         root = binding.getRoot();
 
         passcode = new Random().nextInt((999999 -  100000) + 1) + 100000;
-        //passcode = ThreadLocalRandom.current().nextInt(100000, 999999);
         code = String.valueOf(passcode);
         System.out.println(passcode);
         binding.passcode.setText(code);
